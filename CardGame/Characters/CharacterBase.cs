@@ -11,11 +11,11 @@
             get => _name;
         }
 
-        protected readonly uint _iD;
+        protected readonly int _iD;
         /// <summary>
         /// ID of character.
         /// </summary>
-        public uint ID
+        public int ID
         {
             get => _iD;
         }
@@ -92,7 +92,7 @@
             get => _isMagicResistant;
         }
 
-        public CharacterBase(string name, uint iD, string describe, string shortDescribe, SpeciesTypes species, CharacterTypeEnum characterType, int attackPoints, int healthPoints, int shieldPoints, bool isMagicResistant)
+        public CharacterBase(string name, int iD, string describe, string shortDescribe, SpeciesTypes species, CharacterTypeEnum characterType, int attackPoints, int healthPoints, int shieldPoints, bool isMagicResistant)
         {
             _name = name;
             _iD = iD;

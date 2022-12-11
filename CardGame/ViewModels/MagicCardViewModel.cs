@@ -11,9 +11,9 @@ namespace CardGame.ViewModels
 
         public new readonly MagicCharacter Character;
 
-        public int MagicPoints
+        public string MagicPoints
         {
-            get => Character.MagicPoints;
+            get => IntToThreeCharStringComparer(Character.MagicPoints);
         }
 
     }

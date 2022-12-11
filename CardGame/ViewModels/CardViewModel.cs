@@ -37,7 +37,7 @@ namespace CardGame.ViewModels
             get => _strokeColor;
         }
 
-        private readonly Image _exampleImage = new() { Source = "D:\\Moje dokumenty\\Obrazy\\Animacje\\AE\\Snapinsta.app_1080_318581844_198805902630374_2066124822979055544_n.jpg" };
+        private readonly Image _exampleImage = new() { Source = "https://i.pinimg.com/280x280_RS/2e/51/23/2e51230e3d557acde4744f7848308da0.jpg" };
         public Image ExampleImage
         {
             get => _exampleImage;
@@ -50,23 +50,25 @@ namespace CardGame.ViewModels
 
         public string ID
         {
-            get
+            get => IntToThreeCharStringComparer(Character.ID);
+        }
+
+        protected static string IntToThreeCharStringComparer(int value)
+        {
+            string s = value.ToString();
+            char[] c = new char[3] { '0', '0', '0' };
+            for (int i = 0; i < 3; i++)
             {
-                string s = Character.ID.ToString();
-                char[] c = new char[3] { '0', '0', '0' };
-                for (int i = 0; i < 3; i++)
-                {
-                    if (s.Length < i + 1)
-                        continue;
-                    c[i] = s[i];
-                }
-                s = string.Empty;
-                for (int i = 2; i >= 0; i--)
-                {
-                    s += c[i];
-                }
-                return s;
+                if (s.Length < i + 1)
+                    continue;
+                c[i] = s[i];
             }
+            s = string.Empty;
+            for (int i = 2; i >= 0; i--)
+            {
+                s += c[i];
+            }
+            return s;
         }
 
         public string ShortDescribe
@@ -91,19 +93,19 @@ namespace CardGame.ViewModels
             get => Character.IsMagicResistant;
         }
 
-        public int AttackPoints
+        public string AttackPoints
         {
-            get => Character.AttackPoints;
+            get => IntToThreeCharStringComparer(Character.AttackPoints);
         }
 
-        public int HealthPoints
+        public string HealthPoints
         {
-            get => Character.HealthPoints;
+            get => IntToThreeCharStringComparer(Character.HealthPoints);
         }
 
-        public int ShieldPoints
+        public string ShieldPoints
         {
-            get => Character.ShieldPoints;
+            get => IntToThreeCharStringComparer(Character.ShieldPoints);
         }
 
     }

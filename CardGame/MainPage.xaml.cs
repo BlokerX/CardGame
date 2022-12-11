@@ -14,15 +14,12 @@ public partial class MainPage : ContentPage
         {
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center,
-            Margin = 20,
             Scale = 0.8
         });
         Content.Add(new Card(new Zeus())
         {
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center,
-            Margin = 20,
-            Scale = 0.8
         });
     }
 

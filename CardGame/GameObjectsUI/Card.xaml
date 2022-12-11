@@ -5,24 +5,28 @@
              xmlns:local="clr-namespace:CardGame.ViewModels"
              x:DataType="local:MagicCardViewModel">
 
+    
+    
     <Border 
         HorizontalOptions="Fill"
         VerticalOptions="Fill"
         StrokeShape="RoundRectangle 10"
-        Background="{Binding BackgroundColor}"
-        Stroke="{Binding StrokeColor}"
-        StrokeThickness="10"
-        Padding="5">
+        Background="{Binding StrokeColor}"
+        Stroke="black"
+        StrokeThickness="1"
+        Padding="10">
 
         <Grid 
             HorizontalOptions="FillAndExpand"
-            VerticalOptions="FillAndExpand">
+            VerticalOptions="FillAndExpand"
+            Background="{Binding BackgroundColor}"
+            Padding="15,10">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="8*" />
+                <RowDefinition Height="1.5*" />
+                <RowDefinition Height="6*" />
                 <RowDefinition Height="4*" />
-                <RowDefinition Height="1*" />
+                <RowDefinition Height="3*" />
             </Grid.RowDefinitions>
 
             <Grid
@@ -34,23 +38,22 @@
                 <HorizontalStackLayout>
 
                     <Label 
-                        Text="T"
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Start" 
-                        BackgroundColor="Brown"
-                        FontAttributes="Bold"
-                        Margin="0,0,5,0"
-                        Padding="10" />
-
-                    <Label 
                         Text="{Binding Name}"
                         VerticalOptions="Center" 
                         HorizontalOptions="Start" 
                         TextColor="White"
                         FontAttributes="Bold"
-                        FontSize="Large"
+                        FontSize="Header"
                         Margin="2.5"
                         Padding="5" />
+
+                    <Label 
+                        Text="Tmg"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Start" 
+                        BackgroundColor="Brown"
+                        FontAttributes="Bold"
+                        Padding="10" />
 
                 </HorizontalStackLayout>
 
@@ -66,7 +69,7 @@
 
                     <Label 
                         Text="{Binding ID}"
-                        FontSize="Medium"
+                        FontSize="Large"
                         FontAttributes="Bold"
                         VerticalOptions="Fill"
                         HorizontalOptions="Fill"
@@ -78,7 +81,7 @@
 
             </Grid>
 
-            <Border 
+            <Border
                 Grid.Row="1"
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill"
@@ -90,13 +93,16 @@
                     Source="{Binding ExampleImage.Source}"
                     Aspect="Fill"
                     VerticalOptions="Fill"
-                    HorizontalOptions="Fill"/>
+                    HorizontalOptions="Fill"
+                    WidthRequest="500"
+                    HeightRequest="500"/>
 
             </Border>
 
             <Label 
                 Grid.Row="2"
-                Text="{Binding ShortDescribe}"
+                Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget nisl porttitor, lacinia arcu et, faucibus justo. Pellentesque congue ornare nibh vitae fermentum. Etiam sed libero lacus. Cras ultricies ultrices ligula, eu venenatis lacus viverra vel."
+                FontSize="Subtitle"
                 VerticalOptions="Start" 
                 HorizontalOptions="Center" />
 
@@ -138,7 +144,8 @@
                         <Label 
                             Text="{Binding AttackPoints}"
                             VerticalOptions="Center" 
-                            HorizontalOptions="Center" />
+                            HorizontalOptions="Center" 
+                            FontSize="Large" />
 
                     </Border>
 
@@ -153,7 +160,8 @@
                         <Label 
                             Text="{Binding HealthPoints}"
                             VerticalOptions="Center" 
-                            HorizontalOptions="Center" />
+                            HorizontalOptions="Center"
+                            FontSize="Large" />
 
                     </Border>
 
@@ -168,7 +176,8 @@
                         <Label 
                             Text="{Binding ShieldPoints}"
                             VerticalOptions="Center" 
-                            HorizontalOptions="Center" />
+                            HorizontalOptions="Center" 
+                            FontSize="Large" />
 
                     </Border>
 
@@ -184,7 +193,8 @@
                         <Label 
                             Text="{Binding MagicPoints}"
                             VerticalOptions="Center" 
-                            HorizontalOptions="Center" />
+                            HorizontalOptions="Center"
+                            FontSize="Large" />
 
                     </Border>
 
