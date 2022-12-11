@@ -8,6 +8,6 @@ namespace CardGame.Characters
 {
     internal class Knight : CharacterBase
     {
-        public Knight() : base("Knight", 7, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Melee, 18, 10, 15, false) { }
+        public Knight() : base("Knight", 7, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Melee, 18, 10, 15, false, "img_source") { }
     }
 }

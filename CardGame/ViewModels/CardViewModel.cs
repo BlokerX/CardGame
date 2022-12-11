@@ -53,22 +53,17 @@ namespace CardGame.ViewModels
             get => IntToThreeCharStringComparer(Character.ID);
         }
 
-        protected static string IntToThreeCharStringComparer(int value)
+        protected static string IntToThreeCharStringComparer(int value, int charPlacesCount = 3)
         {
-            string s = value.ToString();
-            char[] c = new char[3] { '0', '0', '0' };
-            for (int i = 0; i < 3; i++)
+            char[] c = new char[charPlacesCount];
+
+            int d = 1;
+            for (int i=charPlacesCount-1; i>=0; i--)
             {
-                if (s.Length < i + 1)
-                    continue;
-                c[i] = s[i];
+                c[i] = char.Parse((value / d % 10).ToString());
+                d *= 10;
             }
-            s = string.Empty;
-            for (int i = 2; i >= 0; i--)
-            {
-                s += c[i];
-            }
-            return s;
+            return new string(c);
         }
 
         public string ShortDescribe

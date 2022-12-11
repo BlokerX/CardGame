@@ -8,6 +8,6 @@ namespace CardGame.Characters
 {
     internal class Zeus : CharacterBase
     {
-        public Zeus() : base("Zeus", 5, "-", "-", SpeciesTypes.God, CharacterTypeEnum.God, 20, 10, 0, false) { }
+        public Zeus() : base("Zeus", 5, "-", "-", SpeciesTypes.God, CharacterTypeEnum.God, 20, 10, 0, false, "img_source") { }
     }
 }

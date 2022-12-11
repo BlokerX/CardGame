@@ -8,6 +8,6 @@ namespace CardGame.Characters
 {
     internal class FireDragon : CharacterBase
     {
-        public FireDragon() : base("Fire dragon", 6, "-", "-", SpeciesTypes.Dragon, CharacterTypeEnum.Tank, 15, 15, 5, true) { }
+        public FireDragon() : base("Fire dragon", 6, "-", "-", SpeciesTypes.Dragon, CharacterTypeEnum.Tank, 15, 15, 5, true, "img_source") { }
     }
 }

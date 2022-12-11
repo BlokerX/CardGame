@@ -92,7 +92,16 @@
             get => _isMagicResistant;
         }
 
-        public CharacterBase(string name, int iD, string describe, string shortDescribe, SpeciesTypes species, CharacterTypeEnum characterType, int attackPoints, int healthPoints, int shieldPoints, bool isMagicResistant)
+        protected readonly string _exampleImageSource;
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ExampleImageSource
+        {
+            get => _exampleImageSource;
+        }
+
+        public CharacterBase(string name, int iD, string describe, string shortDescribe, SpeciesTypes species, CharacterTypeEnum characterType, int attackPoints, int healthPoints, int shieldPoints, bool isMagicResistant, string exampleImageSource)
         {
             _name = name;
             _iD = iD;
@@ -104,6 +113,7 @@
             _healthPoints = healthPoints;
             _shieldPoints = shieldPoints;
             _isMagicResistant = isMagicResistant;
+            _exampleImageSource = exampleImageSource;
         }
 
         public enum SpeciesTypes

@@ -3,10 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CardGame.GameObjectsUI.Card"
              xmlns:local="clr-namespace:CardGame.ViewModels"
-             x:DataType="local:MagicCardViewModel">
+             x:DataType="local:MagicCardViewModel"
+             SizeChanged="ContentView_SizeChanged">
+             <!--HeightRequest = "829"
+             WidthRequest = "505"-->
 
-    
-    
     <Border 
         HorizontalOptions="Fill"
         VerticalOptions="Fill"
@@ -25,8 +26,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="1.5*" />
                 <RowDefinition Height="6*" />
-                <RowDefinition Height="4*" />
                 <RowDefinition Height="3*" />
+                <RowDefinition Height="1.5*" />
             </Grid.RowDefinitions>
 
             <Grid
@@ -35,29 +36,34 @@
                 HorizontalOptions="Fill"
                 Margin="5">
 
-                <HorizontalStackLayout>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="90"/>
+                </Grid.ColumnDefinitions>
 
-                    <Label 
-                        Text="{Binding Name}"
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Start" 
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        FontSize="Header"
-                        Margin="2.5"
-                        Padding="5" />
+                <Label 
+                    Grid.Column="0"
+                    Text="Tmg"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Start" 
+                    BackgroundColor="Brown"
+                    FontAttributes="Bold"
+                    Padding="10" />
 
-                    <Label 
-                        Text="Tmg"
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Start" 
-                        BackgroundColor="Brown"
-                        FontAttributes="Bold"
-                        Padding="10" />
-
-                </HorizontalStackLayout>
+                <Label 
+                    Grid.Column="1"
+                    Text="{Binding Name}"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Start" 
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="Large"
+                    Margin="2.5"
+                    Padding="5" />
 
                 <Border 
+                    Grid.Column="2"
                     VerticalOptions="Center" 
                     HorizontalOptions="End"
                     StrokeShape="RoundRectangle 5"
@@ -71,8 +77,8 @@
                         Text="{Binding ID}"
                         FontSize="Large"
                         FontAttributes="Bold"
-                        VerticalOptions="Fill"
-                        HorizontalOptions="Fill"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
                         VerticalTextAlignment="Center"
                         HorizontalTextAlignment="Center"
                         TextColor="Black" />
@@ -81,7 +87,7 @@
 
             </Grid>
 
-            <Border
+            <Border x:Name="ImgBorder"
                 Grid.Row="1"
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill"
@@ -89,13 +95,13 @@
                 Stroke="{Binding StrokeColor}"
                 StrokeThickness="5">
 
-                <Image 
-                    Source="{Binding ExampleImage.Source}"
-                    Aspect="Fill"
-                    VerticalOptions="Fill"
-                    HorizontalOptions="Fill"
-                    WidthRequest="500"
-                    HeightRequest="500"/>
+                <Grid>
+
+                    <Image 
+                        Source="{Binding ExampleImage.Source}"
+                        Aspect="Fill"/>
+
+                </Grid>
 
             </Border>
 
@@ -134,6 +140,8 @@
                     HorizontalOptions="End">
 
                     <Border 
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center"
                         StrokeShape="RoundRectangle 5"
                         StrokeThickness="4"
                         Stroke="{Binding StrokeColor}"
@@ -150,6 +158,8 @@
                     </Border>
 
                     <Border 
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center"
                         StrokeShape="RoundRectangle 5"
                         StrokeThickness="4"
                         Stroke="{Binding StrokeColor}"
@@ -166,6 +176,8 @@
                     </Border>
 
                     <Border 
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center"
                         StrokeShape="RoundRectangle 5"
                         StrokeThickness="4"
                         Stroke="{Binding StrokeColor}"
@@ -182,6 +194,9 @@
                     </Border>
 
                     <Border 
+                        
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center"
                         StrokeShape="RoundRectangle 5"
                         StrokeThickness="4"
                         Stroke="{Binding StrokeColor}"

@@ -6,7 +6,18 @@
              Background="white">
 
     <ScrollView>
-        <VerticalStackLayout x:Name="Content" />
+
+        <VerticalStackLayout
+            Margin="20" 
+            x:Name="Content" >
+
+            <Grid
+                x:Name="GContent" >
+                
+            </Grid>
+            
+        </VerticalStackLayout>
+        
     </ScrollView>
 
 </ContentPage>
