@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CardGame.GameObjectsUI.Card"
+             xmlns:local="clr-namespace:CardGame.ViewModels"
+             x:DataType="local:MagicCardViewModel">
+
+    <Border 
+        HorizontalOptions="Fill"
+        VerticalOptions="Fill"
+        StrokeShape="RoundRectangle 10"
+        Background="{Binding BackgroundColor}"
+        Stroke="{Binding StrokeColor}"
+        StrokeThickness="10"
+        Padding="5">
+
+        <Grid 
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="8*" />
+                <RowDefinition Height="4*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0"
+                VerticalOptions="Fill"
+                HorizontalOptions="Fill"
+                Margin="5">
+
+                <HorizontalStackLayout>
+
+                    <Label 
+                        Text="T"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Start" 
+                        BackgroundColor="Brown"
+                        FontAttributes="Bold"
+                        Margin="0,0,5,0"
+                        Padding="10" />
+
+                    <Label 
+                        Text="{Binding Name}"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Start" 
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="Large"
+                        Margin="2.5"
+                        Padding="5" />
+
+                </HorizontalStackLayout>
+
+                <Border 
+                    VerticalOptions="Center" 
+                    HorizontalOptions="End"
+                    StrokeShape="RoundRectangle 5"
+                    StrokeThickness="4"
+                    Stroke="Black"
+                    BackgroundColor="White"
+                    Margin="2.5"
+                    Padding="10">
+
+                    <Label 
+                        Text="{Binding ID}"
+                        FontSize="Medium"
+                        FontAttributes="Bold"
+                        VerticalOptions="Fill"
+                        HorizontalOptions="Fill"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                        TextColor="Black" />
+
+                </Border>
+
+            </Grid>
+
+            <Border 
+                Grid.Row="1"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill"
+                StrokeShape="RoundRectangle 10"
+                Stroke="{Binding StrokeColor}"
+                StrokeThickness="5">
+
+                <Image 
+                    Source="{Binding ExampleImage.Source}"
+                    Aspect="Fill"
+                    VerticalOptions="Fill"
+                    HorizontalOptions="Fill"/>
+
+            </Border>
+
+            <Label 
+                Grid.Row="2"
+                Text="{Binding ShortDescribe}"
+                VerticalOptions="Start" 
+                HorizontalOptions="Center" />
+
+            <Grid
+                Grid.Row="3"
+                VerticalOptions="Fill"
+                HorizontalOptions="Fill"
+                Margin="5" >
+
+                <HorizontalStackLayout>
+
+
+                    <Label 
+                        Text="SPECIES"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Start"
+                        Margin="5"/>
+
+                    <Label 
+                        Text="{Binding IsMagicResistant}"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Fill" 
+                        Margin="5"/>
+
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout
+                    VerticalOptions="Fill"
+                    HorizontalOptions="End">
+
+                    <Border 
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="4"
+                        Stroke="{Binding StrokeColor}"
+                        BackgroundColor="Green"
+                        Margin="5"
+                        Padding="5" >
+
+                        <Label 
+                            Text="{Binding AttackPoints}"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" />
+
+                    </Border>
+
+                    <Border 
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="4"
+                        Stroke="{Binding StrokeColor}"
+                        BackgroundColor="Red"
+                        Margin="5"
+                        Padding="5" >
+
+                        <Label 
+                            Text="{Binding HealthPoints}"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" />
+
+                    </Border>
+
+                    <Border 
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="4"
+                        Stroke="{Binding StrokeColor}"
+                        BackgroundColor="LightBlue"
+                        Margin="5"
+                        Padding="5" >
+
+                        <Label 
+                            Text="{Binding ShieldPoints}"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" />
+
+                    </Border>
+
+                    <Border 
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="4"
+                        Stroke="{Binding StrokeColor}"
+                        BackgroundColor="MediumPurple"
+                        Margin="5"
+                        Padding="5"
+                        IsVisible="{Binding IsMagicCard}">
+
+                        <Label 
+                            Text="{Binding MagicPoints}"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" />
+
+                    </Border>
+
+                </HorizontalStackLayout>
+
+            </Grid>
+
+        </Grid>
+
+    </Border>
+
+</ContentView>
