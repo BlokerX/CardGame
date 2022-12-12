@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CardGame.GameObjectsUI.Board"
+             Title="Board">
+    
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="200" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" BackgroundColor="LightBlue" >
+
+            <Label
+                Text="{Binding Player.Name}"
+                VerticalOptions="Center"/>
+
+        </Grid>
+
+        <Grid Grid.Row="1" BackgroundColor="LightYellow" >
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Border
+                Grid.Column="0"
+                Stroke="blue"
+                Margin="10">
+
+                <HorizontalStackLayout x:Name="PlayerBoard">
+                    
+                </HorizontalStackLayout>
+                
+            </Border>
+
+            <Border
+                Grid.Column="1"
+                Stroke="red"
+                Margin="10">
+
+                <HorizontalStackLayout x:Name="ComputerBoard">
+
+                </HorizontalStackLayout>
+
+            </Border>
+            
+        </Grid>
+
+        <Grid Grid.Row="2" BackgroundColor="LightBlue" Padding="20">
+            <HorizontalStackLayout x:Name="PlayerCards"/>
+        </Grid>
+
+    </Grid>
+    
+</ContentPage>

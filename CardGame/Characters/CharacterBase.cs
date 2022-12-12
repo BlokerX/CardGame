@@ -1,6 +1,8 @@
-﻿namespace CardGame.Characters
+﻿using System.ComponentModel;
+
+namespace CardGame.Characters
 {
-    public class CharacterBase
+    public class CharacterBase : INotifyPropertyChanged
     {
         protected string _name;
         /// <summary>
@@ -63,6 +65,11 @@
         public int AttackPoints
         {
             get => _attackPoints;
+            private set
+            {
+                _attackPoints = value;
+                OnPropertyChanged("AttackPoints");
+            }
         }
 
         protected int _healthPoints;
@@ -72,6 +79,11 @@
         public int HealthPoints
         {
             get => _healthPoints;
+            private set
+            {
+                _healthPoints = value;
+                OnPropertyChanged("HealthPoints");
+            }
         }
 
         protected int _shieldPoints;
@@ -81,6 +93,11 @@
         public int ShieldPoints
         {
             get => _shieldPoints;
+            private set
+            {
+                _shieldPoints = value;
+                OnPropertyChanged("ShieldPoints");
+            }
         }
 
         protected readonly bool _isMagicResistant;
@@ -93,6 +110,7 @@
         }
 
         protected readonly string _exampleImageSource;
+
         /// <summary>
         /// 
         /// </summary>
@@ -133,5 +151,60 @@
             Tank,
             God
         }
+
+        public void Attack(CharacterBase selectedCharacter)
+        {
+            selectedCharacter.GetDamaged(AttackPoints);
+        }
+
+        public virtual void SpecialAttack(CharacterBase[] enemies, CharacterBase[] allies, CharacterBase selectedCharacter) { }
+
+        public void GetDamaged(int damage)
+        {
+            // todo get damages for shield
+            HealthPoints -= damage;
+            if (HealthPoints < 0)
+                HealthPoints = 0;
+        }
+
+        public void GetPearcingDamaged(int damage)
+        {
+            HealthPoints -= damage;
+            if (HealthPoints < 0)
+                HealthPoints = 0;
+        }
+
+        public void Heal(int healthPoints)
+        {
+            HealthPoints += healthPoints;
+        }
+
+        public void BoostAttack(int attackPoints)
+        {
+            AttackPoints += attackPoints;
+        }
+
+        public void DebuffAttack(int attackPoints)
+        {
+            AttackPoints -= attackPoints;
+        }
+
+        public void ReinforceShield(int shieldPoints)
+        {
+            ShieldPoints += shieldPoints;
+        }
+
+        public void BreakShield()
+        {
+            ShieldPoints = 0;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

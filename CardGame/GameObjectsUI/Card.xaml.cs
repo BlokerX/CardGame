@@ -1,6 +1,5 @@
 using CardGame.Characters;
 using CardGame.ViewModels;
-using Microsoft.Maui.Controls.Shapes;
 
 namespace CardGame.GameObjectsUI;
 
@@ -9,6 +8,13 @@ public partial class Card : ContentView
     private Card()
     {
         InitializeComponent();
+
+        // Click action implement:
+        this.GestureRecognizers.Add(new TapGestureRecognizer
+        {
+            Command = new Command((o) => OnSomeButtonClicked(this))
+        });
+        OnSomeButtonClicked += (a) => { };
     }
 
     public Card(MagicCharacter character) : this()
@@ -27,4 +33,15 @@ public partial class Card : ContentView
             this.SizeAllocated(this.Height / 2.5, this.Height);
         //ImgBorder.StrokeShape = new RoundRectangle() { CornerRadius = 10 };
     }
+
+    #region click event
+
+    public delegate void OnSomeButtonClickedDelegate(object sender);
+
+    public OnSomeButtonClickedDelegate OnSomeButtonClicked { get; set; }
+
+    // ================================================================= //
+
+    #endregion
+
 }

@@ -14,16 +14,21 @@ namespace CardGame.ViewModels
         public CardViewModel(CharacterBase character)
         {
             _isMagicCard = false;
-            Character = character;
+            _character = character;
         }
 
         protected CardViewModel(MagicCharacter character)
         {
             _isMagicCard = true;
-            Character = character;
+            _character = character;
         }
 
-        public readonly CharacterBase Character;
+        public readonly CharacterBase _character;
+
+        public CharacterBase Character
+        {
+            get => _character;
+        }
 
         private readonly Brush _backgroundColor = Color.Parse("orange");
         public Brush BackgroundColor

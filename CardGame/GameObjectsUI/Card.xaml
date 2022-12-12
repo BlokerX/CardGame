@@ -145,14 +145,14 @@
                         StrokeShape="RoundRectangle 5"
                         StrokeThickness="4"
                         Stroke="{Binding StrokeColor}"
-                        BackgroundColor="Green"
+                        BackgroundColor="Red"
                         Margin="5"
                         Padding="5" >
 
                         <Label 
-                            Text="{Binding AttackPoints}"
+                            Text="{Binding Character.HealthPoints}"
                             VerticalOptions="Center" 
-                            HorizontalOptions="Center" 
+                            HorizontalOptions="Center"
                             FontSize="Large" />
 
                     </Border>
@@ -163,14 +163,14 @@
                         StrokeShape="RoundRectangle 5"
                         StrokeThickness="4"
                         Stroke="{Binding StrokeColor}"
-                        BackgroundColor="Red"
+                        BackgroundColor="Green"
                         Margin="5"
                         Padding="5" >
 
                         <Label 
-                            Text="{Binding HealthPoints}"
+                            Text="{Binding AttackPoints}"
                             VerticalOptions="Center" 
-                            HorizontalOptions="Center"
+                            HorizontalOptions="Center" 
                             FontSize="Large" />
 
                     </Border>

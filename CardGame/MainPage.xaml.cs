@@ -48,6 +48,13 @@ public partial class MainPage : ContentPage
             WidthRequest = 505,
             Scale = 0.8
         });
+        
+        Content.Add(new Card(new Bandit())
+        {
+            HeightRequest = 829,
+            WidthRequest = 505,
+            Scale = 1.5
+        });
     }
 
     //private void OnCounterClicked(object sender, EventArgs e)
