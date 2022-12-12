@@ -28,6 +28,8 @@ public partial class Board : ContentPage
             card.OnSomeButtonClicked += PlayerTurn;
         }
 
+        ComputerTurn();
+
     }
 
     private static List<Card> GetCards()
@@ -88,22 +90,54 @@ public partial class Board : ContentPage
 
     private void PlayerTurn(object sender)
     {
-        var card = sender as Card;
-        card.OnSomeButtonClicked -= PlayerTurn;
-        (card.Parent as HorizontalStackLayout).Remove(card);
-        PlayerBoard.Children.Add(card);
+        player1.ChosenCard = sender as Card;
+        player1.ChosenCard.OnSomeButtonClicked -= PlayerTurn;
+        (player1.ChosenCard.Parent as HorizontalStackLayout).Remove(player1.ChosenCard);
+        PlayerBoard.Children.Add(player1.ChosenCard);
 
-        if (computer.Cards.Count == 0)
+        if (ComputerBoard.Children.Count == 0)
+        {
+            if(computer.Cards.Count != 0) 
+            {
+                ComputerTurn();
+            }
             return;
+        }
 
-        var myCharacter = (card.BindingContext as CardViewModel).Character;
-        CharacterBase computerCharacter = (computer.Cards.First().BindingContext as CardViewModel).Character;
 
-        myCharacter.Attack(computerCharacter);
+        foreach (Card card in ComputerBoard.Children)
+        {
+            card.OnSomeButtonClicked += OnComputerCardClickedPlayerTargeted;
+        }
+
+        player1.TargetedCardSelected += OnPlayer1TargetedCardSelected;
+        PlayerCards.IsVisible = false;
+    }
+
+    private void OnComputerCardClickedPlayerTargeted(object card)
+    {
+        var c = card as Card;
+        foreach (Card item in ComputerBoard.Children)
+        {
+            item.OnSomeButtonClicked -= OnComputerCardClickedPlayerTargeted;
+        }
+        player1.TargetedCard = c;
+        player1.TargetedCardSelected();
+    }
+
+    private void OnPlayer1TargetedCardSelected()
+    {
+        player1.TargetedCardSelected -= OnPlayer1TargetedCardSelected;
+        var myCharacter = (player1.ChosenCard.BindingContext as CardViewModel).Character;
+        CharacterBase enemyCharacter = (player1.TargetedCard.BindingContext as CardViewModel).Character;
+
+        myCharacter.Attack(enemyCharacter);
+        player1.ChosenCard = null;
 
         Thread.Sleep(2000);
 
         ComputerTurn();
+        PlayerCards.IsVisible = true;
     }
 
     int ComputerCardIndex = 0;
@@ -114,11 +148,11 @@ public partial class Board : ContentPage
         var card = computer.Cards[ComputerCardIndex++];
         ComputerBoard.Children.Add(card);
 
-        if (player1.Cards.Count == 0)
+        if (PlayerBoard.Children.Count == 0)
             return;
 
         var myCharacter = (card.BindingContext as CardViewModel).Character;
-        var playerCharacter = (player1.Cards.First().BindingContext as CardViewModel).Character;
+        var playerCharacter = ((PlayerBoard.Children.First() as Card).BindingContext as CardViewModel).Character;
 
         myCharacter.Attack(playerCharacter);
 

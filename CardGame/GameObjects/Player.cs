@@ -26,5 +26,13 @@ namespace CardGame.GameObjects
 			set => _cards = value;
 		}
 
+		public Card ChosenCard;
+
+		public Action ChosenCardSelected;
+
+		public Card TargetedCard;
+
+		public Action TargetedCardSelected;
+
 	}
 }
