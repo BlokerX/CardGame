@@ -16,20 +16,80 @@ public partial class Board : ContentPage
         {
             Cards = GetCards()
         };
+        player1.Cards.ForEach((card) =>
+        {
+            (card.BindingContext as CardViewModel).Character.OnHealthToZero += (card) =>
+            {
+                // naprawiæ zwalnianie objektu z pamiêci
+                if (player1.Cards.Contains(card))
+                {
+                    player1.Cards.Remove(card);
+                }
+                if(PlayerCards.Children.Contains(card))
+                {
+                    PlayerCards.Children.Remove(card);
+                }
+                if (PlayerBoard.Children.Contains(card))
+                {
+                    PlayerBoard.Children.Remove(card);
+                }
+            };
+        });
 
         computer = new Player()
         {
             Cards = GetCards()
         };
+        computer.Cards.ForEach((card) =>
+        {
+            (card.BindingContext as CardViewModel).Character.OnHealthToZero += (card) =>
+            {
+                // naprawiæ zwalnianie objektu z pamiêci
+                if (computer.Cards.Contains(card))
+                {
+                    computer.Cards.Remove(card);
+                }
+                if (ComputerBoard.Children.Contains(card))
+                {
+                    ComputerBoard.Children.Remove(card);
+                }
+            };
+        });
 
+        // Show player's cards in lobby panel:
         foreach (Card card in player1.Cards)
         {
             PlayerCards.Children.Add(card);
-            card.OnSomeButtonClicked += PlayerTurn;
         }
+
+        AddClickEventToSelectForPlayer1Cards();
 
         ComputerTurn();
 
+    }
+
+    private void AddClickEventToSelectForPlayer1Cards()
+    {
+        foreach(Card card in PlayerCards.Children)
+        {
+            card.OnSomeButtonClicked += PlayerThrowCard;
+        }
+        foreach (Card card in player1.Cards)
+        {
+            card.OnSomeButtonClicked += PlayerTurn;
+        }
+    }
+
+    private void RemoveClickEventToSelectForPlayer1Cards()
+    {
+        foreach (Card card in PlayerCards.Children)
+        {
+            card.OnSomeButtonClicked -= PlayerThrowCard;
+        }
+        foreach (Card card in player1.Cards)
+        {
+            card.OnSomeButtonClicked -= PlayerTurn;
+        }
     }
 
     private static List<Card> GetCards()
@@ -88,12 +148,19 @@ public partial class Board : ContentPage
             };
     }
 
-    private void PlayerTurn(object sender)
+    private void PlayerThrowCard(object sender)
     {
         player1.ChosenCard = sender as Card;
-        player1.ChosenCard.OnSomeButtonClicked -= PlayerTurn;
+        player1.ChosenCard.OnSomeButtonClicked -= PlayerThrowCard;
         (player1.ChosenCard.Parent as HorizontalStackLayout).Remove(player1.ChosenCard);
         PlayerBoard.Children.Add(player1.ChosenCard);
+    }
+
+    // for all player cards
+    private void PlayerTurn(object sender)
+    {
+        RemoveClickEventToSelectForPlayer1Cards();
+        player1.ChosenCard = sender as Card;
 
         if (ComputerBoard.Children.Count == 0)
         {
@@ -137,6 +204,8 @@ public partial class Board : ContentPage
         Thread.Sleep(2000);
 
         ComputerTurn();
+
+        AddClickEventToSelectForPlayer1Cards();
         PlayerCards.IsVisible = true;
     }
 
@@ -155,7 +224,6 @@ public partial class Board : ContentPage
         var playerCharacter = ((PlayerBoard.Children.First() as Card).BindingContext as CardViewModel).Character;
 
         myCharacter.Attack(playerCharacter);
-
     }
 
 }

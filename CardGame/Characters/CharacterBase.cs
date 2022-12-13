@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using CardGame.GameObjectsUI;
+using System.ComponentModel;
 
 namespace CardGame.Characters
 {
@@ -132,6 +133,8 @@ namespace CardGame.Characters
             _shieldPoints = shieldPoints;
             _isMagicResistant = isMagicResistant;
             _exampleImageSource = exampleImageSource;
+
+            OnHealthToZero += (c) => { };
         }
 
         public enum SpeciesTypes
@@ -163,15 +166,22 @@ namespace CardGame.Characters
         {
             // todo get damages for shield
             HealthPoints -= damage;
-            if (HealthPoints < 0)
+            if (HealthPoints <= 0)
+            {
                 HealthPoints = 0;
+                OnHealthToZero(CardOvner);
+            }
         }
 
         public void GetPearcingDamaged(int damage)
         {
             HealthPoints -= damage;
-            if (HealthPoints < 0)
+            if (HealthPoints <= 0)
+            {
                 HealthPoints = 0;
+                OnHealthToZero(CardOvner);
+            }
+
         }
 
         public void Heal(int healthPoints)
@@ -205,6 +215,9 @@ namespace CardGame.Characters
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public Card CardOvner;
+        public Action<Card> OnHealthToZero;
 
     }
 }

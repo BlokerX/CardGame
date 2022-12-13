@@ -20,11 +20,13 @@ public partial class Card : ContentView
     public Card(MagicCharacter character) : this()
     {
         BindingContext = new MagicCardViewModel(character);
+        (BindingContext as MagicCardViewModel).Character.CardOvner = this;
     }
 
     public Card(CharacterBase character) : this()
     {
         BindingContext = new CardViewModel(character);
+        (BindingContext as CardViewModel).Character.CardOvner = this;
     }
 
     private void ContentView_SizeChanged(object sender, EventArgs e)
