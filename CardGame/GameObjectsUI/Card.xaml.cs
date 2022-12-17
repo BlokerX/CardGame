@@ -11,11 +11,7 @@ public partial class Card : ContentView
         InitializeComponent();
 
         // Click action implement:
-        this.GestureRecognizers.Add(new TapGestureRecognizer
-        {
-            Command = new Command((o) => OnSomeButtonClicked(this))
-        });
-        OnSomeButtonClicked += (a) => { };
+        this.GestureRecognizers.Add(new TapGestureRecognizer { Command = new Command((o) => OnCardTaped?.Invoke(this)) });
     }
 
     ~Card()
@@ -48,7 +44,7 @@ public partial class Card : ContentView
 
     public delegate void OnSomeButtonClickedDelegate(object sender);
 
-    public OnSomeButtonClickedDelegate OnSomeButtonClicked { get; set; }
+    public OnSomeButtonClickedDelegate OnCardTaped { get; set; }
 
     // ================================================================= //
 

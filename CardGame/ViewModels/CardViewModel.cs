@@ -1,11 +1,9 @@
 ﻿using CardGame.Characters;
-using CardGame.GameObjectsUI;
-using System;
-using Color = Microsoft.Maui.Graphics.Color;
+using CardGame.ServiceObjects;
 
 namespace CardGame.ViewModels
 {
-    public class CardViewModel
+    public class CardViewModel : PropertyChangeObject
     {
         private readonly bool _isMagicCard = false;
         public bool IsMagicCard
@@ -15,14 +13,15 @@ namespace CardGame.ViewModels
 
         public CardViewModel(CharacterBase character)
         {
-            _isMagicCard = false;
             _character = character;
+            Character.HealthPointsChanged += (i) => OnPropertyChanged(nameof(HealthPoints));
+            Character.AttackPointsChanged += (i) => OnPropertyChanged(nameof(AttackPoints));
+            Character.ShieldPointsChanged += (i) => OnPropertyChanged(nameof(ShieldPoints));
         }
 
-        protected CardViewModel(MagicCharacter character)
+        public CardViewModel(MagicCharacter character) : this((CharacterBase)character)
         {
             _isMagicCard = true;
-            _character = character;
         }
 
         public readonly CharacterBase _character;
@@ -32,22 +31,20 @@ namespace CardGame.ViewModels
             get => _character;
         }
 
-        private readonly Brush _backgroundColor = Color.Parse("orange");
         public Brush BackgroundColor
         {
-            get => _backgroundColor;
+            get => Character.BakckgroundColor;
         }
 
-        private readonly Brush _strokeColor = Color.Parse("white");
         public Brush StrokeColor
         {
-            get => _strokeColor;
+            get => Character.StrokeColor;
         }
 
-        private readonly Image _exampleImage = new() { Source = "https://i.pinimg.com/280x280_RS/2e/51/23/2e51230e3d557acde4744f7848308da0.jpg" };
+        //private readonly Image _exampleImage/* = new() { Source = "https://i.pinimg.com/280x280_RS/2e/51/23/2e51230e3d557acde4744f7848308da0.jpg" }*/;
         public Image ExampleImage
         {
-            get => _exampleImage;
+            get => new() { Source = Character.ExampleImageSource };
         }
 
         public string Name
@@ -65,7 +62,7 @@ namespace CardGame.ViewModels
             char[] c = new char[charPlacesCount];
 
             int d = 1;
-            for (int i=charPlacesCount-1; i>=0; i--)
+            for (int i = charPlacesCount - 1; i >= 0; i--)
             {
                 c[i] = char.Parse((value / d % 10).ToString());
                 d *= 10;

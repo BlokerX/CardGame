@@ -1,10 +1,10 @@
 ﻿using CardGame.GameObjectsUI;
-using System.ComponentModel;
+using CardGame.ServiceObjects;
 using System.Diagnostics;
 
 namespace CardGame.Characters
 {
-    public class CharacterBase : INotifyPropertyChanged
+    public class CharacterBase : PropertyChangeObject
     {
         protected string _name;
         /// <summary>
@@ -70,9 +70,11 @@ namespace CardGame.Characters
             private set
             {
                 _attackPoints = value;
-                OnPropertyChanged("AttackPoints");
+                OnPropertyChanged(nameof(AttackPoints));
+                AttackPointsChanged?.Invoke(_attackPoints);
             }
         }
+        public Action<int> AttackPointsChanged;
 
         protected int _healthPoints;
         /// <summary>
@@ -84,9 +86,11 @@ namespace CardGame.Characters
             private set
             {
                 _healthPoints = value;
-                OnPropertyChanged("HealthPoints");
+                OnPropertyChanged(nameof(HealthPoints));
+                HealthPointsChanged?.Invoke(_healthPoints);
             }
         }
+        public Action<int> HealthPointsChanged;
 
         protected int _shieldPoints;
         /// <summary>
@@ -98,9 +102,11 @@ namespace CardGame.Characters
             private set
             {
                 _shieldPoints = value;
-                OnPropertyChanged("ShieldPoints");
+                OnPropertyChanged(nameof(ShieldPoints));
+                ShieldPointsChanged?.Invoke(_shieldPoints);
             }
         }
+        public Action<int> ShieldPointsChanged;
 
         protected readonly bool _isMagicResistant;
         /// <summary>
@@ -231,14 +237,8 @@ namespace CardGame.Characters
             ShieldPoints = 0;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public Card CardOvner;
+
         public Action<Card> OnHealthToZero;
 
         public CharacterBase(string name, int iD, string describe, string shortDescribe, SpeciesTypes species, CharacterTypeEnum characterType, int attackPoints, int healthPoints, int shieldPoints, bool isMagicResistant, string exampleImageSource, Brush backgroundColor = null, Brush strokeColor = null)

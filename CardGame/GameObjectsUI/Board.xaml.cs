@@ -82,11 +82,11 @@ public partial class Board : ContentPage
     {
         foreach (Card card in PlayerCards.Children)
         {
-            card.OnSomeButtonClicked += PlayerThrowCard;
+            card.OnCardTaped += PlayerThrowCard;
         }
         foreach (Card card in player1.DeckOfCards.Cards)
         {
-            card.OnSomeButtonClicked += PlayerTurn;
+            card.OnCardTaped += PlayerTurn;
         }
     }
 
@@ -94,11 +94,11 @@ public partial class Board : ContentPage
     {
         foreach (Card card in PlayerCards.Children)
         {
-            card.OnSomeButtonClicked -= PlayerThrowCard;
+            card.OnCardTaped -= PlayerThrowCard;
         }
         foreach (Card card in player1.DeckOfCards.Cards)
         {
-            card.OnSomeButtonClicked -= PlayerTurn;
+            card.OnCardTaped -= PlayerTurn;
         }
     }
 
@@ -165,7 +165,7 @@ public partial class Board : ContentPage
     private void PlayerThrowCard(object sender)
     {
         player1.ChosenCard = sender as Card;
-        player1.ChosenCard.OnSomeButtonClicked -= PlayerThrowCard;
+        player1.ChosenCard.OnCardTaped -= PlayerThrowCard;
         (player1.ChosenCard.Parent as HorizontalStackLayout).Remove(player1.ChosenCard);
         PlayerBoard.Children.Add(player1.ChosenCard);
     }
@@ -188,7 +188,7 @@ public partial class Board : ContentPage
 
         foreach (Card card in ComputerBoard.Children)
         {
-            card.OnSomeButtonClicked += OnComputerCardClickedPlayerTargeted;
+            card.OnCardTaped += OnComputerCardClickedPlayerTargeted;
         }
 
         player1.TargetedCardSelected += OnPlayer1TargetedCardSelected;
@@ -200,7 +200,7 @@ public partial class Board : ContentPage
         var c = card as Card;
         foreach (Card item in ComputerBoard.Children)
         {
-            item.OnSomeButtonClicked -= OnComputerCardClickedPlayerTargeted;
+            item.OnCardTaped -= OnComputerCardClickedPlayerTargeted;
         }
         player1.TargetedCard = c;
         player1.TargetedCardSelected();
