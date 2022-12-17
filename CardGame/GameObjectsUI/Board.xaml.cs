@@ -1,13 +1,13 @@
 ﻿using CardGame.Characters;
 using CardGame.GameObjects;
 using CardGame.ViewModels;
-
 namespace CardGame.GameObjectsUI;
 
 public partial class Board : ContentPage
 {
     private Player player1;
     private Player computer;
+    private int cardPerPerson = 32;
 
     public Board()
     {
@@ -16,7 +16,7 @@ public partial class Board : ContentPage
         {
             DeckOfCards = new()
             {
-                Cards = GetCards()
+                Cards = GetCards(cardPerPerson)
             }
         };
         player1.DeckOfCards.Cards.ForEach((card) =>
@@ -28,7 +28,7 @@ public partial class Board : ContentPage
         {
             DeckOfCards = new()
             {
-                Cards = GetCards()
+                Cards = GetCards(cardPerPerson)
             }
         };
         computer.DeckOfCards.Cards.ForEach((card) =>
@@ -102,49 +102,62 @@ public partial class Board : ContentPage
         }
     }
 
-    private static List<Card> GetCards()
+    private List<Card> GetCards(int count)
     {
         // Skalowanie kart:
         double scale = 0.3;
         double x = -(1 - scale) * 505 / 2, y = -(1 - scale) * 829 / 2;
-        return new List<Card>()
-            {
-                new(new FireDragon())
-                {
-                    Scale = scale,
-                    Margin = new Thickness(x,y),
-                },
-                new(new Archer())
-                {
-                    Scale = scale,
-                    Margin = new Thickness(x,y)
-                },
-                new(new SwordFighter())
-                {
-                    Scale = scale,
-                    Margin = new Thickness(x,y)
-                },
-                new(new Zeus())
-                {
-                    Scale = scale,
-                    Margin = new Thickness(x,y)
-                },
-                new(new Bandit())
-                {
-                    Scale = scale,
-                    Margin = new Thickness(x,y)
-                },
-                new(new Fighter())
-                {
-                    Scale = scale,
-                    Margin = new Thickness(x,y)
-                },
-                new(new FireDragon())
-                {
-                    Scale = scale,
-                    Margin = new Thickness(x,y)
-                },
-            };
+
+        List<Card> cards = new();
+
+        for (int i = 0; i < count; i++)
+        {
+            var c = GetRandomCard();
+            c.Scale = scale;
+            c.Margin = new Thickness(x, y);
+            cards.Add(c);
+        }
+
+        return cards;
+
+        //return new List<Card>()
+        //    {
+        //        new(new FireDragon())
+        //        {
+        //            Scale = scale,
+        //            Margin = new Thickness(x,y),
+        //        },
+        //        new(new Archer())
+        //        {
+        //            Scale = scale,
+        //            Margin = new Thickness(x,y)
+        //        },
+        //        new(new SwordFighter())
+        //        {
+        //            Scale = scale,
+        //            Margin = new Thickness(x,y)
+        //        },
+        //        new(new Zeus())
+        //        {
+        //            Scale = scale,
+        //            Margin = new Thickness(x,y)
+        //        },
+        //        new(new Bandit())
+        //        {
+        //            Scale = scale,
+        //            Margin = new Thickness(x,y)
+        //        },
+        //        new(new Fighter())
+        //        {
+        //            Scale = scale,
+        //            Margin = new Thickness(x,y)
+        //        },
+        //        new(new FireDragon())
+        //        {
+        //            Scale = scale,
+        //            Margin = new Thickness(x,y)
+        //        },
+        //    };
     }
 
     private void PlayerThrowCard(object sender)
@@ -232,5 +245,48 @@ public partial class Board : ContentPage
         computer.ChosenCard = null;
         computer.TargetedCard = null;
     }
+
+    // ---------------------------------------------- //
+
+    private Card GetRandomCard()
+    {
+        return new Card(GetCharacterTypesById(new Random().Next(1, CharacterTypesByID.Count)));
+    }
+
+    private CharacterBase GetCharacterTypesById(int id)
+    {
+        switch (id)
+        {
+            case 1: return new Fighter();
+            case 2: return new Archer();
+            case 3: return new Wizard();
+            case 4: return new SwordFighter();
+            case 5: return new Zeus();
+            case 6: return new FireDragon();
+            case 7: return new Bandit();
+            case 8: return new Witch();
+            case 9: return new RoyalSoldier();
+            case 10: return new Prince();
+            case 11: return new Knight();
+            default: return null;
+        }
+        //return CharacterTypesByID[id];
+        //todo trzeba twożyć nowe instancje zamiast używania gotowych ze słownika
+    }
+
+    private Dictionary<int, CharacterBase> CharacterTypesByID = new()
+    {
+        { 1, new Fighter() },
+        { 2, new Archer() },
+        { 3, new Wizard() },
+        { 4, new SwordFighter() },
+        { 5, new Zeus() },
+        { 6, new FireDragon() },
+        { 7, new Bandit() },
+        { 8, new Witch() },
+        { 9, new RoyalSoldier() },
+        { 10, new Prince() },
+        { 11, new Knight() }
+    };
 
 }
