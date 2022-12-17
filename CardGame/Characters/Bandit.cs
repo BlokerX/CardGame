@@ -2,7 +2,7 @@
 {
     internal class Bandit : CharacterBase
     {
-        public Bandit() : base("Bandit", 7, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Normal, 10, 6, 2, false, "img_source") { }
+        public Bandit() : base("Bandit", 7, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Normal, 10, 6, 2, false, "img_source", Color.Parse("DarkRed")) { }
         public override void SpecialAttack(CharacterBase[] enemies, CharacterBase[] allies, CharacterBase selectedCharacter)
         {
             var selectedEnemies = new int[3];

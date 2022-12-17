@@ -2,7 +2,7 @@
 {
     internal class Zeus : CharacterBase
     {
-        public Zeus() : base("Zeus", 5, "-", "-", SpeciesTypes.God, CharacterTypeEnum.God, 20, 10, 0, false, "img_source") { }
+        public Zeus() : base("Zeus", 5, "-", "-", SpeciesTypes.God, CharacterTypeEnum.God, 20, 10, 0, false, "img_source", Color.Parse("LightBlue")) { }
 
         public override void SpecialAttack(CharacterBase[] enemies, CharacterBase[] allies, CharacterBase selectedCharacter)
         {
@@ -11,7 +11,7 @@
 
             // Ataki poboczne:
             Random random = new();
-            var selectedEnemies = new int[random.Next() % (enemies.Length-1)];
+            var selectedEnemies = new int[random.Next() % (enemies.Length - 1)];
             for (int i = 0; i < selectedEnemies.Length; i++)
             {
                 int x;

@@ -8,6 +8,6 @@ namespace CardGame.Characters
 {
     internal class Prince : CharacterBase
     {
-        public Prince() : base("Prince", 10, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Melee, 25, 15, 10, false, "img_source") { }
+        public Prince() : base("Prince", 10, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Melee, 25, 15, 10, false, "img_source", Color.Parse("Gold")) { }
     }
 }
