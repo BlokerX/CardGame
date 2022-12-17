@@ -8,6 +8,17 @@
              HeightRequest="829"
              WidthRequest="505">
 
+    <ContentView.GestureRecognizers>
+        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+        <DragGestureRecognizer 
+            DragStarting="DragGestureRecognizer_DragStarting" 
+            DropCompleted="DragGestureRecognizer_DropCompleted"/>
+        <!--DropGestureRecognizer 
+            Drop="DropGestureRecognizer_Drop"
+            DragOver="DropGestureRecognizer_DragOver" 
+            DragLeave="DropGestureRecognizer_DragLeave" /-->
+    </ContentView.GestureRecognizers>
+
     <Border 
         HorizontalOptions="Fill"
         VerticalOptions="Fill"

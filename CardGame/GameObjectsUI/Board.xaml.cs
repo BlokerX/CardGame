@@ -1,6 +1,7 @@
 ﻿using CardGame.Characters;
 using CardGame.GameObjects;
 using CardGame.ViewModels;
+
 namespace CardGame.GameObjectsUI;
 
 public partial class Board : ContentPage
@@ -32,9 +33,21 @@ public partial class Board : ContentPage
             }
         };
         computer.DeckOfCards.Cards.ForEach((card) =>
-        {
-            (card.BindingContext as CardViewModel).Character.OnHealthToZero += ComputerCardDipose;
-        });
+            {
+                (card.BindingContext as CardViewModel).Character.OnHealthToZero += ComputerCardDipose;
+                foreach (var item in card.GestureRecognizers)
+                {
+                    if (item is DragGestureRecognizer)
+                    {
+                        (item as DragGestureRecognizer).CanDrag = false;
+                        break;
+                    }
+                }
+
+                var dropGestureRecognizer = new DropGestureRecognizer();
+                dropGestureRecognizer.Drop += ComputerCard_DropGestureRecognizer_Drop;
+                card.GestureRecognizers.Add(dropGestureRecognizer);
+            });
 
         // Show player's cards in lobby panel:
         foreach (Card card in player1.DeckOfCards.Cards)
@@ -46,6 +59,28 @@ public partial class Board : ContentPage
 
         ComputerTurn();
 
+    }
+
+    private void ComputerCard_DropGestureRecognizer_Drop(object sender, DropEventArgs e)
+    {
+        var dgr = sender as DropGestureRecognizer;
+        var d1 = e.Data.Properties["Card"];
+        if (d1 is Card)
+        {
+            var card = d1 as Card;
+
+            // For computer:
+            if (player1.DeckOfCards.Cards.Contains(card))
+            {
+                if (!PlayerBoard.Contains(card))
+                {
+                    PlayerThrowCard(card);
+                }
+                PlayerTurn(card);
+
+                OnComputerCardClickedPlayerTargeted(dgr.Parent);
+            }
+        }
     }
 
     private void Player1CardDipose(Card card)
@@ -183,7 +218,6 @@ public partial class Board : ContentPage
             return;
         }
 
-
         foreach (Card card in ComputerBoard.Children)
         {
             card.OnCardTaped += OnComputerCardClickedPlayerTargeted;
@@ -288,5 +322,45 @@ public partial class Board : ContentPage
         { 10, new Prince() },
         { 11, new Knight() }
     };
+
+    private void DropGestureRecognizer_Drop(object sender, DropEventArgs e)
+    {
+        var dgr = sender is DropGestureRecognizer;
+        var d1 = e.Data.Properties["Card"];
+        if (d1 is Card)
+        {
+            var card = d1 as Card;
+
+            // For player1:
+            if (player1.DeckOfCards.Cards.Contains(card))
+            {
+                if (!PlayerBoard.Contains(card))
+                {
+                    PlayerThrowCard(card);
+                    PlayerTurn(card);
+                }
+            }
+        }
+
+        // Cofnięcie animacji:
+        PlayerBoardBorder.BackgroundColor = Color.FromHex("#66AAAAFF");
+        PlayerBoardBorder.Stroke = Color.Parse("Blue");
+    }
+
+    #region Animations
+
+    private void DropGestureRecognizer_DragOver(object sender, DragEventArgs e)
+    {
+        PlayerBoardBorder.BackgroundColor = Color.FromHex("#AAAAFF");
+        PlayerBoardBorder.Stroke = Color.Parse("DarkBlue");
+    }
+
+    private void DropGestureRecognizer_DragLeave(object sender, DragEventArgs e)
+    {
+        PlayerBoardBorder.BackgroundColor = Color.FromHex("#66AAAAFF");
+        PlayerBoardBorder.Stroke = Color.Parse("Blue");
+    }
+
+    #endregion
 
 }
