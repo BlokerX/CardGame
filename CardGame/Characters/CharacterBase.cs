@@ -1,5 +1,6 @@
 ﻿using CardGame.GameObjectsUI;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace CardGame.Characters
 {
@@ -120,21 +121,20 @@ namespace CardGame.Characters
             get => _exampleImageSource;
         }
 
-        public CharacterBase(string name, int iD, string describe, string shortDescribe, SpeciesTypes species, CharacterTypeEnum characterType, int attackPoints, int healthPoints, int shieldPoints, bool isMagicResistant, string exampleImageSource)
-        {
-            _name = name;
-            _iD = iD;
-            _describe = describe;
-            _shortDescribe = shortDescribe;
-            _species = species;
-            _characterType = characterType;
-            _attackPoints = attackPoints;
-            _healthPoints = healthPoints;
-            _shieldPoints = shieldPoints;
-            _isMagicResistant = isMagicResistant;
-            _exampleImageSource = exampleImageSource;
+        private Brush _backgroundColor;
 
-            OnHealthToZero += (c) => { };
+        public Brush BakckgroundColor
+        {
+            get => _backgroundColor;
+            set => _backgroundColor = value;
+        }
+
+        private Brush _strokeColor;
+
+        public Brush StrokeColor
+        {
+            get => _strokeColor;
+            set => _strokeColor = value;
         }
 
         public enum SpeciesTypes
@@ -164,43 +164,65 @@ namespace CardGame.Characters
 
         public void GetDamaged(int damage)
         {
+            if (damage <= 0)
+                return;
+
             // todo get damages for shield
-            HealthPoints -= damage;
-            if (HealthPoints <= 0)
+            else if (ShieldPoints >= damage)
             {
-                HealthPoints = 0;
-                OnHealthToZero(CardOvner);
+                ShieldPoints -= damage;
+            }
+            else if (ShieldPoints < damage)
+            {
+                damage -= ShieldPoints;
+                ShieldPoints = 0;
+                GetPearcingDamaged(damage);
             }
         }
 
         public void GetPearcingDamaged(int damage)
         {
+            if (damage <= 0)
+                return;
+
             HealthPoints -= damage;
             if (HealthPoints <= 0)
             {
                 HealthPoints = 0;
-                OnHealthToZero(CardOvner);
+                OnHealthToZero?.Invoke(CardOvner);
             }
 
         }
 
         public void Heal(int healthPoints)
         {
+            if (healthPoints <= 0)
+                return;
+
             HealthPoints += healthPoints;
         }
 
         public void BoostAttack(int attackPoints)
         {
+            if (attackPoints <= 0)
+                return;
+
             AttackPoints += attackPoints;
         }
 
         public void DebuffAttack(int attackPoints)
         {
+            if (attackPoints <= 0)
+                return;
+
             AttackPoints -= attackPoints;
         }
 
         public void ReinforceShield(int shieldPoints)
         {
+            if (shieldPoints <= 0)
+                return;
+
             ShieldPoints += shieldPoints;
         }
 
@@ -218,6 +240,34 @@ namespace CardGame.Characters
 
         public Card CardOvner;
         public Action<Card> OnHealthToZero;
+
+        public CharacterBase(string name, int iD, string describe, string shortDescribe, SpeciesTypes species, CharacterTypeEnum characterType, int attackPoints, int healthPoints, int shieldPoints, bool isMagicResistant, string exampleImageSource, Brush backgroundColor = null, Brush strokeColor = null)
+        {
+            _name = name;
+            _iD = iD;
+            _describe = describe;
+            _shortDescribe = shortDescribe;
+            _species = species;
+            _characterType = characterType;
+            _attackPoints = attackPoints;
+            _healthPoints = healthPoints;
+            _shieldPoints = shieldPoints;
+            _isMagicResistant = isMagicResistant;
+            _exampleImageSource = exampleImageSource;
+            if (backgroundColor == null)
+                _backgroundColor = Brush.Orange;
+            else _backgroundColor = backgroundColor;
+            if (strokeColor == null)
+                _strokeColor = Brush.White;
+            else _strokeColor = strokeColor;
+        }
+
+        ~CharacterBase()
+        {
+#if DEBUG
+            Debug.WriteLine("Character has been destroyed.");
+#endif
+        }
 
     }
 }

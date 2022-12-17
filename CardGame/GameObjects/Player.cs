@@ -18,13 +18,7 @@ namespace CardGame.GameObjects
 			set => _name = value;
 		}
 
-		private List<Card> _cards;
-
-		public List<Card> Cards
-		{
-			get => _cards;
-			set => _cards = value;
-		}
+		public Deck DeckOfCards;
 
 		public Card ChosenCard;
 

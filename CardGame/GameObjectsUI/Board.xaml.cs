@@ -1,4 +1,4 @@
-using CardGame.Characters;
+ï»¿using CardGame.Characters;
 using CardGame.GameObjects;
 using CardGame.ViewModels;
 
@@ -14,50 +14,30 @@ public partial class Board : ContentPage
         InitializeComponent();
         player1 = new Player()
         {
-            Cards = GetCards()
-        };
-        player1.Cards.ForEach((card) =>
-        {
-            (card.BindingContext as CardViewModel).Character.OnHealthToZero += (card) =>
+            DeckOfCards = new()
             {
-                // naprawiæ zwalnianie objektu z pamiêci
-                if (player1.Cards.Contains(card))
-                {
-                    player1.Cards.Remove(card);
-                }
-                if(PlayerCards.Children.Contains(card))
-                {
-                    PlayerCards.Children.Remove(card);
-                }
-                if (PlayerBoard.Children.Contains(card))
-                {
-                    PlayerBoard.Children.Remove(card);
-                }
-            };
+                Cards = GetCards()
+            }
+        };
+        player1.DeckOfCards.Cards.ForEach((card) =>
+        {
+            (card.BindingContext as CardViewModel).Character.OnHealthToZero += Player1CardDipose;
         });
 
         computer = new Player()
         {
-            Cards = GetCards()
-        };
-        computer.Cards.ForEach((card) =>
-        {
-            (card.BindingContext as CardViewModel).Character.OnHealthToZero += (card) =>
+            DeckOfCards = new()
             {
-                // naprawiæ zwalnianie objektu z pamiêci
-                if (computer.Cards.Contains(card))
-                {
-                    computer.Cards.Remove(card);
-                }
-                if (ComputerBoard.Children.Contains(card))
-                {
-                    ComputerBoard.Children.Remove(card);
-                }
-            };
+                Cards = GetCards()
+            }
+        };
+        computer.DeckOfCards.Cards.ForEach((card) =>
+        {
+            (card.BindingContext as CardViewModel).Character.OnHealthToZero += ComputerCardDipose;
         });
 
         // Show player's cards in lobby panel:
-        foreach (Card card in player1.Cards)
+        foreach (Card card in player1.DeckOfCards.Cards)
         {
             PlayerCards.Children.Add(card);
         }
@@ -68,13 +48,43 @@ public partial class Board : ContentPage
 
     }
 
+    private void Player1CardDipose(Card card)
+    {
+        // naprawiÄ‡ zwalnianie objektu z pamiÄ™ci
+        if (player1.DeckOfCards.Cards.Contains(card))
+        {
+            player1.DeckOfCards.Cards.Remove(card);
+        }
+        if (PlayerCards.Children.Contains(card))
+        {
+            PlayerCards.Children.Remove(card);
+        }
+        if (PlayerBoard.Children.Contains(card))
+        {
+            PlayerBoard.Children.Remove(card);
+        }
+    }
+
+    private void ComputerCardDipose(Card card)
+    {
+        // naprawiÃ¦ zwalnianie objektu z pamiÃªci
+        if (computer.DeckOfCards.Cards.Contains(card))
+        {
+            computer.DeckOfCards.Cards.Remove(card);
+        }
+        if (ComputerBoard.Children.Contains(card))
+        {
+            ComputerBoard.Children.Remove(card);
+        }
+    }
+
     private void AddClickEventToSelectForPlayer1Cards()
     {
-        foreach(Card card in PlayerCards.Children)
+        foreach (Card card in PlayerCards.Children)
         {
             card.OnSomeButtonClicked += PlayerThrowCard;
         }
-        foreach (Card card in player1.Cards)
+        foreach (Card card in player1.DeckOfCards.Cards)
         {
             card.OnSomeButtonClicked += PlayerTurn;
         }
@@ -86,7 +96,7 @@ public partial class Board : ContentPage
         {
             card.OnSomeButtonClicked -= PlayerThrowCard;
         }
-        foreach (Card card in player1.Cards)
+        foreach (Card card in player1.DeckOfCards.Cards)
         {
             card.OnSomeButtonClicked -= PlayerTurn;
         }
@@ -94,56 +104,60 @@ public partial class Board : ContentPage
 
     private static List<Card> GetCards()
     {
+        // Skalowanie kart:
+        int w = 505, h = 829;
+        double scale = 0.3;
+        double x = -(1 - scale) * w/2, y = -(1 - scale) * h/2;
         return new List<Card>()
             {
                 new(new FireDragon())
                 {
-                    HeightRequest = 829,
-                    WidthRequest = 505,
-                    Scale = 0.2,
-                    Margin = new Thickness(-200,-50),
+                    HeightRequest = h,
+                    WidthRequest = w,
+                    Scale = scale,
+                    Margin = new Thickness(x,y),
                 },
                 new(new Archer())
                 {
-                    HeightRequest = 829,
-                    WidthRequest = 505,
-                    Scale = 0.2,
-                    Margin = new Thickness(-200,-50)
+                    HeightRequest = h,
+                    WidthRequest = w,
+                    Scale = scale,
+                    Margin = new Thickness(x,y)
                 },
                 new(new SwordFighter())
                 {
-                    HeightRequest = 829,
-                    WidthRequest = 505,
-                    Scale = 0.2,
-                    Margin = new Thickness(-200,-50)
+                    HeightRequest = h,
+                    WidthRequest = w,
+                    Scale = scale,
+                    Margin = new Thickness(x,y)
                 },
                 new(new Zeus())
                 {
-                    HeightRequest = 829,
-                    WidthRequest = 505,
-                    Scale = 0.2,
-                    Margin = new Thickness(-200,-50)
+                    HeightRequest = h,
+                    WidthRequest = w,
+                    Scale = scale,
+                    Margin = new Thickness(x,y)
                 },
                 new(new Bandit())
                 {
-                    HeightRequest = 829,
-                    WidthRequest = 505,
-                    Scale = 0.2,
-                    Margin = new Thickness(-200,-50)
+                    HeightRequest = h,
+                    WidthRequest = w,
+                    Scale = scale,
+                    Margin = new Thickness(x,y)
                 },
                 new(new Fighter())
                 {
-                    HeightRequest = 829,
-                    WidthRequest = 505,
-                    Scale = 0.2,
-                    Margin = new Thickness(-200,-50)
+                    HeightRequest = h,
+                    WidthRequest = w,
+                    Scale = scale,
+                    Margin = new Thickness(x,y)
                 },
                 new(new FireDragon())
                 {
-                    HeightRequest = 829,
-                    WidthRequest = 505,
-                    Scale = 0.2,
-                    Margin = new Thickness(-200,-50)
+                    HeightRequest = h,
+                    WidthRequest = w,
+                    Scale = scale,
+                    Margin = new Thickness(x,y)
                 },
             };
     }
@@ -164,7 +178,7 @@ public partial class Board : ContentPage
 
         if (ComputerBoard.Children.Count == 0)
         {
-            if(computer.Cards.Count != 0) 
+            if (computer.DeckOfCards.Cards.Count != 0)
             {
                 ComputerTurn();
             }
@@ -200,8 +214,7 @@ public partial class Board : ContentPage
 
         myCharacter.Attack(enemyCharacter);
         player1.ChosenCard = null;
-
-        Thread.Sleep(2000);
+        player1.TargetedCard = null;
 
         ComputerTurn();
 
@@ -209,21 +222,30 @@ public partial class Board : ContentPage
         PlayerCards.IsVisible = true;
     }
 
-    int ComputerCardIndex = 0;
     private void ComputerTurn()
     {
-        if (ComputerCardIndex >= computer.Cards.Count)
-            return;
-        var card = computer.Cards[ComputerCardIndex++];
-        ComputerBoard.Children.Add(card);
+        Card card;
+        if (ComputerBoard.Children.Count > 0)
+        {
+            card = computer.ChosenCard = (ComputerBoard[0] as Card);
+        }
+        else
+        {
+            if (0 >= computer.DeckOfCards.Cards.Count)
+                return;
+            card = computer.ChosenCard = computer.DeckOfCards.Cards[0];
+            ComputerBoard.Children.Add(card);
+        }
 
         if (PlayerBoard.Children.Count == 0)
             return;
 
         var myCharacter = (card.BindingContext as CardViewModel).Character;
-        var playerCharacter = ((PlayerBoard.Children.First() as Card).BindingContext as CardViewModel).Character;
+        var playerCharacter = ((computer.TargetedCard = PlayerBoard.Children.First() as Card).BindingContext as CardViewModel).Character;
 
         myCharacter.Attack(playerCharacter);
+        computer.ChosenCard = null;
+        computer.TargetedCard = null;
     }
 
 }

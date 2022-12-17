@@ -87,7 +87,7 @@
 
             </Grid>
 
-            <Border x:Name="ImgBorder"
+            <Border
                 Grid.Row="1"
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill"

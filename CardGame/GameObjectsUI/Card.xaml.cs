@@ -1,5 +1,6 @@
 using CardGame.Characters;
 using CardGame.ViewModels;
+using System.Diagnostics;
 
 namespace CardGame.GameObjectsUI;
 
@@ -15,6 +16,13 @@ public partial class Card : ContentView
             Command = new Command((o) => OnSomeButtonClicked(this))
         });
         OnSomeButtonClicked += (a) => { };
+    }
+
+    ~Card()
+    {
+#if DEBUG
+        Debug.WriteLine("Card has been destroyed successfull!");
+#endif
     }
 
     public Card(MagicCharacter character) : this()

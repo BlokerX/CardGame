@@ -4,8 +4,8 @@
     {
         protected int _magicPoints;
 
-        public MagicCharacter(string name, int iD, string describe, string shortDescribe, SpeciesTypes species, CharacterTypeEnum characterType, int attackPoints, int healthPoints, int shieldPoints, bool isMagicResistant, string exampleImageSource, int magicPoints) :
-            base(name, iD, describe, shortDescribe, species, characterType, attackPoints, healthPoints, shieldPoints, isMagicResistant, exampleImageSource)
+        public MagicCharacter(string name, int iD, string describe, string shortDescribe, SpeciesTypes species, CharacterTypeEnum characterType, int attackPoints, int healthPoints, int shieldPoints, bool isMagicResistant, string exampleImageSource, int magicPoints, Brush backgroundColor = null, Brush strokeColor = null) :
+            base(name, iD, describe, shortDescribe, species, characterType, attackPoints, healthPoints, shieldPoints, isMagicResistant, exampleImageSource, backgroundColor, strokeColor)
         {
             _magicPoints = magicPoints;
         }
