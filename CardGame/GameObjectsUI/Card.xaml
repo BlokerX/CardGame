@@ -4,9 +4,9 @@
              x:Class="CardGame.GameObjectsUI.Card"
              xmlns:local="clr-namespace:CardGame.ViewModels"
              x:DataType="local:MagicCardViewModel"
-             SizeChanged="ContentView_SizeChanged">
-             <!--HeightRequest = "829"
-             WidthRequest = "505"-->
+             SizeChanged="ContentView_SizeChanged"
+             HeightRequest="829"
+             WidthRequest="505">
 
     <Border 
         HorizontalOptions="Fill"

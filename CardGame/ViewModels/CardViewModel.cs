@@ -59,6 +59,8 @@ namespace CardGame.ViewModels
 
         protected static string IntToThreeCharStringComparer(int value, int charPlacesCount = 3)
         {
+            if (value < 0) return "∞";
+
             char[] c = new char[charPlacesCount];
 
             int d = 1;

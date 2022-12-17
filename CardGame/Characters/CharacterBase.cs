@@ -191,12 +191,8 @@ namespace CardGame.Characters
             if (damage <= 0)
                 return;
 
-            HealthPoints -= damage;
-            if (HealthPoints <= 0)
-            {
-                HealthPoints = 0;
-                OnHealthToZero?.Invoke(CardOvner);
-            }
+            HealthPoints = HealthPoints - damage > 0 ? HealthPoints - damage : 0;
+            OnHealthToZero?.Invoke(CardOvner);
 
         }
 
@@ -221,7 +217,7 @@ namespace CardGame.Characters
             if (attackPoints <= 0)
                 return;
 
-            AttackPoints -= attackPoints;
+            AttackPoints = AttackPoints - attackPoints > 0 ? AttackPoints - attackPoints : 0;
         }
 
         public void ReinforceShield(int shieldPoints)
@@ -234,7 +230,7 @@ namespace CardGame.Characters
 
         public void BreakShield()
         {
-            ShieldPoints = 0;
+            if (ShieldPoints != 0) ShieldPoints = 0;
         }
 
         public Card CardOvner;

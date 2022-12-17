@@ -105,57 +105,42 @@ public partial class Board : ContentPage
     private static List<Card> GetCards()
     {
         // Skalowanie kart:
-        int w = 505, h = 829;
         double scale = 0.3;
-        double x = -(1 - scale) * w/2, y = -(1 - scale) * h/2;
+        double x = -(1 - scale) * 505 / 2, y = -(1 - scale) * 829 / 2;
         return new List<Card>()
             {
                 new(new FireDragon())
                 {
-                    HeightRequest = h,
-                    WidthRequest = w,
                     Scale = scale,
                     Margin = new Thickness(x,y),
                 },
                 new(new Archer())
                 {
-                    HeightRequest = h,
-                    WidthRequest = w,
                     Scale = scale,
                     Margin = new Thickness(x,y)
                 },
                 new(new SwordFighter())
                 {
-                    HeightRequest = h,
-                    WidthRequest = w,
                     Scale = scale,
                     Margin = new Thickness(x,y)
                 },
                 new(new Zeus())
                 {
-                    HeightRequest = h,
-                    WidthRequest = w,
                     Scale = scale,
                     Margin = new Thickness(x,y)
                 },
                 new(new Bandit())
                 {
-                    HeightRequest = h,
-                    WidthRequest = w,
                     Scale = scale,
                     Margin = new Thickness(x,y)
                 },
                 new(new Fighter())
                 {
-                    HeightRequest = h,
-                    WidthRequest = w,
                     Scale = scale,
                     Margin = new Thickness(x,y)
                 },
                 new(new FireDragon())
                 {
-                    HeightRequest = h,
-                    WidthRequest = w,
                     Scale = scale,
                     Margin = new Thickness(x,y)
                 },
