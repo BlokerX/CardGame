@@ -82,10 +82,10 @@
 
 
                     <Border.GestureRecognizers>
-                        <DropGestureRecognizer 
+                        <!--DropGestureRecognizer 
                                     DragOver="DropGestureRecognizer_DragOver" 
                                     Drop="DropGestureRecognizer_Drop"
-                                    DragLeave="DropGestureRecognizer_DragLeave"/>
+                                    DragLeave="DropGestureRecognizer_DragLeave"/-->
                     </Border.GestureRecognizers>
 
                     <ScrollView 

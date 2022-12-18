@@ -10,13 +10,7 @@
 
     <ContentView.GestureRecognizers>
         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-        <DragGestureRecognizer 
-            DragStarting="DragGestureRecognizer_DragStarting" 
-            DropCompleted="DragGestureRecognizer_DropCompleted"/>
-        <!--DropGestureRecognizer 
-            Drop="DropGestureRecognizer_Drop"
-            DragOver="DropGestureRecognizer_DragOver" 
-            DragLeave="DropGestureRecognizer_DragLeave" /-->
+        <!--DragGestureRecognizer DragStarting="DragGestureRecognizer_DragStarting"/-->
     </ContentView.GestureRecognizers>
 
     <Border 
@@ -24,7 +18,7 @@
         VerticalOptions="Fill"
         StrokeShape="RoundRectangle 10"
         Background="{Binding StrokeColor}"
-        Stroke="black"
+        Stroke="Black"
         StrokeThickness="1"
         Padding="10">
 
