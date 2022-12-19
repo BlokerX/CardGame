@@ -37,6 +37,21 @@ public partial class Card : ContentView
         //ImgBorder.StrokeShape = new RoundRectangle() { CornerRadius = 10 };
     }
 
+    #region Destroy
+
+    public Action<Card> ToDestroy;
+    public void Destroy()
+    {
+        ToDestroy?.Invoke(this);
+    }
+
+    #endregion
+
+    public static Card GetRandomCard()
+    {
+        return new Card(CharacterBase.GetCharacterTypesById(new Random().Next(1, 11)));
+    }
+
     #region click event
 
     public delegate void OnSomeButtonClickedDelegate(object sender);

@@ -6,187 +6,142 @@ namespace CardGame.GameObjectsUI;
 
 public partial class Board : ContentPage
 {
-    private readonly Player player1;
-    private readonly Player computer;
+    private readonly List<Player> players;
     private readonly int cardPerPerson = 32;
 
     public Board()
     {
         InitializeComponent();
-        player1 = new Player()
-        {
-            DeckOfCards = new()
-            {
-                Cards = Board.GetCards(cardPerPerson)
-            }
-        };
-        player1.DeckOfCards.Cards.ForEach((card) =>
-        {
-            (card.BindingContext as CardViewModel).Character.OnHealthToZero += Player1CardDipose;
-        });
 
-        computer = new Player()
-        {
-            DeckOfCards = new()
-            {
-                Cards = Board.GetCards(cardPerPerson)
-            }
-        };
-        computer.DeckOfCards.Cards.ForEach((card) =>
-            {
-                (card.BindingContext as CardViewModel).Character.OnHealthToZero += ComputerCardDipose;
+        players = new List<Player>() { null, null };
 
-                //foreach (var item in card.GestureRecognizers)
-                //{
-                //    if (item is DragGestureRecognizer)
-                //    {
-                //        (item as DragGestureRecognizer).CanDrag = false;
-                //        break;
-                //    }
-                //}
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i] = new Player()
+            {
+                DeckOfCards = new()
+                {
+                    Cards = Player.GetCards(cardPerPerson)
+                }
+            };
+            players[i].DeckOfCards.Cards.ForEach((card) =>
+            {
+                (card.BindingContext as CardViewModel).Character.OnHealthToZero += DestroyCard;
+
+                card.ToDestroy += RemoveCardFrom_Player; // dać to
+                card.ToDestroy += RemoveCardFrom_Computer; // dla każdego osobno
             });
-
-        // Show player's cards in lobby panel:
-        foreach (Card card in player1.DeckOfCards.Cards)
-        {
-            PlayerCards.Children.Add(card);
         }
 
-        AddClickEventToSelectForPlayer1Cards();
+        // Show player's cards in lobby panel:
+        foreach (Card card in players[0].DeckOfCards.Cards)
+        {
+            PlayerCards.Children.Add(card);
+            card.ToDestroy += RemoveCardFrom_PlayerCards;
+        }
+
+        AddClickEventToSelect_PlayerCards();
 
         ComputerTurn();
 
     }
 
-    private void Player1CardDipose(Card card)
+    #region Events methods
+
+    // All player cards:
+    private void RemoveCardFrom_Player(Card card)
     {
-        // naprawić zwalnianie objektu z pamięci
-        if (player1.DeckOfCards.Cards.Contains(card))
-        {
-            player1.DeckOfCards.Cards.Remove(card);
-        }
+        if (players[0].DeckOfCards.Cards.Contains(card))
+            players[0].DeckOfCards.Cards.Remove(card);
+    }
+
+    // Player's card lobby:
+    private void RemoveCardFrom_PlayerCards(Card card)
+    {
         if (PlayerCards.Children.Contains(card))
-        {
             PlayerCards.Children.Remove(card);
-        }
-        if (PlayerBoard.Children.Contains(card))
-        {
-            PlayerBoard.Children.Remove(card);
-        }
     }
 
-    private void ComputerCardDipose(Card card)
+    // Player's board:
+    private void RemoveCardFrom_PlayerBoard(Card card)
     {
-        // naprawiæ zwalnianie objektu z pamiêci
-        if (computer.DeckOfCards.Cards.Contains(card))
-        {
-            computer.DeckOfCards.Cards.Remove(card);
-        }
-        if (ComputerBoard.Children.Contains(card))
-        {
-            ComputerBoard.Children.Remove(card);
-        }
+        if (PlayerBoard.Children.Contains(card))
+            PlayerBoard.Children.Remove(card);
     }
 
-    private void AddClickEventToSelectForPlayer1Cards()
+    // - - - - - //
+
+    // All computer cards:
+    private void RemoveCardFrom_Computer(Card card)
+    {
+        if (players[1].DeckOfCards.Cards.Contains(card))
+            players[1].DeckOfCards.Cards.Remove(card);
+    }
+
+    // Computer's board:
+    private void RemoveCardFrom_ComputerBoard(Card card)
+    {
+        if (ComputerBoard.Children.Contains(card))
+            ComputerBoard.Children.Remove(card);
+    }
+
+    // ----------------------------- //
+
+    private void DestroyCard(Card card)
+    {
+        card.Destroy();
+    }
+
+    #endregion
+
+    private void AddClickEventToSelect_PlayerCards()
     {
         foreach (Card card in PlayerCards.Children.Cast<Card>())
         {
-            card.OnCardTaped += PlayerThrowCard;
+            card.OnCardTaped += ThrowCard_Player;
         }
-        foreach (Card card in player1.DeckOfCards.Cards)
+        foreach (Card card in players[0].DeckOfCards.Cards)
         {
             card.OnCardTaped += PlayerTurn;
         }
     }
 
-    private void RemoveClickEventToSelectForPlayer1Cards()
+    private void RemoveClickEventToSelect_PlayerCards()
     {
         foreach (Card card in PlayerCards.Children.Cast<Card>())
         {
-            card.OnCardTaped -= PlayerThrowCard;
+            card.OnCardTaped -= ThrowCard_Player;
         }
-        foreach (Card card in player1.DeckOfCards.Cards)
+        foreach (Card card in players[0].DeckOfCards.Cards)
         {
             card.OnCardTaped -= PlayerTurn;
         }
     }
 
-    private static List<Card> GetCards(int count)
+    #region Game logic
+
+    private void ThrowCard_Player(object sender)
     {
-        // Skalowanie kart:
-        double scale = 0.3;
-        double x = -(1 - scale) * 505 / 2, y = -(1 - scale) * 829 / 2;
+        players[0].ChosenCard = sender as Card;
+        players[0].ChosenCard.OnCardTaped -= ThrowCard_Player;
 
-        List<Card> cards = new();
+        RemoveCardFrom_PlayerCards(players[0].ChosenCard);
+        players[0].ChosenCard.ToDestroy -= RemoveCardFrom_PlayerCards;
 
-        for (int i = 0; i < count; i++)
-        {
-            var c = Board.GetRandomCard();
-            c.Scale = scale;
-            c.Margin = new Thickness(x, y);
-            cards.Add(c);
-        }
-
-        return cards;
-
-        //return new List<Card>()
-        //    {
-        //        new(new FireDragon())
-        //        {
-        //            Scale = scale,
-        //            Margin = new Thickness(x,y),
-        //        },
-        //        new(new Archer())
-        //        {
-        //            Scale = scale,
-        //            Margin = new Thickness(x,y)
-        //        },
-        //        new(new SwordFighter())
-        //        {
-        //            Scale = scale,
-        //            Margin = new Thickness(x,y)
-        //        },
-        //        new(new Zeus())
-        //        {
-        //            Scale = scale,
-        //            Margin = new Thickness(x,y)
-        //        },
-        //        new(new Bandit())
-        //        {
-        //            Scale = scale,
-        //            Margin = new Thickness(x,y)
-        //        },
-        //        new(new Fighter())
-        //        {
-        //            Scale = scale,
-        //            Margin = new Thickness(x,y)
-        //        },
-        //        new(new FireDragon())
-        //        {
-        //            Scale = scale,
-        //            Margin = new Thickness(x,y)
-        //        },
-        //    };
-    }
-
-    private void PlayerThrowCard(object sender)
-    {
-        player1.ChosenCard = sender as Card;
-        player1.ChosenCard.OnCardTaped -= PlayerThrowCard;
-        (player1.ChosenCard.Parent as HorizontalStackLayout).Remove(player1.ChosenCard);
-        PlayerBoard.Children.Add(player1.ChosenCard);
+        PlayerBoard.Children.Add(players[0].ChosenCard);
+        players[0].ChosenCard.ToDestroy += RemoveCardFrom_PlayerBoard;
     }
 
     // for all player cards
     private void PlayerTurn(object sender)
     {
-        RemoveClickEventToSelectForPlayer1Cards();
-        player1.ChosenCard = sender as Card;
+        RemoveClickEventToSelect_PlayerCards();
+
+        players[0].ChosenCard = sender as Card;
 
         if (ComputerBoard.Children.Count == 0)
         {
-            if (computer.DeckOfCards.Cards.Count != 0)
+            if (players[1].DeckOfCards.Cards.Count != 0)
             {
                 ComputerTurn();
             }
@@ -198,7 +153,8 @@ public partial class Board : ContentPage
             card.OnCardTaped += OnComputerCardClickedPlayerTargeted;
         }
 
-        player1.TargetedCardSelected += OnPlayer1TargetedCardSelected;
+        players[0].TargetedCardSelected += OnPlayerTargetedCardSelected;
+
         PlayerCards.IsVisible = false;
     }
 
@@ -209,94 +165,59 @@ public partial class Board : ContentPage
         {
             item.OnCardTaped -= OnComputerCardClickedPlayerTargeted;
         }
-        player1.TargetedCard = c;
-        player1.TargetedCardSelected();
+        players[0].TargetedCard = c;
+        players[0].TargetedCardSelected();
     }
 
-    private void OnPlayer1TargetedCardSelected()
+    private void OnPlayerTargetedCardSelected()
     {
-        player1.TargetedCardSelected -= OnPlayer1TargetedCardSelected;
-        var myCharacter = (player1.ChosenCard.BindingContext as CardViewModel).Character;
-        CharacterBase enemyCharacter = (player1.TargetedCard.BindingContext as CardViewModel).Character;
+        players[0].TargetedCardSelected -= OnPlayerTargetedCardSelected;
+
+        CharacterBase myCharacter = (players[0].ChosenCard.BindingContext as CardViewModel).Character;
+        CharacterBase enemyCharacter = (players[0].TargetedCard.BindingContext as CardViewModel).Character;
 
         myCharacter.Attack(enemyCharacter);
-        player1.ChosenCard = null;
-        player1.TargetedCard = null;
+
+        players[0].ChosenCard = null;
+        players[0].TargetedCard = null;
 
         ComputerTurn();
 
-        AddClickEventToSelectForPlayer1Cards();
+        AddClickEventToSelect_PlayerCards();
         PlayerCards.IsVisible = true;
     }
 
     private void ComputerTurn()
     {
-        Card card;
         if (ComputerBoard.Children.Count > 0)
         {
-            card = computer.ChosenCard = (ComputerBoard[0] as Card);
+            players[1].ChosenCard = ComputerBoard[0] as Card;
         }
         else
         {
-            if (0 >= computer.DeckOfCards.Cards.Count)
+            if (players[1].DeckOfCards.Cards.Count < 1)
                 return;
-            card = computer.ChosenCard = computer.DeckOfCards.Cards[0];
-            ComputerBoard.Children.Add(card);
+
+            players[1].ChosenCard = players[1].DeckOfCards.Cards[0];
+
+            ComputerBoard.Children.Add(players[1].ChosenCard);
+            players[1].ChosenCard.ToDestroy += RemoveCardFrom_ComputerBoard;
         }
 
         if (PlayerBoard.Children.Count == 0)
             return;
 
-        var myCharacter = (card.BindingContext as CardViewModel).Character;
-        var playerCharacter = ((computer.TargetedCard = PlayerBoard.Children.First() as Card).BindingContext as CardViewModel).Character;
+        var myCharacter = (players[1].ChosenCard.BindingContext as CardViewModel).Character;
+        var playerCharacter = ((players[1].TargetedCard = PlayerBoard.Children.First() as Card).BindingContext as CardViewModel).Character;
 
         myCharacter.Attack(playerCharacter);
-        computer.ChosenCard = null;
-        computer.TargetedCard = null;
+        players[1].ChosenCard = null;
+        players[1].TargetedCard = null;
     }
+
+    #endregion
 
     // ---------------------------------------------- //
-
-    private static Card GetRandomCard()
-    {
-        return new Card(GetCharacterTypesById(new Random().Next(1, 11)));
-    }
-
-    private static CharacterBase GetCharacterTypesById(int id)
-    {
-        return id switch
-        {
-            1 => new Fighter(),
-            2 => new Archer(),
-            3 => new Wizard(),
-            4 => new SwordFighter(),
-            5 => new Zeus(),
-            6 => new FireDragon(),
-            7 => new Bandit(),
-            8 => new Witch(),
-            9 => new RoyalSoldier(),
-            10 => new Prince(),
-            11 => new Knight(),
-            _ => null,
-        };
-        //return CharacterTypesByID[id];
-        //todo trzeba twożyć nowe instancje zamiast używania gotowych ze słownika
-    }
-
-    //private readonly Dictionary<int, CharacterBase> CharacterTypesByID = new()
-    //{
-    //    { 1, new Fighter() },
-    //    { 2, new Archer() },
-    //    { 3, new Wizard() },
-    //    { 4, new SwordFighter() },
-    //    { 5, new Zeus() },
-    //    { 6, new FireDragon() },
-    //    { 7, new Bandit() },
-    //    { 8, new Witch() },
-    //    { 9, new RoyalSoldier() },
-    //    { 10, new Prince() },
-    //    { 11, new Knight() }
-    //};
 
     #region Drag&Drop
 
