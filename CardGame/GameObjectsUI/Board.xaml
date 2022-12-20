@@ -89,7 +89,7 @@
                     </Border.GestureRecognizers>
 
                     <ScrollView 
-                        Orientation="Horizontal"
+                        Orientation="Both"
                         Padding="5">
 
                         <HorizontalStackLayout 
@@ -106,7 +106,7 @@
                     Margin="10,20,20,20">
 
                     <ScrollView 
-                        Orientation="Horizontal"
+                        Orientation="Both"
                         Padding="5">
 
                         <HorizontalStackLayout 

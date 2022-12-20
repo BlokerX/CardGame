@@ -192,7 +192,9 @@ namespace CardGame.Characters
                 return;
 
             HealthPoints = HealthPoints - damage > 0 ? HealthPoints - damage : 0;
-            OnHealthToZero?.Invoke(CardOvner);
+
+            if (HealthPoints <= 0)
+                OnHealthToZero?.Invoke(CardOvner);
 
         }
 
