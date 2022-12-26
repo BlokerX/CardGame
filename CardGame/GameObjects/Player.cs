@@ -2,35 +2,73 @@
 
 namespace CardGame.GameObjects
 {
+    /// <summary>
+    /// Player object.
+    /// </summary>
     public class Player
     {
-        //todo do zmiany
+        //todo do zmiany 
         private string _name = "William";
-
+        /// <summary>
+        /// Player's name.
+        /// </summary>
         public string Name
         {
             get => _name;
             set => _name = value;
         }
 
+        /// <summary>
+        /// Player's deck of cards.
+        /// </summary>
         public Deck DeckOfCards;
 
-
+        /// <summary>
+        /// Chosen card (ovn card).
+        /// </summary>
         public Card ChosenCard;
 
+        /// <summary>
+        /// Invoke when chosen card is select (own card).
+        /// </summary>
         public Action ChosenCardSelected;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool CanSelectChosenCard;
 
+        /// <summary>
+        /// Targeted card (enemy card).
+        /// </summary>
         public Card TargetedCard;
 
+        /// <summary>
+        /// Invoke when targeted card is select (enamy card).
+        /// </summary>
         public Action TargetedCardSelected;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool CanSeleckTargetedCard;
+
+        /// <summary>
+        /// Special point to use speial attacks.
+        /// </summary>
+        public byte SpecialPoints;
+
         // - - - //
 
 
 
         // - - - //
 
+        /// <summary>
+        /// It gets random cards list.
+        /// </summary>
+        /// <param name="count">Count of cards.</param>
+        /// <returns>Random cards list.</returns>
         public static List<Card> GetCards(int count)
         {
             // Skalowanie kart:
@@ -48,6 +86,22 @@ namespace CardGame.GameObjects
             }
 
             return cards;
+        }
+
+        public TurnFazeEnum TurnFaze;
+
+        public enum TurnFazeEnum
+        {
+            // Ememy turn:
+            EnemyTure,
+
+            // Player moves:
+            SelectingPlayerCard,
+            SelectingEnemyCard,
+            UsingSpecialAttack,
+            
+            // End game:
+            EndGame
         }
 
     }

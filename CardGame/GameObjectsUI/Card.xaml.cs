@@ -54,7 +54,7 @@ public partial class Card : ContentView
 
     #region click event
 
-    public delegate void OnSomeButtonClickedDelegate(object sender);
+    public delegate void OnSomeButtonClickedDelegate(Card sender);
 
     public OnSomeButtonClickedDelegate OnCardTaped { get; set; }
 

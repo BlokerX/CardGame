@@ -138,6 +138,10 @@
             </ScrollView>
         </Border>
 
+        <Button
+            Text="Load special attack"
+            Clicked="LoadSpecialAttackButton_Clicked"/>
+
     </Grid>
 
 </ContentPage>

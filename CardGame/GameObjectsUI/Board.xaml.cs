@@ -53,6 +53,8 @@ public partial class Board : ContentPage
     {
         if (players[0].DeckOfCards.Cards.Contains(card))
             players[0].DeckOfCards.Cards.Remove(card);
+
+        card.ToDestroy -= RemoveCardFrom_Player;
     }
 
     // Player's card lobby:
@@ -60,6 +62,8 @@ public partial class Board : ContentPage
     {
         if (PlayerCards.Children.Contains(card))
             PlayerCards.Children.Remove(card);
+
+        card.ToDestroy -= RemoveCardFrom_PlayerCards;
     }
 
     // Player's board:
@@ -67,6 +71,8 @@ public partial class Board : ContentPage
     {
         if (PlayerBoard.Children.Contains(card))
             PlayerBoard.Children.Remove(card);
+
+        card.ToDestroy -= RemoveCardFrom_PlayerBoard;
     }
 
     // - - - - - //
@@ -76,6 +82,8 @@ public partial class Board : ContentPage
     {
         if (players[1].DeckOfCards.Cards.Contains(card))
             players[1].DeckOfCards.Cards.Remove(card);
+
+        card.ToDestroy -= RemoveCardFrom_Computer;
     }
 
     // Computer's board:
@@ -83,6 +91,8 @@ public partial class Board : ContentPage
     {
         if (ComputerBoard.Children.Contains(card))
             ComputerBoard.Children.Remove(card);
+
+        card.ToDestroy -= RemoveCardFrom_ComputerBoard;
     }
 
     // ----------------------------- //
@@ -94,18 +104,16 @@ public partial class Board : ContentPage
 
     #endregion
 
+    // domyślna akcja kliknięcia karty gracza
     private void AddClickEventToSelect_PlayerCards()
     {
         foreach (Card card in PlayerCards.Children.Cast<Card>())
         {
             card.OnCardTaped += ThrowCard_Player;
         }
-        foreach (Card card in players[0].DeckOfCards.Cards)
-        {
-            card.OnCardTaped += PlayerTurn;
-        }
     }
 
+    // przestarzałe
     private void RemoveClickEventToSelect_PlayerCards()
     {
         foreach (Card card in PlayerCards.Children.Cast<Card>())
@@ -114,77 +122,89 @@ public partial class Board : ContentPage
         }
         foreach (Card card in players[0].DeckOfCards.Cards)
         {
-            card.OnCardTaped -= PlayerTurn;
+            card.OnCardTaped -= SelectOwnCard;
         }
     }
 
     #region Game logic
 
-    private void ThrowCard_Player(object sender)
+    // Wystawia karty z lobby na planszę.
+    private void ThrowCard_Player(Card card)
     {
-        players[0].ChosenCard = sender as Card;
-        players[0].ChosenCard.OnCardTaped -= ThrowCard_Player;
+        if (players[0].TurnFaze is not Player.TurnFazeEnum.SelectingPlayerCard)
+            return;
 
-        RemoveCardFrom_PlayerCards(players[0].ChosenCard);
-        players[0].ChosenCard.ToDestroy -= RemoveCardFrom_PlayerCards;
+        card.OnCardTaped -= ThrowCard_Player;
+        card.OnCardTaped += SelectOwnCard;
 
-        PlayerBoard.Children.Add(players[0].ChosenCard);
-        players[0].ChosenCard.ToDestroy += RemoveCardFrom_PlayerBoard;
+        RemoveCardFrom_PlayerCards(card);
+
+        PlayerBoard.Children.Add(card);
+        card.ToDestroy += RemoveCardFrom_PlayerBoard;
+
+        SelectOwnCard(card);
     }
 
-    // for all player cards
-    private void PlayerTurn(object sender)
+    // Wybieranie karty.
+    private void SelectOwnCard(Card card)
     {
-        RemoveClickEventToSelect_PlayerCards();
-
-        players[0].ChosenCard = sender as Card;
-
-        if (ComputerBoard.Children.Count == 0)
-        {
-            if (players[1].DeckOfCards.Cards.Count != 0)
-            {
-                ComputerTurn();
-            }
+        if (players[0].TurnFaze is not Player.TurnFazeEnum.SelectingPlayerCard)
             return;
-        }
 
-        foreach (Card card in ComputerBoard.Children.Cast<Card>())
-        {
-            card.OnCardTaped += OnComputerCardClickedPlayerTargeted;
-        }
-
-        players[0].TargetedCardSelected += OnPlayerTargetedCardSelected;
+        players[0].ChosenCard = card;
 
         PlayerCards.IsVisible = false;
+
+        players[0].TurnFaze = Player.TurnFazeEnum.SelectingEnemyCard;
     }
 
-    private void OnComputerCardClickedPlayerTargeted(object card)
+    // Wybieranie karty atakowanej:
+    private void OnComputerCardClickedPlayerTargeted(Card card)
     {
-        var c = card as Card;
-        foreach (Card item in ComputerBoard.Children.Cast<Card>())
-        {
-            item.OnCardTaped -= OnComputerCardClickedPlayerTargeted;
-        }
-        players[0].TargetedCard = c;
-        players[0].TargetedCardSelected();
-    }
+        if (players[0].TurnFaze is not Player.TurnFazeEnum.SelectingEnemyCard)
+            return;
 
-    private void OnPlayerTargetedCardSelected()
-    {
-        players[0].TargetedCardSelected -= OnPlayerTargetedCardSelected;
+        players[0].TargetedCard = card;
 
         CharacterBase myCharacter = (players[0].ChosenCard.BindingContext as CardViewModel).Character;
         CharacterBase enemyCharacter = (players[0].TargetedCard.BindingContext as CardViewModel).Character;
-
+        
+        // Normal attack
         myCharacter.Attack(enemyCharacter);
+
+        // todo specialAttack
 
         players[0].ChosenCard = null;
         players[0].TargetedCard = null;
 
+        players[0].TurnFaze = Player.TurnFazeEnum.EnemyTure;
+
         ComputerTurn();
 
-        AddClickEventToSelect_PlayerCards();
         PlayerCards.IsVisible = true;
+    }
+
+    //testowe
+    private void LoadSpecialAttackButton_Clicked(object sender, EventArgs e)
+    {
+        switch (players[0].TurnFaze)
+        {
+            case Player.TurnFazeEnum.SelectingEnemyCard:
+                players[0].TurnFaze = Player.TurnFazeEnum.UsingSpecialAttack;
+                (sender as Button).Text = "Load normal attack";
+                break;
+            case Player.TurnFazeEnum.UsingSpecialAttack:
+                players[0].TurnFaze = Player.TurnFazeEnum.SelectingEnemyCard;
+                (sender as Button).Text = "Load special attack";
+                break;
+        }
+    }
+
+    //testowe
+    private void TargetedCardsToSpecialAttack(Card card)
+    {
+        if (players[0].TurnFaze is not Player.TurnFazeEnum.UsingSpecialAttack)
+            return;
     }
 
     private void ComputerTurn()
@@ -196,23 +216,30 @@ public partial class Board : ContentPage
         else
         {
             if (players[1].DeckOfCards.Cards.Count < 1)
-                return;
+                goto END;
 
             players[1].ChosenCard = players[1].DeckOfCards.Cards[0];
 
             ComputerBoard.Children.Add(players[1].ChosenCard);
             players[1].ChosenCard.ToDestroy += RemoveCardFrom_ComputerBoard;
+
+            players[1].ChosenCard.OnCardTaped += OnComputerCardClickedPlayerTargeted;
+            players[1].ChosenCard.OnCardTaped += TargetedCardsToSpecialAttack;
         }
 
         if (PlayerBoard.Children.Count == 0)
-            return;
+            goto END;
 
         var myCharacter = (players[1].ChosenCard.BindingContext as CardViewModel).Character;
         var playerCharacter = ((players[1].TargetedCard = PlayerBoard.Children.First() as Card).BindingContext as CardViewModel).Character;
 
         myCharacter.Attack(playerCharacter);
+
+    END:
         players[1].ChosenCard = null;
         players[1].TargetedCard = null;
+
+        players[0].TurnFaze = Player.TurnFazeEnum.SelectingPlayerCard;
     }
 
     #endregion
@@ -261,5 +288,4 @@ public partial class Board : ContentPage
     //#endregion
 
     #endregion
-
 }
