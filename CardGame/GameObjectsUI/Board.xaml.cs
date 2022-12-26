@@ -1,6 +1,7 @@
 ﻿using CardGame.Characters;
 using CardGame.GameObjects;
 using CardGame.ViewModels;
+using Microsoft.Maui.Graphics;
 
 namespace CardGame.GameObjectsUI;
 
@@ -153,6 +154,11 @@ public partial class Board : ContentPage
 
         players[0].ChosenCard = card;
 
+        #region Animation
+        if (players[0].ChosenCard != null)
+            (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromArgb("#880000FF");
+        #endregion
+
         PlayerCards.IsVisible = false;
 
         players[0].TurnFaze = Player.TurnFazeEnum.SelectingEnemyCard;
@@ -165,6 +171,10 @@ public partial class Board : ContentPage
             return;
 
         players[0].TargetedCard = card;
+        #region Animation
+        if (players[0].TargetedCard != null)
+            (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromArgb("#88FF0000");
+        #endregion
 
         CharacterBase myCharacter = (players[0].ChosenCard.BindingContext as CardViewModel).Character;
         CharacterBase enemyCharacter = (players[0].TargetedCard.BindingContext as CardViewModel).Character;
@@ -174,7 +184,16 @@ public partial class Board : ContentPage
 
         // todo specialAttack
 
+        #region Animation
+        if (players[0].ChosenCard != null)
+            (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
+        #endregion
         players[0].ChosenCard = null;
+
+        #region Animation
+        if (players[0].TargetedCard != null)
+            (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
+        #endregion
         players[0].TargetedCard = null;
 
         players[0].TurnFaze = Player.TurnFazeEnum.EnemyTure;
@@ -225,6 +244,7 @@ public partial class Board : ContentPage
 
             players[1].ChosenCard.OnCardTaped += OnComputerCardClickedPlayerTargeted;
             players[1].ChosenCard.OnCardTaped += TargetedCardsToSpecialAttack;
+            //todo pauza timerem
         }
 
         if (PlayerBoard.Children.Count == 0)

@@ -129,10 +129,14 @@ namespace CardGame.Characters
 
         private Brush _backgroundColor;
 
-        public Brush BakckgroundColor
+        public Brush BackgroundColor
         {
             get => _backgroundColor;
-            set => _backgroundColor = value;
+            set
+            {
+                _backgroundColor = value;
+                OnPropertyChanged(nameof(BackgroundColor));
+            }
         }
 
         private Brush _strokeColor;
@@ -140,8 +144,25 @@ namespace CardGame.Characters
         public Brush StrokeColor
         {
             get => _strokeColor;
-            set => _strokeColor = value;
+            set
+            {
+                _strokeColor = value;
+                OnPropertyChanged(nameof(StrokeColor));
+            }
         }
+
+        private Brush _auraBrush;
+
+        public Brush AuraBrush
+        {
+            get => _auraBrush;
+            set
+            {
+                _auraBrush = value;
+                OnPropertyChanged(nameof(AuraBrush));
+            }
+        }
+
 
         public enum SpeciesTypes
         {

@@ -29,29 +29,9 @@ namespace CardGame.GameObjects
         public Card ChosenCard;
 
         /// <summary>
-        /// Invoke when chosen card is select (own card).
-        /// </summary>
-        public Action ChosenCardSelected;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool CanSelectChosenCard;
-
-        /// <summary>
         /// Targeted card (enemy card).
         /// </summary>
         public Card TargetedCard;
-
-        /// <summary>
-        /// Invoke when targeted card is select (enamy card).
-        /// </summary>
-        public Action TargetedCardSelected;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool CanSeleckTargetedCard;
 
         /// <summary>
         /// Special point to use speial attacks.
