@@ -1,7 +1,6 @@
 ﻿using CardGame.Characters;
 using CardGame.GameObjects;
 using CardGame.ViewModels;
-using Microsoft.Maui.Graphics;
 
 namespace CardGame.GameObjectsUI;
 
@@ -167,7 +166,8 @@ public partial class Board : ContentPage
     // Wybieranie karty atakowanej:
     private void OnComputerCardClickedPlayerTargeted(Card card)
     {
-        if (players[0].TurnFaze is not Player.TurnFazeEnum.SelectingEnemyCard)
+        if (players[0].TurnFaze != Player.TurnFazeEnum.SelectingEnemyCard &&
+            players[0].TurnFaze != Player.TurnFazeEnum.UsingSpecialAttack)
             return;
 
         players[0].TargetedCard = card;
@@ -178,11 +178,27 @@ public partial class Board : ContentPage
 
         CharacterBase myCharacter = (players[0].ChosenCard.BindingContext as CardViewModel).Character;
         CharacterBase enemyCharacter = (players[0].TargetedCard.BindingContext as CardViewModel).Character;
-        
-        // Normal attack
-        myCharacter.Attack(enemyCharacter);
 
-        // todo specialAttack
+        // Normal attack
+        if (players[0].TurnFaze == Player.TurnFazeEnum.SelectingPlayerCard)
+            myCharacter.Attack(enemyCharacter);
+
+        // Special attack
+        else if (players[0].TurnFaze == Player.TurnFazeEnum.UsingSpecialAttack)
+        {
+            List<CharacterBase> playerBoardCharacters = new();
+            foreach (Card item in PlayerBoard.Cast<Card>())
+            {
+                playerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
+            }
+            List<CharacterBase> computerBoardCharacters = new();
+            foreach (Card item in ComputerBoard.Cast<Card>())
+            {
+                computerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
+            }
+
+            myCharacter.SpecialAttack(computerBoardCharacters.ToArray(), playerBoardCharacters.ToArray(), enemyCharacter);
+        }
 
         #region Animation
         if (players[0].ChosenCard != null)
@@ -210,21 +226,77 @@ public partial class Board : ContentPage
         {
             case Player.TurnFazeEnum.SelectingEnemyCard:
                 players[0].TurnFaze = Player.TurnFazeEnum.UsingSpecialAttack;
+
+                #region Animation
+                if (players[0].ChosenCard != null)
+                    (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromArgb("#BBFFFF00");
+                #endregion
+
                 (sender as Button).Text = "Load normal attack";
                 break;
             case Player.TurnFazeEnum.UsingSpecialAttack:
                 players[0].TurnFaze = Player.TurnFazeEnum.SelectingEnemyCard;
+
+                #region Animation
+                if (players[0].ChosenCard != null)
+                    (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromArgb("#880000FF");
+                #endregion
+
                 (sender as Button).Text = "Load special attack";
                 break;
         }
     }
 
     //testowe
-    private void TargetedCardsToSpecialAttack(Card card)
-    {
-        if (players[0].TurnFaze is not Player.TurnFazeEnum.UsingSpecialAttack)
-            return;
-    }
+    //private void TargetedCardsToSpecialAttack(Card card)
+    //{
+    //    if (players[0].TurnFaze is not Player.TurnFazeEnum.UsingSpecialAttack)
+    //        return;
+
+    //    players[0].TargetedCard = card;
+    //    #region Animation
+    //    if (players[0].TargetedCard != null)
+    //        (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromArgb("#88FF0000");
+    //    #endregion
+
+    //    CharacterBase myCharacter = (players[0].ChosenCard.BindingContext as CardViewModel).Character;
+    //    CharacterBase enemyCharacter = (players[0].TargetedCard.BindingContext as CardViewModel).Character;
+
+    //    #region other code
+
+    //    List<CharacterBase> playerBoardCharacters = new();
+    //    foreach (Card item in PlayerBoard.Cast<Card>())
+    //    {
+    //        playerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
+    //    }
+    //    List<CharacterBase> computerBoardCharacters = new();
+    //    foreach (Card item in ComputerBoard.Cast<Card>())
+    //    {
+    //        computerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
+    //    }
+
+    //    // Special attack
+    //    myCharacter.SpecialAttack(computerBoardCharacters.ToArray(), playerBoardCharacters.ToArray(), enemyCharacter);
+    //    #endregion
+
+    //    #region Animation
+    //    if (players[0].ChosenCard != null)
+    //        (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
+    //    #endregion
+    //    players[0].ChosenCard = null;
+
+    //    #region Animation
+    //    if (players[0].TargetedCard != null)
+    //        (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
+    //    #endregion
+    //    players[0].TargetedCard = null;
+
+    //    players[0].TurnFaze = Player.TurnFazeEnum.EnemyTure;
+
+    //    ComputerTurn();
+
+    //    PlayerCards.IsVisible = true;
+    //}
 
     private void ComputerTurn()
     {
@@ -243,7 +315,6 @@ public partial class Board : ContentPage
             players[1].ChosenCard.ToDestroy += RemoveCardFrom_ComputerBoard;
 
             players[1].ChosenCard.OnCardTaped += OnComputerCardClickedPlayerTargeted;
-            players[1].ChosenCard.OnCardTaped += TargetedCardsToSpecialAttack;
             //todo pauza timerem
         }
 
