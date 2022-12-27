@@ -6,7 +6,8 @@
              x:DataType="local:MagicCardViewModel"
              SizeChanged="ContentView_SizeChanged"
              HeightRequest="829"
-             WidthRequest="505">
+             WidthRequest="505"
+             Margin="10">
 
     <ContentView.GestureRecognizers>
         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
@@ -21,8 +22,8 @@
         VerticalOptions="Fill"
         StrokeShape="RoundRectangle 10"
         Margin="-10">
-    
-    <Border 
+
+        <Border 
         HorizontalOptions="Fill"
         VerticalOptions="Fill"
         StrokeShape="RoundRectangle 10"
@@ -31,32 +32,32 @@
         StrokeThickness="1"
         Padding="10">
 
-        <Grid 
+            <Grid 
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand"
             Background="{Binding BackgroundColor}"
             Padding="15,10">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1.5*" />
-                <RowDefinition Height="6*" />
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="1.5*" />
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1.5*" />
+                    <RowDefinition Height="6*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="1.5*" />
+                </Grid.RowDefinitions>
 
-            <Grid
+                <Grid
                 Grid.Row="0"
                 VerticalOptions="Fill"
                 HorizontalOptions="Fill"
                 Margin="5">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="5*"/>
-                    <ColumnDefinition Width="90"/>
-                </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="90"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label 
+                    <Label 
                     Grid.Column="0"
                     Text="Tmg"
                     VerticalOptions="Center" 
@@ -65,7 +66,7 @@
                     FontAttributes="Bold"
                     Padding="10" />
 
-                <Label 
+                    <Label 
                     Grid.Column="1"
                     Text="{Binding Name}"
                     VerticalOptions="Center" 
@@ -76,7 +77,7 @@
                     Margin="2.5"
                     Padding="5" />
 
-                <Border 
+                    <Border 
                     Grid.Column="2"
                     VerticalOptions="Center" 
                     HorizontalOptions="End"
@@ -87,7 +88,7 @@
                     Margin="2.5"
                     Padding="10">
 
-                    <Label 
+                        <Label 
                         Text="{Binding ID}"
                         FontSize="Large"
                         FontAttributes="Bold"
@@ -97,11 +98,11 @@
                         HorizontalTextAlignment="Center"
                         TextColor="Black" />
 
-                </Border>
+                    </Border>
 
-            </Grid>
+                </Grid>
 
-            <Border
+                <Border
                 Grid.Row="1"
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill"
@@ -109,51 +110,51 @@
                 Stroke="{Binding Character.StrokeColor}"
                 StrokeThickness="5">
 
-                <Grid>
+                    <Grid>
 
-                    <Image 
+                        <Image 
                         Source="{Binding ExampleImage.Source}"
                         Aspect="Fill"/>
 
-                </Grid>
+                    </Grid>
 
-            </Border>
+                </Border>
 
-            <Label 
+                <Label 
                 Grid.Row="2"
                 Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget nisl porttitor, lacinia arcu et, faucibus justo. Pellentesque congue ornare nibh vitae fermentum. Etiam sed libero lacus. Cras ultricies ultrices ligula, eu venenatis lacus viverra vel."
                 FontSize="Subtitle"
                 VerticalOptions="Start" 
                 HorizontalOptions="Center" />
 
-            <Grid
+                <Grid
                 Grid.Row="3"
                 VerticalOptions="Fill"
                 HorizontalOptions="Fill"
                 Margin="5" >
 
-                <HorizontalStackLayout>
+                    <HorizontalStackLayout>
 
 
-                    <Label 
+                        <Label 
                         Text="SPECIES"
                         VerticalOptions="Center" 
                         HorizontalOptions="Start"
                         Margin="5"/>
 
-                    <Label 
+                        <Label 
                         Text="{Binding IsMagicResistant}"
                         VerticalOptions="Center" 
                         HorizontalOptions="Fill" 
                         Margin="5"/>
 
-                </HorizontalStackLayout>
+                    </HorizontalStackLayout>
 
-                <HorizontalStackLayout
+                    <HorizontalStackLayout
                     VerticalOptions="Fill"
                     HorizontalOptions="End">
 
-                    <Border 
+                        <Border 
                         VerticalOptions="Center" 
                         HorizontalOptions="Center"
                         StrokeShape="RoundRectangle 5"
@@ -163,15 +164,15 @@
                         Margin="5"
                         Padding="5" >
 
-                        <Label 
+                            <Label 
                             Text="{Binding HealthPoints}"
                             VerticalOptions="Center" 
                             HorizontalOptions="Center"
                             FontSize="Large" />
 
-                    </Border>
+                        </Border>
 
-                    <Border 
+                        <Border 
                         VerticalOptions="Center" 
                         HorizontalOptions="Center"
                         StrokeShape="RoundRectangle 5"
@@ -181,15 +182,15 @@
                         Margin="5"
                         Padding="5" >
 
-                        <Label 
+                            <Label 
                             Text="{Binding AttackPoints}"
                             VerticalOptions="Center" 
                             HorizontalOptions="Center" 
                             FontSize="Large" />
 
-                    </Border>
+                        </Border>
 
-                    <Border 
+                        <Border 
                         VerticalOptions="Center" 
                         HorizontalOptions="Center"
                         StrokeShape="RoundRectangle 5"
@@ -199,16 +200,15 @@
                         Margin="5"
                         Padding="5" >
 
-                        <Label 
+                            <Label 
                             Text="{Binding ShieldPoints}"
                             VerticalOptions="Center" 
                             HorizontalOptions="Center" 
                             FontSize="Large" />
 
-                    </Border>
+                        </Border>
 
-                    <Border 
-                        
+                        <Border 
                         VerticalOptions="Center" 
                         HorizontalOptions="Center"
                         StrokeShape="RoundRectangle 5"
@@ -219,22 +219,22 @@
                         Padding="5"
                         IsVisible="{Binding IsMagicCard}">
 
-                        <Label 
+                            <Label 
                             Text="{Binding MagicPoints}"
                             VerticalOptions="Center" 
                             HorizontalOptions="Center"
                             FontSize="Large" />
 
-                    </Border>
+                        </Border>
 
-                </HorizontalStackLayout>
+                    </HorizontalStackLayout>
+
+                </Grid>
 
             </Grid>
 
-        </Grid>
+        </Border>
 
-    </Border>
-        
     </Border>
 
 </ContentView>

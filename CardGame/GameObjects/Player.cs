@@ -1,4 +1,5 @@
 ﻿using CardGame.GameObjectsUI;
+using CardGame.ServiceObjects;
 
 namespace CardGame.GameObjects
 {
@@ -33,10 +34,22 @@ namespace CardGame.GameObjects
         /// </summary>
         public Card TargetedCard;
 
+        private byte _specialPoints;
         /// <summary>
         /// Special point to use speial attacks.
         /// </summary>
-        public byte SpecialPoints;
+        public byte SpecialPoints
+        {
+            get => _specialPoints;
+            set
+            {
+                if (value > 3)
+                    return;
+
+                //todo stała liczba punktów
+                _specialPoints = value;
+            }
+        }
 
         // - - - //
 
@@ -79,7 +92,7 @@ namespace CardGame.GameObjects
             SelectingPlayerCard,
             SelectingEnemyCard,
             UsingSpecialAttack,
-            
+
             // End game:
             EndGame
         }

@@ -135,7 +135,8 @@ public partial class Board : ContentPage
             return;
 
         card.OnCardTaped -= ThrowCard_Player;
-        card.OnCardTaped += SelectOwnCard;
+        card.OnCardTaped += ChangeAttackMode;   // 1
+        card.OnCardTaped += SelectOwnCard;      // 2
 
         RemoveCardFrom_PlayerCards(card);
 
@@ -180,9 +181,11 @@ public partial class Board : ContentPage
         CharacterBase enemyCharacter = (players[0].TargetedCard.BindingContext as CardViewModel).Character;
 
         // Normal attack
-        if (players[0].TurnFaze == Player.TurnFazeEnum.SelectingPlayerCard)
+        if (players[0].TurnFaze == Player.TurnFazeEnum.SelectingEnemyCard)
+        {
             myCharacter.Attack(enemyCharacter);
-
+            players[0].SpecialPoints++;
+        }
         // Special attack
         else if (players[0].TurnFaze == Player.TurnFazeEnum.UsingSpecialAttack)
         {
@@ -198,6 +201,7 @@ public partial class Board : ContentPage
             }
 
             myCharacter.SpecialAttack(computerBoardCharacters.ToArray(), playerBoardCharacters.ToArray(), enemyCharacter);
+            players[0].SpecialPoints = 0;
         }
 
         #region Animation
@@ -219,22 +223,29 @@ public partial class Board : ContentPage
         PlayerCards.IsVisible = true;
     }
 
-    //testowe
-    private void LoadSpecialAttackButton_Clicked(object sender, EventArgs e)
+    private void ChangeAttackMode(Card card)
     {
+        if (players[0].ChosenCard != card)
+            return;
+
         switch (players[0].TurnFaze)
         {
             case Player.TurnFazeEnum.SelectingEnemyCard:
-                players[0].TurnFaze = Player.TurnFazeEnum.UsingSpecialAttack;
+
+                if (players[0].SpecialPoints < 3)
+                    return;
+
+                    players[0].TurnFaze = Player.TurnFazeEnum.UsingSpecialAttack;
 
                 #region Animation
                 if (players[0].ChosenCard != null)
                     (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromArgb("#BBFFFF00");
                 #endregion
 
-                (sender as Button).Text = "Load normal attack";
                 break;
+
             case Player.TurnFazeEnum.UsingSpecialAttack:
+
                 players[0].TurnFaze = Player.TurnFazeEnum.SelectingEnemyCard;
 
                 #region Animation
@@ -242,7 +253,6 @@ public partial class Board : ContentPage
                     (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromArgb("#880000FF");
                 #endregion
 
-                (sender as Button).Text = "Load special attack";
                 break;
         }
     }
