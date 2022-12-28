@@ -1,5 +1,4 @@
 ﻿using CardGame.GameObjectsUI;
-using CardGame.ServiceObjects;
 
 namespace CardGame.GameObjects
 {
@@ -82,6 +81,7 @@ namespace CardGame.GameObjects
         }
 
         public TurnFazeEnum TurnFaze;
+        public AttackTypeEnum AttackType;
 
         public enum TurnFazeEnum
         {
@@ -91,10 +91,16 @@ namespace CardGame.GameObjects
             // Player moves:
             SelectingPlayerCard,
             SelectingEnemyCard,
-            UsingSpecialAttack,
+            Attacking,
 
             // End game:
             EndGame
+        }
+
+        public enum AttackTypeEnum
+        {
+            Attack,
+            SpecialAttack
         }
 
     }
