@@ -182,7 +182,7 @@ namespace CardGame.Characters
             God
         }
 
-        public void Attack(CharacterBase selectedCharacter)
+        public virtual void Attack(CharacterBase selectedCharacter)
         {
             selectedCharacter.GetDamaged(AttackPoints);
         }

@@ -257,57 +257,6 @@ public partial class Board : ContentPage
         }
     }
 
-    //testowe
-    //private void TargetedCardsToSpecialAttack(Card card)
-    //{
-    //    if (players[0].TurnFaze is not Player.TurnFazeEnum.UsingSpecialAttack)
-    //        return;
-
-    //    players[0].TargetedCard = card;
-    //    #region Animation
-    //    if (players[0].TargetedCard != null)
-    //        (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromArgb("#88FF0000");
-    //    #endregion
-
-    //    CharacterBase myCharacter = (players[0].ChosenCard.BindingContext as CardViewModel).Character;
-    //    CharacterBase enemyCharacter = (players[0].TargetedCard.BindingContext as CardViewModel).Character;
-
-    //    #region other code
-
-    //    List<CharacterBase> playerBoardCharacters = new();
-    //    foreach (Card item in PlayerBoard.Cast<Card>())
-    //    {
-    //        playerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
-    //    }
-    //    List<CharacterBase> computerBoardCharacters = new();
-    //    foreach (Card item in ComputerBoard.Cast<Card>())
-    //    {
-    //        computerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
-    //    }
-
-    //    // Special attack
-    //    myCharacter.SpecialAttack(computerBoardCharacters.ToArray(), playerBoardCharacters.ToArray(), enemyCharacter);
-    //    #endregion
-
-    //    #region Animation
-    //    if (players[0].ChosenCard != null)
-    //        (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
-    //    #endregion
-    //    players[0].ChosenCard = null;
-
-    //    #region Animation
-    //    if (players[0].TargetedCard != null)
-    //        (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
-    //    #endregion
-    //    players[0].TargetedCard = null;
-
-    //    players[0].TurnFaze = Player.TurnFazeEnum.EnemyTure;
-
-    //    ComputerTurn();
-
-    //    PlayerCards.IsVisible = true;
-    //}
-
     private void ComputerTurn()
     {
         if (ComputerBoard.Children.Count > 0)

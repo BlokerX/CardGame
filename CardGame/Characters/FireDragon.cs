@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CardGame.Characters
+﻿namespace CardGame.Characters
 {
     internal class FireDragon : CharacterBase
     {
@@ -12,11 +6,11 @@ namespace CardGame.Characters
 
         public override void SpecialAttack(CharacterBase[] enemies, CharacterBase[] allies, CharacterBase selectedCharacter)
         {
-            foreach(var character in enemies)
+            foreach (var character in enemies)
             {
                 character.GetDamaged(20);
             }
-            foreach(var character in allies)
+            foreach (var character in allies)
             {
                 character.ReinforceShield(2);
             }

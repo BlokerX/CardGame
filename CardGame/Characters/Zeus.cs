@@ -10,6 +10,8 @@
             selectedCharacter.GetDamaged(AttackPoints * 3);
 
             // Ataki poboczne:
+            if (enemies.Length < 2)
+                return;
             Random random = new();
             var selectedEnemies = new int[random.Next() % (enemies.Length - 1)];
             for (int i = 0; i < selectedEnemies.Length; i++)

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CardGame.Characters
+﻿namespace CardGame.Characters
 {
     internal class SwordFighter : CharacterBase
     {

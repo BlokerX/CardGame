@@ -7,7 +7,7 @@
         public override void SpecialAttack(CharacterBase[] enemies, CharacterBase[] allies, CharacterBase selectedCharacter)
         {
             selectedCharacter.BreakShield();
-            selectedCharacter.GetDamaged(1);
+            selectedCharacter.GetDamaged(AttackPoints);
         }
 
     }
