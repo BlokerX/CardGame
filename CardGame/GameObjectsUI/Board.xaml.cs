@@ -6,9 +6,20 @@ namespace CardGame.GameObjectsUI;
 
 public partial class Board : ContentPage
 {
-    private readonly List<Player> players;
+    /// <summary>
+    /// Card per person count.
+    /// </summary>
     private const int cardPerPerson = 32;
-    private const int GlowUpCardAnimationTime = 500;
+
+    /// <summary>
+    /// Highlight card animation time.
+    /// </summary>
+    private const int highlightCardAnimationTime = 500;
+
+    /// <summary>
+    /// Players in game.
+    /// </summary>
+    private readonly List<Player> players;
 
     public Board()
     {
@@ -43,9 +54,8 @@ public partial class Board : ContentPage
 
         AddClickEventToSelect_PlayerCards();
 
-        this.Loaded += (s, e) =>
-        ComputerTurn();
-
+        this.Loaded += (s, e) => ComputerTurn();
+        //todo change loaded to start event
     }
 
     #region Events methods
@@ -162,7 +172,7 @@ public partial class Board : ContentPage
         if (players[0].ChosenCard != null)
             new Animation(callback: v => (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, v, 0.5),
                 start: 0,
-                end: 1).Commit(players[0].ChosenCard, "Animation", 16, GlowUpCardAnimationTime);
+                end: 1).Commit(players[0].ChosenCard, "Animation", 16, highlightCardAnimationTime);
         #endregion
 
         PlayerCards.IsVisible = false;
@@ -183,7 +193,7 @@ public partial class Board : ContentPage
         if (players[0].TargetedCard != null)
             new Animation(callback: v => (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.5),
                     start: 0,
-                    end: 1).Commit(players[0].TargetedCard, "Animation", 16, GlowUpCardAnimationTime, finished: (d, b) => AttackTargetCard());
+                    end: 1).Commit(players[0].TargetedCard, "Animation", 16, highlightCardAnimationTime, finished: (d, b) => AttackTargetCard());
     }
 
     private void ChangeAttackMode(Card card)
@@ -204,7 +214,7 @@ public partial class Board : ContentPage
                 if (players[0].ChosenCard != null)
                     new Animation(callback: v => (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, v, 0, 0.73),
                         start: 0,
-                        end: 1).Commit(players[0].ChosenCard, "Animation", 16, GlowUpCardAnimationTime);
+                        end: 1).Commit(players[0].ChosenCard, "Animation", 16, highlightCardAnimationTime);
                 #endregion
 
                 break;
@@ -217,7 +227,7 @@ public partial class Board : ContentPage
                 if (players[0].ChosenCard != null)
                     new Animation(callback: v => (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, v, 0.5),
                         start: 0,
-                        end: 1).Commit(players[0].ChosenCard, "Animation", 16, GlowUpCardAnimationTime);
+                        end: 1).Commit(players[0].ChosenCard, "Animation", 16, highlightCardAnimationTime);
                 #endregion
 
                 break;
@@ -286,11 +296,7 @@ public partial class Board : ContentPage
                     new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1500, finished: (d, b) =>
                     {
                         players[1].ChosenCard = ComputerBoard[new Random().Next(0, ComputerBoard.Children.Count)] as Card;
-
-                        if (players[1].ChosenCard != null)
-                            new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, 0, v),
-                                start: 0,
-                                end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, GlowUpCardAnimationTime, finished: (d, b) => ComputerTargetEnemyCard());
+                        HighlightComputerChosenCard();
                     });
                     break;
 
@@ -301,6 +307,32 @@ public partial class Board : ContentPage
 
         }
         else ToComputerThrowNewCard();
+    }
+
+    private void HighlightComputerChosenCard()
+    {
+        if (players[1].SpecialPoints >= 3)
+            players[1].AttackType = (Player.AttackTypeEnum)new Random().Next(0, 2);
+        else
+            players[1].AttackType = Player.AttackTypeEnum.Attack;
+
+        switch (players[1].AttackType)
+        {
+            case Player.AttackTypeEnum.Attack:
+                if (players[1].ChosenCard != null)
+                    new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, 0, v),
+                    start: 0,
+                    end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: (d, b) => ComputerTargetEnemyCard());
+                break;
+            
+            case Player.AttackTypeEnum.SpecialAttack:
+                if (players[1].ChosenCard != null)
+                    new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, v, 0, v),
+                    start: 0,
+                    end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: (d, b) => ComputerTargetEnemyCard());
+                break;
+        }
+
     }
 
     private void ToComputerThrowNewCard()
@@ -336,10 +368,7 @@ public partial class Board : ContentPage
             players[1].ChosenCard.OnCardTaped += OnComputerCardClickedPlayerTargeted;
         }
 
-        if (players[1].ChosenCard != null)
-            new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, 0, v),
-                start: 0,
-                end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, GlowUpCardAnimationTime, finished: (d, b) => ComputerTargetEnemyCard());
+        HighlightComputerChosenCard();
     }
 
     private void ComputerTargetEnemyCard()
@@ -357,7 +386,7 @@ public partial class Board : ContentPage
             if (players[1].TargetedCard != null)
                 new Animation(callback: v => (players[1].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.75),
                     start: 0,
-                    end: 1).Commit(players[1].TargetedCard, "Animation", 16, GlowUpCardAnimationTime, finished: (d, b) => ComputerAttack());
+                    end: 1).Commit(players[1].TargetedCard, "Animation", 16, highlightCardAnimationTime, finished: (d, b) => ComputerAttack());
         });
     }
 
@@ -369,7 +398,29 @@ public partial class Board : ContentPage
             CharacterBase computerCharacter = (players[1].ChosenCard.BindingContext as CardViewModel).Character;
             CharacterBase enemyCharacter = (players[1].TargetedCard.BindingContext as CardViewModel).Character;
 
-            computerCharacter.Attack(enemyCharacter);
+            // Normal attack
+            if (players[1].AttackType == Player.AttackTypeEnum.Attack)
+            {
+                computerCharacter.Attack(enemyCharacter);
+                players[1].SpecialPoints++;
+            }
+            // Special attack
+            else if (players[1].AttackType == Player.AttackTypeEnum.SpecialAttack)
+            {
+                List<CharacterBase> computerBoardCharacters = new();
+                foreach (Card item in ComputerBoard.Cast<Card>())
+                {
+                    computerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
+                }
+                List<CharacterBase> playerBoardCharacters = new();
+                foreach (Card item in ComputerBoard.Cast<Card>())
+                {
+                    playerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
+                }
+
+                computerCharacter.SpecialAttack(playerBoardCharacters.ToArray(), computerBoardCharacters.ToArray(), enemyCharacter);
+                players[1].SpecialPoints = 0;
+            }
 
             ClearComputerTurnData();
         });

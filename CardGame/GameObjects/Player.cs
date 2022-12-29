@@ -50,11 +50,45 @@ namespace CardGame.GameObjects
             }
         }
 
-        // - - - //
+        /// <summary>
+        /// Turn faze for player.
+        /// </summary>
+        public TurnFazeEnum TurnFaze;
 
+        /// <summary>
+        /// Selected attack type 
+        /// (eg. normal attack or special attack).
+        /// </summary>
+        public AttackTypeEnum AttackType;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public enum TurnFazeEnum
+        {
+            // Ememy turn:
+            EnemyTure,
 
-        // - - - //
+            // Player moves:
+            SelectingPlayerCard,
+            SelectingEnemyCard,
+            Attacking,
+
+            // On animating:
+            Animating,
+
+            // End game:
+            EndGame
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public enum AttackTypeEnum
+        {
+            Attack,
+            SpecialAttack
+        }
 
         /// <summary>
         /// It gets random cards list.
@@ -78,29 +112,6 @@ namespace CardGame.GameObjects
             }
 
             return cards;
-        }
-
-        public TurnFazeEnum TurnFaze;
-        public AttackTypeEnum AttackType;
-
-        public enum TurnFazeEnum
-        {
-            // Ememy turn:
-            EnemyTure,
-
-            // Player moves:
-            SelectingPlayerCard,
-            SelectingEnemyCard,
-            Attacking,
-
-            // End game:
-            EndGame
-        }
-
-        public enum AttackTypeEnum
-        {
-            Attack,
-            SpecialAttack
         }
 
     }
