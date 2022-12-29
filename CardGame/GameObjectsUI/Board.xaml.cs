@@ -282,7 +282,7 @@ public partial class Board : ContentPage
             switch (new Random().Next(0, 2))
             {
                 case 0:
-                    new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 500, finished: (d, b) =>
+                    new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1500, finished: (d, b) =>
                     {
                         players[1].ChosenCard = ComputerBoard[new Random().Next(0, ComputerBoard.Children.Count)] as Card;
 
@@ -312,7 +312,7 @@ public partial class Board : ContentPage
         }
 
         // czekanie na ruch
-        new Animation((v) => { return; }).Commit(this, "Animation", 16, 2000, Easing.Linear, finished: (d, b) => ComputerThrowNewCard());
+        new Animation((v) => { return; }).Commit(this, "Animation", 16, 1500, Easing.Linear, finished: (d, b) => ComputerThrowNewCard());
     }
 
     private void ComputerThrowNewCard()
@@ -343,7 +343,7 @@ public partial class Board : ContentPage
 
     private void ComputerTargetEnemyCard()
     {
-        new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 2000, finished: (d, b) =>
+        new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1500, finished: (d, b) =>
         {
             if (PlayerBoard.Children.Count == 0)
             {
@@ -363,7 +363,7 @@ public partial class Board : ContentPage
     private void ComputerAttack()
     {
         // atak kończący turę
-        new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 2000, finished: (d, b) =>
+        new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1000, finished: (d, b) =>
         {
             CharacterBase computerCharacter = (players[1].ChosenCard.BindingContext as CardViewModel).Character;
             CharacterBase enemyCharacter = (players[1].TargetedCard.BindingContext as CardViewModel).Character;
