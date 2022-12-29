@@ -42,7 +42,7 @@ public partial class Board : ContentPage
 
         AddClickEventToSelect_PlayerCards();
 
-        this.Appearing += (s, e) =>
+        this.Loaded += (s, e) =>
         ComputerTurn();
 
     }
@@ -128,6 +128,8 @@ public partial class Board : ContentPage
     }
 
     #region Game logic
+
+    #region Player turn
 
     // Wystawia karty z lobby na planszę.
     private void ThrowCard_Player(Card card)
@@ -269,41 +271,69 @@ public partial class Board : ContentPage
         PlayerCards.IsVisible = true;
     }
 
+    #endregion
+
+    #region Computer turn
+
     private void ComputerTurn()
     {
         if (ComputerBoard.Children.Count > 0)
         {
-            new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 2000, finished: (d, b) =>
+            switch (new Random().Next(0, 2))
             {
-                players[1].ChosenCard = ComputerBoard[0] as Card;
+                case 0:
+                    new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 500, finished: (d, b) =>
+                    {
+                        players[1].ChosenCard = ComputerBoard[new Random().Next(0, ComputerBoard.Children.Count)] as Card;
 
-                if (players[1].ChosenCard != null)
-                    new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, 0, v),
-                        start: 0,
-                        end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, 500, finished: (d, b) => ComputerTargetEnemyCard());
-            });
-        }
-        else
-        {
-            if (players[1].DeckOfCards.Cards.Count < 1)
-            {
+                        if (players[1].ChosenCard != null)
+                            new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, 0, v),
+                                start: 0,
+                                end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, 500, finished: (d, b) => ComputerTargetEnemyCard());
+                    });
+                    break;
 
-                ClearComputerTurnData();
-                return;
+                case 1:
+                    ToComputerThrowNewCard();
+                    break;
             }
 
-            // czekanie na ruch
-            new Animation((v) => { return; }).Commit(this, "Animation", 16, 2000, Easing.Linear, finished: (d, b) => ComputerThrowCard());
         }
+        else ToComputerThrowNewCard();
     }
 
-    private void ComputerThrowCard()
+    private void ToComputerThrowNewCard()
     {
-        players[1].ChosenCard = players[1].DeckOfCards.Cards[0];
+        if (players[1].DeckOfCards.Cards.Count < 1)
+        {
 
-        ComputerBoard.Children.Add(players[1].ChosenCard);
-        players[1].ChosenCard.ToDestroy += RemoveCardFrom_ComputerBoard;
-        players[1].ChosenCard.OnCardTaped += OnComputerCardClickedPlayerTargeted;
+            ClearComputerTurnData();
+            return;
+        }
+
+        // czekanie na ruch
+        new Animation((v) => { return; }).Commit(this, "Animation", 16, 2000, Easing.Linear, finished: (d, b) => ComputerThrowNewCard());
+    }
+
+    private void ComputerThrowNewCard()
+    {
+        players[1].ChosenCard = players[1].DeckOfCards.Cards.First();
+
+        for (int i = 0; i < players[1].DeckOfCards.Cards.Count; i++)
+        {
+            if (!ComputerBoard.Contains(players[1].DeckOfCards.Cards[i]))
+            {
+                players[1].ChosenCard = players[1].DeckOfCards.Cards[i];
+                break;
+            }
+        }
+
+        if (!ComputerBoard.Contains(players[1].ChosenCard))
+        {
+            ComputerBoard.Children.Add(players[1].ChosenCard);
+            players[1].ChosenCard.ToDestroy += RemoveCardFrom_ComputerBoard;
+            players[1].ChosenCard.OnCardTaped += OnComputerCardClickedPlayerTargeted;
+        }
 
         if (players[1].ChosenCard != null)
             new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, 0, v),
@@ -321,7 +351,7 @@ public partial class Board : ContentPage
                 return;
             }
 
-            players[1].TargetedCard = PlayerBoard.Children.First() as Card;
+            players[1].TargetedCard = PlayerBoard.Children[new Random().Next(0, PlayerBoard.Children.Count)] as Card;
 
             if (players[1].TargetedCard != null)
                 new Animation(callback: v => (players[1].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.75),
@@ -360,6 +390,8 @@ public partial class Board : ContentPage
 
         players[0].TurnFaze = Player.TurnFazeEnum.SelectingPlayerCard;
     }
+
+    #endregion
 
     #endregion
 
