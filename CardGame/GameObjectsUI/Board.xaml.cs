@@ -7,7 +7,8 @@ namespace CardGame.GameObjectsUI;
 public partial class Board : ContentPage
 {
     private readonly List<Player> players;
-    private readonly int cardPerPerson = 32;
+    private const int cardPerPerson = 32;
+    private const int GlowUpCardAnimationTime = 500;
 
     public Board()
     {
@@ -161,7 +162,7 @@ public partial class Board : ContentPage
         if (players[0].ChosenCard != null)
             new Animation(callback: v => (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, v, 0.5),
                 start: 0,
-                end: 1).Commit(players[0].ChosenCard, "Animation", 16, 500);
+                end: 1).Commit(players[0].ChosenCard, "Animation", 16, GlowUpCardAnimationTime);
         #endregion
 
         PlayerCards.IsVisible = false;
@@ -182,7 +183,7 @@ public partial class Board : ContentPage
         if (players[0].TargetedCard != null)
             new Animation(callback: v => (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.5),
                     start: 0,
-                    end: 1).Commit(players[0].TargetedCard, "Animation", 16, 500, finished: (d, b) => AttackTargetCard());
+                    end: 1).Commit(players[0].TargetedCard, "Animation", 16, GlowUpCardAnimationTime, finished: (d, b) => AttackTargetCard());
     }
 
     private void ChangeAttackMode(Card card)
@@ -203,7 +204,7 @@ public partial class Board : ContentPage
                 if (players[0].ChosenCard != null)
                     new Animation(callback: v => (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, v, 0, 0.73),
                         start: 0,
-                        end: 1).Commit(players[0].ChosenCard, "Animation", 16, 500);
+                        end: 1).Commit(players[0].ChosenCard, "Animation", 16, GlowUpCardAnimationTime);
                 #endregion
 
                 break;
@@ -216,7 +217,7 @@ public partial class Board : ContentPage
                 if (players[0].ChosenCard != null)
                     new Animation(callback: v => (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, v, 0.5),
                         start: 0,
-                        end: 1).Commit(players[0].ChosenCard, "Animation", 16, 500);
+                        end: 1).Commit(players[0].ChosenCard, "Animation", 16, GlowUpCardAnimationTime);
                 #endregion
 
                 break;
@@ -282,14 +283,14 @@ public partial class Board : ContentPage
             switch (new Random().Next(0, 2))
             {
                 case 0:
-                    new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 500, finished: (d, b) =>
+                    new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1500, finished: (d, b) =>
                     {
                         players[1].ChosenCard = ComputerBoard[new Random().Next(0, ComputerBoard.Children.Count)] as Card;
 
                         if (players[1].ChosenCard != null)
                             new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, 0, v),
                                 start: 0,
-                                end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, 500, finished: (d, b) => ComputerTargetEnemyCard());
+                                end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, GlowUpCardAnimationTime, finished: (d, b) => ComputerTargetEnemyCard());
                     });
                     break;
 
@@ -312,7 +313,7 @@ public partial class Board : ContentPage
         }
 
         // czekanie na ruch
-        new Animation((v) => { return; }).Commit(this, "Animation", 16, 2000, Easing.Linear, finished: (d, b) => ComputerThrowNewCard());
+        new Animation((v) => { return; }).Commit(this, "Animation", 16, 1500, Easing.Linear, finished: (d, b) => ComputerThrowNewCard());
     }
 
     private void ComputerThrowNewCard()
@@ -338,12 +339,12 @@ public partial class Board : ContentPage
         if (players[1].ChosenCard != null)
             new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, 0, v),
                 start: 0,
-                end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, 500, finished: (d, b) => ComputerTargetEnemyCard());
+                end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, GlowUpCardAnimationTime, finished: (d, b) => ComputerTargetEnemyCard());
     }
 
     private void ComputerTargetEnemyCard()
     {
-        new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 2000, finished: (d, b) =>
+        new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1500, finished: (d, b) =>
         {
             if (PlayerBoard.Children.Count == 0)
             {
@@ -356,14 +357,14 @@ public partial class Board : ContentPage
             if (players[1].TargetedCard != null)
                 new Animation(callback: v => (players[1].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.75),
                     start: 0,
-                    end: 1).Commit(players[1].TargetedCard, "Animation", 16, 500, finished: (d, b) => ComputerAttack());
+                    end: 1).Commit(players[1].TargetedCard, "Animation", 16, GlowUpCardAnimationTime, finished: (d, b) => ComputerAttack());
         });
     }
 
     private void ComputerAttack()
     {
         // atak kończący turę
-        new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 2000, finished: (d, b) =>
+        new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1000, finished: (d, b) =>
         {
             CharacterBase computerCharacter = (players[1].ChosenCard.BindingContext as CardViewModel).Character;
             CharacterBase enemyCharacter = (players[1].TargetedCard.BindingContext as CardViewModel).Character;
