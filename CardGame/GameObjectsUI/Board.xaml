@@ -2,8 +2,14 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CardGame.GameObjectsUI.Board"
+             xmlns:local="clr-namespace:CardGame.ViewModels"
+             x:DataType="local:BoardViewModel"
              Title="Board"
              BackgroundColor="MediumPurple">
+
+    <ContentPage.BindingContext>
+        <local:BoardViewModel/>
+    </ContentPage.BindingContext>
 
     <Grid>
 
@@ -24,7 +30,7 @@
 
                 <Label
                     Grid.Column="0"
-                    Text="Player 1"
+                    Text="{Binding Player1.Name}"
                     TextColor="Black"
                     FontSize="Title"
                     HorizontalTextAlignment="Center"
@@ -41,7 +47,7 @@
 
                 <Label
                     Grid.Column="1"
-                    Text="Computer"
+                    Text="{Binding Computer.Name}"
                     TextColor="Black"
                     FontSize="Title"
                     HorizontalTextAlignment="Center"
@@ -93,7 +99,8 @@
                         Padding="5">
 
                         <HorizontalStackLayout 
-                            x:Name="PlayerBoard"/>
+                            x:Name="PlayerBoard"
+                            Spacing="5"/>
 
                     </ScrollView>
 
@@ -110,7 +117,8 @@
                         Padding="5">
 
                         <HorizontalStackLayout 
-                            x:Name="ComputerBoard"/>
+                            x:Name="ComputerBoard"
+                            Spacing="5"/>
 
                     </ScrollView>
 

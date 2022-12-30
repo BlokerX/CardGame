@@ -1,4 +1,5 @@
 ﻿using CardGame.GameObjectsUI;
+using CardGame.ViewModels;
 
 namespace CardGame.GameObjects
 {
@@ -18,6 +19,18 @@ namespace CardGame.GameObjects
             set => _name = value;
         }
 
+        private Score _score;
+        /// <summary>
+        /// Player score.
+        /// </summary>
+        public Score Score
+        {
+            get => _score;
+            set => _score = value;
+        }
+
+        #region Cards
+
         /// <summary>
         /// Player's deck of cards.
         /// </summary>
@@ -32,6 +45,8 @@ namespace CardGame.GameObjects
         /// Targeted card (enemy card).
         /// </summary>
         public Card TargetedCard;
+
+        #endregion
 
         private byte _specialPoints;
         /// <summary>
@@ -114,5 +129,40 @@ namespace CardGame.GameObjects
             return cards;
         }
 
+        #region Animations
+
+        /// <summary>
+        /// Highlight card animation time.
+        /// </summary>
+        protected const int highlightCardAnimationTime = 500;
+
+        public void HighlightChosenCard(Action<double, bool> finished = null)
+        {
+            if (this.ChosenCard != null)
+                switch (this.AttackType)
+                {
+                    case Player.AttackTypeEnum.Attack:
+                        new Animation(callback: v => (this.ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, v, 0.5),
+                            start: 0,
+                            end: 1).Commit(this.ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
+                        break;
+
+                    case Player.AttackTypeEnum.SpecialAttack:
+                        new Animation(callback: v => (this.ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, v, 0, 0.73),
+                            start: 0,
+                            end: 1).Commit(this.ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
+                        break;
+                }
+        }
+
+        public void HighlightTargetedCard(Action<double, bool> finished = null)
+        {
+            if (this.TargetedCard != null)
+                new Animation(callback: v => (this.TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.5),
+                        start: 0,
+                        end: 1).Commit(this.TargetedCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
+        }
+
+        #endregion
     }
 }

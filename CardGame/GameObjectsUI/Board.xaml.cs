@@ -168,12 +168,7 @@ public partial class Board : ContentPage
 
         players[0].ChosenCard = card;
 
-        #region Animation
-        if (players[0].ChosenCard != null)
-            new Animation(callback: v => (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, v, 0.5),
-                start: 0,
-                end: 1).Commit(players[0].ChosenCard, "Animation", 16, highlightCardAnimationTime);
-        #endregion
+        players[0].HighlightChosenCard();
 
         PlayerCards.IsVisible = false;
 
@@ -190,48 +185,31 @@ public partial class Board : ContentPage
 
         players[0].TurnFaze = Player.TurnFazeEnum.Attacking;
 
-        if (players[0].TargetedCard != null)
-            new Animation(callback: v => (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.5),
-                    start: 0,
-                    end: 1).Commit(players[0].TargetedCard, "Animation", 16, highlightCardAnimationTime, finished: (d, b) => AttackTargetCard());
+        players[0].HighlightTargetedCard((d, b) => AttackTargetCard());
     }
 
     private void ChangeAttackMode(Card card)
     {
+        if (card != players[0].ChosenCard)
+            return;
+
         if (players[0].ChosenCard != card && players[0].TurnFaze != Player.TurnFazeEnum.SelectingEnemyCard)
             return;
 
         switch (players[0].AttackType)
         {
             case Player.AttackTypeEnum.Attack:
-
                 if (players[0].SpecialPoints < 3)
                     return;
-
                 players[0].AttackType = Player.AttackTypeEnum.SpecialAttack;
-
-                #region Animation
-                if (players[0].ChosenCard != null)
-                    new Animation(callback: v => (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, v, 0, 0.73),
-                        start: 0,
-                        end: 1).Commit(players[0].ChosenCard, "Animation", 16, highlightCardAnimationTime);
-                #endregion
-
                 break;
 
             case Player.AttackTypeEnum.SpecialAttack:
-
                 players[0].AttackType = Player.AttackTypeEnum.Attack;
-
-                #region Animation
-                if (players[0].ChosenCard != null)
-                    new Animation(callback: v => (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, v, 0.5),
-                        start: 0,
-                        end: 1).Commit(players[0].ChosenCard, "Animation", 16, highlightCardAnimationTime);
-                #endregion
-
                 break;
         }
+
+        players[0].HighlightChosenCard();
     }
 
     private void AttackTargetCard()
@@ -274,6 +252,8 @@ public partial class Board : ContentPage
             (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
         #endregion
         players[0].TargetedCard = null;
+
+        players[0].AttackType = Player.AttackTypeEnum.Attack;
 
         players[0].TurnFaze = Player.TurnFazeEnum.EnemyTure;
 
@@ -324,7 +304,7 @@ public partial class Board : ContentPage
                     start: 0,
                     end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: (d, b) => ComputerTargetEnemyCard());
                 break;
-            
+
             case Player.AttackTypeEnum.SpecialAttack:
                 if (players[1].ChosenCard != null)
                     new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, v, 0, v),
