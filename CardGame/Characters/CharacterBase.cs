@@ -295,6 +295,7 @@ namespace CardGame.Characters
         {
 #if DEBUG
             Debug.WriteLine("Character has been destroyed.");
+            // todo destroy it doesn't works
 #endif
         }
 

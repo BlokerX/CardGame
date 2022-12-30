@@ -14,6 +14,7 @@ public partial class Card : ContentView
     ~Card()
     {
 #if DEBUG
+        // todo destroy it doesnt works
         Debug.WriteLine("Card has been destroyed successfull!");
 #endif
     }

@@ -53,12 +53,31 @@ namespace CardGame.GameObjects
         /// <summary>
         /// Player's lobby.
         /// </summary>
-        public View Lobby;
+        private Layout Lobby;
+
+        public void SetLobby(Layout lobby)
+        {
+            Lobby = lobby;
+            this.DeckOfCards.Cards.ForEach((card) =>
+            {
+                this.Lobby.Children.Add(card);
+                card.ToDestroy += RemoveCardFromLobby;
+            });
+        }
 
         /// <summary>
         /// Player's board.
         /// </summary>
-        public View Board;
+        private Layout Board;
+
+        public void SetBoard(Layout board)
+        {
+            Board = board;
+            this.DeckOfCards.Cards.ForEach((card) =>
+            {
+                card.ToDestroy += RemoveCardFromBoard;
+            });
+        }
 
         #endregion
 
@@ -141,6 +160,39 @@ namespace CardGame.GameObjects
             }
 
             return cards;
+        }
+
+        public void Build(Deck deck)
+        {
+            DeckOfCards = deck;
+            this.DeckOfCards.Cards.ForEach((card) =>
+            {
+                card.ToDestroy += RemoveCardFromDeck;
+            });
+        }
+
+        private void RemoveCardFromDeck(Card card)
+        {
+            if (this.DeckOfCards.Cards.Contains(card))
+                this.DeckOfCards.Cards.Remove(card);
+
+            card.ToDestroy -= RemoveCardFromDeck;
+        }
+
+        private void RemoveCardFromLobby(Card card)
+        {
+            if (Lobby.Children.Contains(card))
+                Lobby.Children.Remove(card);
+
+            card.ToDestroy -= RemoveCardFromLobby;
+        }
+
+        private void RemoveCardFromBoard(Card card)
+        {
+            if (Board.Children.Contains(card))
+                Board.Children.Remove(card);
+
+            card.ToDestroy -= RemoveCardFromBoard;
         }
 
         public void ChoseCard(Card card)

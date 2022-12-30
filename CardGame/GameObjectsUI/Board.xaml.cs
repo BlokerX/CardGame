@@ -27,33 +27,20 @@ public partial class Board : ContentPage
 
         players = new List<Player>() { null, null };
 
+        //todo rozdawanie kart graczom i ich tworzenie
+        players[0] = new Player();
+        players[1] = new ComputerPlayer();
         for (int i = 0; i < players.Count; i++)
         {
-            players[i] = new Player()
-            {
-                DeckOfCards = new()
-                {
-                    Cards = Player.GetCards(cardPerPerson)
-                }
-            };
-            players[i].DeckOfCards.Cards.ForEach((card) =>
-            {
-                card.ToDestroy += RemoveCardFrom_Player; // dać to
-                card.ToDestroy += RemoveCardFrom_Computer; // dla każdego osobno
+            players[i].Build(new()
+            {    
+                Cards = Player.GetCards(cardPerPerson)
             });
         }
 
-        players[0].Lobby = PlayerCards;
-        players[0].Board = PlayerBoard;
-
-        players[1].Board = ComputerBoard;
-
-        // Show player's cards in lobby panel:
-        foreach (Card card in players[0].DeckOfCards.Cards)
-        {
-            PlayerCards.Children.Add(card);
-            card.ToDestroy += RemoveCardFrom_PlayerCards;
-        }
+        players[0].SetLobby(PlayerCards);
+        players[0].SetBoard(PlayerBoard);
+        players[1].SetBoard(ComputerBoard);
 
         AddClickEventToSelect_PlayerCards();
 
@@ -62,15 +49,10 @@ public partial class Board : ContentPage
     }
 
     #region Events methods
-
-    // All player cards:
-    private void RemoveCardFrom_Player(Card card)
-    {
-        if (players[0].DeckOfCards.Cards.Contains(card))
-            players[0].DeckOfCards.Cards.Remove(card);
-
-        card.ToDestroy -= RemoveCardFrom_Player;
-    }
+    // powiązania istnieją wyłącznie z tym kodem,
+    // po przeniesieniu tego na kartę Player.cs będzie można zlikwidować
+    // te metody
+    // * Wyjątkiem są objekty tali gracza i przypisywanie usuwania z niej (trzeba zrobić) * //
 
     // Player's card lobby:
     private void RemoveCardFrom_PlayerCards(Card card)
@@ -91,15 +73,6 @@ public partial class Board : ContentPage
     }
 
     // - - - - - //
-
-    // All computer cards:
-    private void RemoveCardFrom_Computer(Card card)
-    {
-        if (players[1].DeckOfCards.Cards.Contains(card))
-            players[1].DeckOfCards.Cards.Remove(card);
-
-        card.ToDestroy -= RemoveCardFrom_Computer;
-    }
 
     // Computer's board:
     private void RemoveCardFrom_ComputerBoard(Card card)
