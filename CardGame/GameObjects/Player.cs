@@ -48,6 +48,20 @@ namespace CardGame.GameObjects
 
         #endregion
 
+        #region On board
+
+        /// <summary>
+        /// Player's lobby.
+        /// </summary>
+        public View Lobby;
+
+        /// <summary>
+        /// Player's board.
+        /// </summary>
+        public View Board;
+
+        #endregion
+
         private byte _specialPoints;
         /// <summary>
         /// Special point to use speial attacks.
@@ -127,6 +141,45 @@ namespace CardGame.GameObjects
             }
 
             return cards;
+        }
+
+        public void ChoseCard(Card card)
+        {
+            if (this.TurnFaze is not Player.TurnFazeEnum.SelectingPlayerCard)
+                return;
+
+            this.ChosenCard = card;
+
+            this.HighlightChosenCard();
+
+            // todo chowanie lobby
+            Lobby.IsVisible = false;
+
+            this.TurnFaze = Player.TurnFazeEnum.SelectingEnemyCard;
+        }
+
+        public void ChangeAttackMode(Card card)
+        {
+            if (card != this.ChosenCard)
+                return;
+
+            if (this.ChosenCard != card && this.TurnFaze != Player.TurnFazeEnum.SelectingEnemyCard)
+                return;
+
+            switch (this.AttackType)
+            {
+                case Player.AttackTypeEnum.Attack:
+                    if (this.SpecialPoints < 3)
+                        return;
+                    this.AttackType = Player.AttackTypeEnum.SpecialAttack;
+                    break;
+
+                case Player.AttackTypeEnum.SpecialAttack:
+                    this.AttackType = Player.AttackTypeEnum.Attack;
+                    break;
+            }
+
+            this.HighlightChosenCard();
         }
 
         #region Animations

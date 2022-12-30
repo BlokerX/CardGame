@@ -38,12 +38,15 @@ public partial class Board : ContentPage
             };
             players[i].DeckOfCards.Cards.ForEach((card) =>
             {
-                (card.BindingContext as CardViewModel).Character.OnHealthToZero += DestroyCard;
-
                 card.ToDestroy += RemoveCardFrom_Player; // dać to
                 card.ToDestroy += RemoveCardFrom_Computer; // dla każdego osobno
             });
         }
+
+        players[0].Lobby = PlayerCards;
+        players[0].Board = PlayerBoard;
+
+        players[1].Board = ComputerBoard;
 
         // Show player's cards in lobby panel:
         foreach (Card card in players[0].DeckOfCards.Cards)
@@ -109,11 +112,6 @@ public partial class Board : ContentPage
 
     // ----------------------------- //
 
-    private void DestroyCard(Card card)
-    {
-        card.Destroy();
-    }
-
     #endregion
 
     // domyślna akcja kliknięcia karty gracza
@@ -122,19 +120,6 @@ public partial class Board : ContentPage
         foreach (Card card in PlayerCards.Children.Cast<Card>())
         {
             card.OnCardTaped += ThrowCard_Player;
-        }
-    }
-
-    // przestarzałe
-    private void RemoveClickEventToSelect_PlayerCards()
-    {
-        foreach (Card card in PlayerCards.Children.Cast<Card>())
-        {
-            card.OnCardTaped -= ThrowCard_Player;
-        }
-        foreach (Card card in players[0].DeckOfCards.Cards)
-        {
-            card.OnCardTaped -= SelectOwnCard;
         }
     }
 
@@ -149,30 +134,15 @@ public partial class Board : ContentPage
             return;
 
         card.OnCardTaped -= ThrowCard_Player;
-        card.OnCardTaped += ChangeAttackMode;   // 1
-        card.OnCardTaped += SelectOwnCard;      // 2
+        card.OnCardTaped += players[0].ChangeAttackMode;    // 1
+        card.OnCardTaped += players[0].ChoseCard;           // 2
 
         RemoveCardFrom_PlayerCards(card);
 
         PlayerBoard.Children.Add(card);
         card.ToDestroy += RemoveCardFrom_PlayerBoard;
 
-        SelectOwnCard(card);
-    }
-
-    // Wybieranie karty.
-    private void SelectOwnCard(Card card)
-    {
-        if (players[0].TurnFaze is not Player.TurnFazeEnum.SelectingPlayerCard)
-            return;
-
-        players[0].ChosenCard = card;
-
-        players[0].HighlightChosenCard();
-
-        PlayerCards.IsVisible = false;
-
-        players[0].TurnFaze = Player.TurnFazeEnum.SelectingEnemyCard;
+        players[0].ChoseCard(card);
     }
 
     // Wybieranie karty atakowanej:
@@ -186,30 +156,6 @@ public partial class Board : ContentPage
         players[0].TurnFaze = Player.TurnFazeEnum.Attacking;
 
         players[0].HighlightTargetedCard((d, b) => AttackTargetCard());
-    }
-
-    private void ChangeAttackMode(Card card)
-    {
-        if (card != players[0].ChosenCard)
-            return;
-
-        if (players[0].ChosenCard != card && players[0].TurnFaze != Player.TurnFazeEnum.SelectingEnemyCard)
-            return;
-
-        switch (players[0].AttackType)
-        {
-            case Player.AttackTypeEnum.Attack:
-                if (players[0].SpecialPoints < 3)
-                    return;
-                players[0].AttackType = Player.AttackTypeEnum.SpecialAttack;
-                break;
-
-            case Player.AttackTypeEnum.SpecialAttack:
-                players[0].AttackType = Player.AttackTypeEnum.Attack;
-                break;
-        }
-
-        players[0].HighlightChosenCard();
     }
 
     private void AttackTargetCard()

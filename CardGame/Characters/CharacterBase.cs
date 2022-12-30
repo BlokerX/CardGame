@@ -1,5 +1,6 @@
 ﻿using CardGame.GameObjectsUI;
 using CardGame.ServiceObjects;
+using CardGame.ViewModels;
 using System.Diagnostics;
 
 namespace CardGame.Characters
@@ -279,6 +280,15 @@ namespace CardGame.Characters
             if (strokeColor == null)
                 _strokeColor = Brush.White;
             else _strokeColor = strokeColor;
+
+            // Śmierć karty:
+            OnHealthToZero += DestroyCard;
+
+        }
+
+        private static void DestroyCard(Card card)
+        {
+            card.Destroy();
         }
 
         ~CharacterBase()
