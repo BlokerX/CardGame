@@ -5,7 +5,7 @@ namespace CardGame.GameObjects
     internal class ComputerPlayer : Player
     {
         // wybiera rodzaj ataku i aktywuje animacje wybrania karty
-        private new void HighlightChosenCard(Action<double, bool> finished = null)
+        public override void HighlightChosenCard(Action<double, bool> finished = null)
         {
             if (this.SpecialPoints >= 3)
                 this.AttackType = (Player.AttackTypeEnum)new Random().Next(0, 2);

@@ -171,7 +171,7 @@ namespace CardGame.GameObjects
             });
         }
 
-        private void RemoveCardFromDeck(Card card)
+        public void RemoveCardFromDeck(Card card)
         {
             if (this.DeckOfCards.Cards.Contains(card))
                 this.DeckOfCards.Cards.Remove(card);
@@ -187,7 +187,7 @@ namespace CardGame.GameObjects
             card.ToDestroy -= RemoveCardFromLobby;
         }
 
-        private void RemoveCardFromBoard(Card card)
+        public void RemoveCardFromBoard(Card card)
         {
             if (Board.Children.Contains(card))
                 Board.Children.Remove(card);
@@ -208,6 +208,23 @@ namespace CardGame.GameObjects
             Lobby.IsVisible = false;
 
             this.TurnFaze = Player.TurnFazeEnum.SelectingEnemyCard;
+        }
+
+        public void ThrowNewCard(Card card)
+        {
+            if (this.TurnFaze is not Player.TurnFazeEnum.SelectingPlayerCard)
+                return;
+
+            card.OnCardTaped -= ThrowNewCard;
+            card.OnCardTaped += this.ChangeAttackMode;    // 1
+            card.OnCardTaped += this.ChoseCard;           // 2
+
+            RemoveCardFromLobby(card);
+
+            Board.Children.Add(card);
+            card.ToDestroy += RemoveCardFromBoard;
+
+            this.ChoseCard(card);
         }
 
         public void ChangeAttackMode(Card card)
@@ -241,7 +258,7 @@ namespace CardGame.GameObjects
         /// </summary>
         protected const int highlightCardAnimationTime = 500;
 
-        public void HighlightChosenCard(Action<double, bool> finished = null)
+        public virtual void HighlightChosenCard(Action<double, bool> finished = null)
         {
             if (this.ChosenCard != null)
                 switch (this.AttackType)

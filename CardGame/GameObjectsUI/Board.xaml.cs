@@ -53,36 +53,6 @@ public partial class Board : ContentPage
     // po przeniesieniu tego na kartę Player.cs będzie można zlikwidować
     // te metody
     // * Wyjątkiem są objekty tali gracza i przypisywanie usuwania z niej (trzeba zrobić) * //
-
-    // Player's card lobby:
-    private void RemoveCardFrom_PlayerCards(Card card)
-    {
-        if (PlayerCards.Children.Contains(card))
-            PlayerCards.Children.Remove(card);
-
-        card.ToDestroy -= RemoveCardFrom_PlayerCards;
-    }
-
-    // Player's board:
-    private void RemoveCardFrom_PlayerBoard(Card card)
-    {
-        if (PlayerBoard.Children.Contains(card))
-            PlayerBoard.Children.Remove(card);
-
-        card.ToDestroy -= RemoveCardFrom_PlayerBoard;
-    }
-
-    // - - - - - //
-
-    // Computer's board:
-    private void RemoveCardFrom_ComputerBoard(Card card)
-    {
-        if (ComputerBoard.Children.Contains(card))
-            ComputerBoard.Children.Remove(card);
-
-        card.ToDestroy -= RemoveCardFrom_ComputerBoard;
-    }
-
     // ----------------------------- //
 
     #endregion
@@ -92,31 +62,13 @@ public partial class Board : ContentPage
     {
         foreach (Card card in PlayerCards.Children.Cast<Card>())
         {
-            card.OnCardTaped += ThrowCard_Player;
+            card.OnCardTaped += players[0].ThrowNewCard;
         }
     }
 
     #region Game logic
 
     #region Player turn
-
-    // Wystawia karty z lobby na planszę.
-    private void ThrowCard_Player(Card card)
-    {
-        if (players[0].TurnFaze is not Player.TurnFazeEnum.SelectingPlayerCard)
-            return;
-
-        card.OnCardTaped -= ThrowCard_Player;
-        card.OnCardTaped += players[0].ChangeAttackMode;    // 1
-        card.OnCardTaped += players[0].ChoseCard;           // 2
-
-        RemoveCardFrom_PlayerCards(card);
-
-        PlayerBoard.Children.Add(card);
-        card.ToDestroy += RemoveCardFrom_PlayerBoard;
-
-        players[0].ChoseCard(card);
-    }
 
     // Wybieranie karty atakowanej:
     private void OnComputerCardClickedPlayerTargeted(Card card)
@@ -195,7 +147,7 @@ public partial class Board : ContentPage
                     new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1500, finished: (d, b) =>
                     {
                         players[1].ChosenCard = ComputerBoard[new Random().Next(0, ComputerBoard.Children.Count)] as Card;
-                        HighlightComputerChosenCard();
+                        players[1].HighlightChosenCard((d, b) => ComputerTargetEnemyCard());
                     });
                     break;
 
@@ -206,32 +158,6 @@ public partial class Board : ContentPage
 
         }
         else ToComputerThrowNewCard();
-    }
-
-    private void HighlightComputerChosenCard()
-    {
-        if (players[1].SpecialPoints >= 3)
-            players[1].AttackType = (Player.AttackTypeEnum)new Random().Next(0, 2);
-        else
-            players[1].AttackType = Player.AttackTypeEnum.Attack;
-
-        switch (players[1].AttackType)
-        {
-            case Player.AttackTypeEnum.Attack:
-                if (players[1].ChosenCard != null)
-                    new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, 0, v),
-                    start: 0,
-                    end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: (d, b) => ComputerTargetEnemyCard());
-                break;
-
-            case Player.AttackTypeEnum.SpecialAttack:
-                if (players[1].ChosenCard != null)
-                    new Animation(callback: v => (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, v, 0, v),
-                    start: 0,
-                    end: 0.75).Commit(players[1].ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: (d, b) => ComputerTargetEnemyCard());
-                break;
-        }
-
     }
 
     private void ToComputerThrowNewCard()
@@ -263,11 +189,11 @@ public partial class Board : ContentPage
         if (!ComputerBoard.Contains(players[1].ChosenCard))
         {
             ComputerBoard.Children.Add(players[1].ChosenCard);
-            players[1].ChosenCard.ToDestroy += RemoveCardFrom_ComputerBoard;
+            players[1].ChosenCard.ToDestroy += players[1].RemoveCardFromBoard;
             players[1].ChosenCard.OnCardTaped += OnComputerCardClickedPlayerTargeted;
         }
 
-        HighlightComputerChosenCard();
+        players[1].HighlightChosenCard((d,b)=>ComputerTargetEnemyCard());
     }
 
     private void ComputerTargetEnemyCard()
