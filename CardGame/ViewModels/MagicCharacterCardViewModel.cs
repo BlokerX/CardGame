@@ -2,9 +2,9 @@
 
 namespace CardGame.ViewModels
 {
-    public class MagicCardViewModel : CardViewModel
+    public class MagicCharacterCardViewModel : CharacterCardViewModel
     {
-        public MagicCardViewModel(MagicCharacter character): base(character)
+        public MagicCharacterCardViewModel(MagicCharacter character): base(character)
         {
             Character = character;
         }

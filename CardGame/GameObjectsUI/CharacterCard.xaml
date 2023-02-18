@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CardGame.GameObjectsUI.Card"
-             xmlns:local="clr-namespace:CardGame.ViewModels"
-             x:DataType="local:MagicCardViewModel"
-             SizeChanged="ContentView_SizeChanged"
-             HeightRequest="829"
-             WidthRequest="505"
-             Margin="10">
+<z:CardBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:z="clr-namespace:CardGame.GameObjectsUI"
+            x:Class="CardGame.GameObjectsUI.CharacterCard"
+            xmlns:local="clr-namespace:CardGame.ViewModels"
+            x:DataType="local:MagicCharacterCardViewModel"
+            SizeChanged="ContentView_SizeChanged"
+            HeightRequest="829"
+            WidthRequest="505"
+            Margin="10">
 
-    <ContentView.GestureRecognizers>
+    <z:CardBase.GestureRecognizers>
         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
         <!--DragGestureRecognizer DragStarting="DragGestureRecognizer_DragStarting"/-->
-    </ContentView.GestureRecognizers>
+    </z:CardBase.GestureRecognizers>
 
     <Border 
         BackgroundColor="Transparent"
@@ -120,49 +121,49 @@
 
                 </Border>
 
-                <Label 
-                Grid.Row="2"
-                Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget nisl porttitor, lacinia arcu et, faucibus justo. Pellentesque congue ornare nibh vitae fermentum. Etiam sed libero lacus. Cras ultricies ultrices ligula, eu venenatis lacus viverra vel."
-                FontSize="Subtitle"
-                VerticalOptions="Start" 
-                HorizontalOptions="Center" />
+                <Label
+                    Grid.Row="2"
+                    Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget nisl porttitor, lacinia arcu et, faucibus justo. Pellentesque congue ornare nibh vitae fermentum. Etiam sed libero lacus. Cras ultricies ultrices ligula, eu venenatis lacus viverra vel."
+                    FontSize="Subtitle"
+                    VerticalOptions="Start" 
+                    HorizontalOptions="Center" />
 
                 <Grid
-                Grid.Row="3"
-                VerticalOptions="Fill"
-                HorizontalOptions="Fill"
-                Margin="5" >
+                    Grid.Row="3"
+                    VerticalOptions="Fill"
+                    HorizontalOptions="Fill"
+                    Margin="5" >
 
                     <HorizontalStackLayout>
 
 
                         <Label 
-                        Text="SPECIES"
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Start"
-                        Margin="5"/>
+                            Text="SPECIES"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Start"
+                            Margin="5"/>
 
                         <Label 
-                        Text="{Binding IsMagicResistant}"
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Fill" 
-                        Margin="5"/>
+                            Text="{Binding IsMagicResistant}"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Fill" 
+                            Margin="5"/>
 
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout
-                    VerticalOptions="Fill"
-                    HorizontalOptions="End">
+                        VerticalOptions="Fill"
+                        HorizontalOptions="End">
 
                         <Border 
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Center"
-                        StrokeShape="RoundRectangle 5"
-                        StrokeThickness="4"
-                        Stroke="{Binding Character.StrokeColor}"
-                        BackgroundColor="Red"
-                        Margin="5"
-                        Padding="5" >
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center"
+                            StrokeShape="RoundRectangle 5"
+                            StrokeThickness="4"
+                            Stroke="{Binding Character.StrokeColor}"
+                            BackgroundColor="Red"
+                            Margin="5"
+                            Padding="5" >
 
                             <Label 
                             Text="{Binding HealthPoints}"
@@ -173,57 +174,57 @@
                         </Border>
 
                         <Border 
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Center"
-                        StrokeShape="RoundRectangle 5"
-                        StrokeThickness="4"
-                        Stroke="{Binding Character.StrokeColor}"
-                        BackgroundColor="Green"
-                        Margin="5"
-                        Padding="5" >
-
-                            <Label 
-                            Text="{Binding AttackPoints}"
-                            VerticalOptions="Center" 
-                            HorizontalOptions="Center" 
-                            FontSize="Large" />
-
-                        </Border>
-
-                        <Border 
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Center"
-                        StrokeShape="RoundRectangle 5"
-                        StrokeThickness="4"
-                        Stroke="{Binding Character.StrokeColor}"
-                        BackgroundColor="LightBlue"
-                        Margin="5"
-                        Padding="5" >
-
-                            <Label 
-                            Text="{Binding ShieldPoints}"
-                            VerticalOptions="Center" 
-                            HorizontalOptions="Center" 
-                            FontSize="Large" />
-
-                        </Border>
-
-                        <Border 
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Center"
-                        StrokeShape="RoundRectangle 5"
-                        StrokeThickness="4"
-                        Stroke="{Binding Character.StrokeColor}"
-                        BackgroundColor="MediumPurple"
-                        Margin="5"
-                        Padding="5"
-                        IsVisible="{Binding IsMagicCard}">
-
-                            <Label 
-                            Text="{Binding MagicPoints}"
                             VerticalOptions="Center" 
                             HorizontalOptions="Center"
-                            FontSize="Large" />
+                            StrokeShape="RoundRectangle 5"
+                            StrokeThickness="4"
+                            Stroke="{Binding Character.StrokeColor}"
+                            BackgroundColor="Green"
+                            Margin="5"
+                            Padding="5" >
+
+                            <Label 
+                                Text="{Binding AttackPoints}"
+                                VerticalOptions="Center" 
+                                HorizontalOptions="Center" 
+                                FontSize="Large" />
+
+                        </Border>
+
+                        <Border 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center"
+                            StrokeShape="RoundRectangle 5"
+                            StrokeThickness="4"
+                            Stroke="{Binding Character.StrokeColor}"
+                            BackgroundColor="LightBlue"
+                            Margin="5"
+                            Padding="5" >
+
+                            <Label 
+                                Text="{Binding ShieldPoints}"
+                                VerticalOptions="Center" 
+                                HorizontalOptions="Center" 
+                                FontSize="Large" />
+
+                        </Border>
+
+                        <Border 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center"
+                            StrokeShape="RoundRectangle 5"
+                            StrokeThickness="4"
+                            Stroke="{Binding Character.StrokeColor}"
+                            BackgroundColor="MediumPurple"
+                            Margin="5"
+                            Padding="5"
+                            IsVisible="{Binding IsMagicCard}">
+
+                            <Label 
+                                Text="{Binding MagicPoints}"
+                                VerticalOptions="Center" 
+                                HorizontalOptions="Center"
+                                FontSize="Large" />
 
                         </Border>
 
@@ -237,4 +238,4 @@
 
     </Border>
 
-</ContentView>
+</z:CardBase>

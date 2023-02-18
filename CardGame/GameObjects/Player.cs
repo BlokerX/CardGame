@@ -1,4 +1,5 @@
-﻿using CardGame.GameObjectsUI;
+﻿using CardGame.Characters;
+using CardGame.GameObjectsUI;
 using CardGame.ViewModels;
 
 namespace CardGame.GameObjects
@@ -39,12 +40,12 @@ namespace CardGame.GameObjects
         /// <summary>
         /// Chosen card (ovn card).
         /// </summary>
-        public Card ChosenCard;
+        public CardBase ChosenCard;
 
         /// <summary>
         /// Targeted card (enemy card).
         /// </summary>
-        public Card TargetedCard;
+        public CardBase TargetedCard;
 
         #endregion
 
@@ -143,17 +144,17 @@ namespace CardGame.GameObjects
         /// </summary>
         /// <param name="count">Count of cards.</param>
         /// <returns>Random cards list.</returns>
-        public static List<Card> GetCards(int count)
+        public static List<CardBase> GetCards(int count)
         {
             // Skalowanie kart:
             double scale = 0.3;
             double x = -(1 - scale) * 505 / 2, y = -(1 - scale) * 829 / 2;
 
-            List<Card> cards = new();
+            List<CardBase> cards = new();
 
             for (int i = 0; i < count; i++)
             {
-                var c = Card.GetRandomCard();
+                var c = CharactersManager.GetRandomCard();
                 c.Scale = scale;
                 c.Margin = new Thickness(x, y);
                 cards.Add(c);
@@ -165,13 +166,13 @@ namespace CardGame.GameObjects
         public void Build(Deck deck)
         {
             DeckOfCards = deck;
-            this.DeckOfCards.Cards.ForEach((card) =>
+            DeckOfCards.Cards.ForEach((card) =>
             {
                 card.ToDestroy += RemoveCardFromDeck;
             });
         }
 
-        public void RemoveCardFromDeck(Card card)
+        public void RemoveCardFromDeck(CardBase card)
         {
             if (this.DeckOfCards.Cards.Contains(card))
                 this.DeckOfCards.Cards.Remove(card);
@@ -179,7 +180,7 @@ namespace CardGame.GameObjects
             card.ToDestroy -= RemoveCardFromDeck;
         }
 
-        private void RemoveCardFromLobby(Card card)
+        private void RemoveCardFromLobby(CardBase card)
         {
             if (Lobby.Children.Contains(card))
                 Lobby.Children.Remove(card);
@@ -187,7 +188,7 @@ namespace CardGame.GameObjects
             card.ToDestroy -= RemoveCardFromLobby;
         }
 
-        public void RemoveCardFromBoard(Card card)
+        public void RemoveCardFromBoard(CardBase card)
         {
             if (Board.Children.Contains(card))
                 Board.Children.Remove(card);
@@ -195,7 +196,7 @@ namespace CardGame.GameObjects
             card.ToDestroy -= RemoveCardFromBoard;
         }
 
-        public void ChoseCard(Card card)
+        public void ChoseCard(CardBase card)
         {
             if (this.TurnFaze is not Player.TurnFazeEnum.SelectingPlayerCard)
                 return;
@@ -210,7 +211,7 @@ namespace CardGame.GameObjects
             this.TurnFaze = Player.TurnFazeEnum.SelectingEnemyCard;
         }
 
-        public void ThrowNewCard(Card card)
+        public void ThrowNewCard(CardBase card)
         {
             if (this.TurnFaze is not Player.TurnFazeEnum.SelectingPlayerCard)
                 return;
@@ -227,7 +228,7 @@ namespace CardGame.GameObjects
             this.ChoseCard(card);
         }
 
-        public void ChangeAttackMode(Card card)
+        public void ChangeAttackMode(CardBase card)
         {
             if (card != this.ChosenCard)
                 return;
@@ -264,13 +265,13 @@ namespace CardGame.GameObjects
                 switch (this.AttackType)
                 {
                     case Player.AttackTypeEnum.Attack:
-                        new Animation(callback: v => (this.ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, v, 0.5),
+                        new Animation(callback: v => (this.ChosenCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Color.FromRgba(0, 0, v, 0.5),
                             start: 0,
                             end: 1).Commit(this.ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
                         break;
 
                     case Player.AttackTypeEnum.SpecialAttack:
-                        new Animation(callback: v => (this.ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, v, 0, 0.73),
+                        new Animation(callback: v => (this.ChosenCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Color.FromRgba(v, v, 0, 0.73),
                             start: 0,
                             end: 1).Commit(this.ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
                         break;
@@ -280,7 +281,7 @@ namespace CardGame.GameObjects
         public void HighlightTargetedCard(Action<double, bool> finished = null)
         {
             if (this.TargetedCard != null)
-                new Animation(callback: v => (this.TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.5),
+                new Animation(callback: v => (this.TargetedCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.5),
                         start: 0,
                         end: 1).Commit(this.TargetedCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
         }

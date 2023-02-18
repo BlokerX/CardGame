@@ -10,46 +10,46 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
-        GContent.Add(new Card(new Wizard())
+        GContent.Add(new CharacterCard(new Wizard())
         {
             Scale = 0.5
         });
-        Content.Add(new Card(new Zeus())
+        Content.Add(new CharacterCard(new Zeus())
         {
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center,
         });
-        Content.Add(new Card(new Knight())
+        Content.Add(new CharacterCard(new Knight())
         {
             HeightRequest = 829,
             WidthRequest = 505
         });
-        Content.Add(new Card(new Archer())
+        Content.Add(new CharacterCard(new Archer())
         {
             HeightRequest = 829/2,
             WidthRequest = 505/2
         });
-        Content.Add(new Card(new RoyalSoldier())
+        Content.Add(new CharacterCard(new RoyalSoldier())
         {
             HeightRequest = 829,
             WidthRequest = 505,
             Scale = 0.8
         });
-        Content.Add(new Card(new SwordFighter())
+        Content.Add(new CharacterCard(new SwordFighter())
         {
             HeightRequest = 829,
             WidthRequest = 505,
             Scale = 0.25
         });
-        Content.Add(new Card(new Witch()));
-        Content.Add(new Card(new Bandit())
+        Content.Add(new CharacterCard(new Witch()));
+        Content.Add(new CharacterCard(new Bandit())
         {
             HeightRequest = 829,
             WidthRequest = 505,
             Scale = 0.8
         });
         
-        Content.Add(new Card(new Bandit())
+        Content.Add(new CharacterCard(new Bandit())
         {
             HeightRequest = 829,
             WidthRequest = 505,

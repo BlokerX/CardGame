@@ -3,7 +3,7 @@ using CardGame.ServiceObjects;
 
 namespace CardGame.ViewModels
 {
-    public class CardViewModel : PropertyChangeObject
+    public class CharacterCardViewModel : PropertyChangeObject, ICardViewModel
     {
         private readonly bool _isMagicCard = false;
         public bool IsMagicCard
@@ -11,7 +11,7 @@ namespace CardGame.ViewModels
             get => _isMagicCard;
         }
 
-        public CardViewModel(CharacterBase character)
+        public CharacterCardViewModel(CharacterBase character)
         {
             _character = character;
             Character.HealthPointsChanged += (i) => OnPropertyChanged(nameof(HealthPoints));
@@ -19,7 +19,7 @@ namespace CardGame.ViewModels
             Character.ShieldPointsChanged += (i) => OnPropertyChanged(nameof(ShieldPoints));
         }
 
-        public CardViewModel(MagicCharacter character) : this((CharacterBase)character)
+        public CharacterCardViewModel(MagicCharacter character) : this((CharacterBase)character)
         {
             _isMagicCard = true;
         }

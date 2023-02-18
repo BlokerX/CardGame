@@ -4,7 +4,7 @@ namespace CardGame.GameObjects
 {
     public class Deck
     {
-        public List<Card> Cards;
+        public List<CardBase> Cards;
 
     }
 }

@@ -49,7 +49,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="GameObjectsUI\Card.xaml">
+	  <Compile Update="GameObjectsUI\ItemCard.xaml.cs">
+	    <DependentUpon>ItemCard.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="GameObjectsUI\CharacterCard.xaml.cs">
+	    <DependentUpon>CharacterCard.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="GameObjectsUI\ItemCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="GameObjectsUI\CharacterCard.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

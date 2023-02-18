@@ -60,7 +60,7 @@ public partial class Board : ContentPage
     // domyślna akcja kliknięcia karty gracza
     private void AddClickEventToSelect_PlayerCards()
     {
-        foreach (Card card in PlayerCards.Children.Cast<Card>())
+        foreach (CardBase card in PlayerCards.Children.Cast<CardBase>())
         {
             card.OnCardTaped += players[0].ThrowNewCard;
         }
@@ -71,7 +71,7 @@ public partial class Board : ContentPage
     #region Player turn
 
     // Wybieranie karty atakowanej:
-    private void OnComputerCardClickedPlayerTargeted(Card card)
+    private void OnComputerCardClickedPlayerTargeted(CardBase card)
     {
         if (players[0].TurnFaze != Player.TurnFazeEnum.SelectingEnemyCard)
             return;
@@ -85,8 +85,8 @@ public partial class Board : ContentPage
 
     private void AttackTargetCard()
     {
-        CharacterBase myCharacter = (players[0].ChosenCard.BindingContext as CardViewModel).Character;
-        CharacterBase enemyCharacter = (players[0].TargetedCard.BindingContext as CardViewModel).Character;
+        CharacterBase myCharacter = (players[0].ChosenCard.BindingContext as CharacterCardViewModel).Character;
+        CharacterBase enemyCharacter = (players[0].TargetedCard.BindingContext as CharacterCardViewModel).Character;
 
         // Normal attack
         if (players[0].AttackType == Player.AttackTypeEnum.Attack)
@@ -98,14 +98,14 @@ public partial class Board : ContentPage
         else if (players[0].AttackType == Player.AttackTypeEnum.SpecialAttack)
         {
             List<CharacterBase> playerBoardCharacters = new();
-            foreach (Card item in PlayerBoard.Cast<Card>())
+            foreach (CardBase item in PlayerBoard.Cast<CardBase>())
             {
-                playerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
+                playerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).Character);
             }
             List<CharacterBase> computerBoardCharacters = new();
-            foreach (Card item in ComputerBoard.Cast<Card>())
+            foreach (CardBase item in ComputerBoard.Cast<CardBase>())
             {
-                computerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
+                computerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).Character);
             }
 
             myCharacter.SpecialAttack(computerBoardCharacters.ToArray(), playerBoardCharacters.ToArray(), enemyCharacter);
@@ -114,13 +114,13 @@ public partial class Board : ContentPage
 
         #region Animation
         if (players[0].ChosenCard != null)
-            (players[0].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
+            (players[0].ChosenCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Brush.Transparent;
         #endregion
         players[0].ChosenCard = null;
 
         #region Animation
         if (players[0].TargetedCard != null)
-            (players[0].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
+            (players[0].TargetedCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Brush.Transparent;
         #endregion
         players[0].TargetedCard = null;
 
@@ -146,7 +146,7 @@ public partial class Board : ContentPage
                 case 0:
                     new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1500, finished: (d, b) =>
                     {
-                        players[1].ChosenCard = ComputerBoard[new Random().Next(0, ComputerBoard.Children.Count)] as Card;
+                        players[1].ChosenCard = ComputerBoard[new Random().Next(0, ComputerBoard.Children.Count)] as CardBase;
                         players[1].HighlightChosenCard((d, b) => ComputerTargetEnemyCard());
                     });
                     break;
@@ -206,10 +206,10 @@ public partial class Board : ContentPage
                 return;
             }
 
-            players[1].TargetedCard = PlayerBoard.Children[new Random().Next(0, PlayerBoard.Children.Count)] as Card;
+            players[1].TargetedCard = PlayerBoard.Children[new Random().Next(0, PlayerBoard.Children.Count)] as CardBase;
 
             if (players[1].TargetedCard != null)
-                new Animation(callback: v => (players[1].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.75),
+                new Animation(callback: v => (players[1].TargetedCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.75),
                     start: 0,
                     end: 1).Commit(players[1].TargetedCard, "Animation", 16, highlightCardAnimationTime, finished: (d, b) => ComputerAttack());
         });
@@ -220,8 +220,8 @@ public partial class Board : ContentPage
         // atak kończący turę
         new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1000, finished: (d, b) =>
         {
-            CharacterBase computerCharacter = (players[1].ChosenCard.BindingContext as CardViewModel).Character;
-            CharacterBase enemyCharacter = (players[1].TargetedCard.BindingContext as CardViewModel).Character;
+            CharacterBase computerCharacter = (players[1].ChosenCard.BindingContext as CharacterCardViewModel).Character;
+            CharacterBase enemyCharacter = (players[1].TargetedCard.BindingContext as CharacterCardViewModel).Character;
 
             // Normal attack
             if (players[1].AttackType == Player.AttackTypeEnum.Attack)
@@ -233,14 +233,14 @@ public partial class Board : ContentPage
             else if (players[1].AttackType == Player.AttackTypeEnum.SpecialAttack)
             {
                 List<CharacterBase> computerBoardCharacters = new();
-                foreach (Card item in ComputerBoard.Cast<Card>())
+                foreach (CardBase item in ComputerBoard.Cast<CardBase>())
                 {
-                    computerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
+                    computerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).Character);
                 }
                 List<CharacterBase> playerBoardCharacters = new();
-                foreach (Card item in ComputerBoard.Cast<Card>())
+                foreach (CardBase item in ComputerBoard.Cast<CardBase>())
                 {
-                    playerBoardCharacters.Add((item.BindingContext as CardViewModel).Character);
+                    playerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).Character);
                 }
 
                 computerCharacter.SpecialAttack(playerBoardCharacters.ToArray(), computerBoardCharacters.ToArray(), enemyCharacter);
@@ -255,13 +255,13 @@ public partial class Board : ContentPage
     {
         #region Animation
         if (players[1].ChosenCard != null)
-            (players[1].ChosenCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
+            (players[1].ChosenCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Brush.Transparent;
         #endregion
         players[1].ChosenCard = null;
 
         #region Animation
         if (players[1].TargetedCard != null)
-            (players[1].TargetedCard.BindingContext as CardViewModel).Character.AuraBrush = Brush.Transparent;
+            (players[1].TargetedCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Brush.Transparent;
         #endregion
         players[1].TargetedCard = null;
 
