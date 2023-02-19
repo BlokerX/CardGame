@@ -1,4 +1,4 @@
-﻿using CardGame.Characters;
+﻿using CardGame.CardModels.Characters;
 using CardGame.ViewModels;
 using System.Diagnostics;
 

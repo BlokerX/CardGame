@@ -1,4 +1,4 @@
-﻿namespace CardGame.Characters
+﻿namespace CardGame.CardModels.Characters
 {
     internal class Wizard : MagicCharacter
     {

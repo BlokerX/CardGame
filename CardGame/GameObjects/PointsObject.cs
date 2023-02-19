@@ -2,7 +2,7 @@
 
 namespace CardGame.GameObjects
 {
-    public class PointsObject : PropertyChangeObject
+    internal class PointsObject : PropertyChangeObject
     {
         // Problem with "_points" privacy and methods like "Heal(int)"
         protected int _points;

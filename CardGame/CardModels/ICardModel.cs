@@ -1,16 +1,28 @@
-﻿namespace CardGame
+﻿using CardGame.GameObjectsUI;
+
+namespace CardGame
 {
-    public interface ICardModel
+    internal interface ICardModel
     {
+        /// <summary>
+        /// ID.
+        /// </summary>
+        public int ID { get; }
+
         /// <summary>
         /// Name.
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// ID.
+        /// Item describe.
         /// </summary>
-        public int ID { get; }
+        public string Describe { get; }
+
+        /// <summary>
+        /// Item short describe.
+        /// </summary>
+        public string ShortDescribe { get; }
 
         /// <summary>
         /// Example image source.

@@ -1,5 +1,4 @@
-﻿using CardGame.Characters;
-using CardGame.ViewModels;
+﻿using CardGame.CardModels.Items;
 using System.Diagnostics;
 
 namespace CardGame.GameObjectsUI;
@@ -19,10 +18,10 @@ public partial class ItemCard : CardBase
 #endif
     }
 
-    public ItemCard(CharacterBase character) : this()
+    public ItemCard(ItemBase character) : this()
     {
-        BindingContext = new CharacterCardViewModel(character);
-        //(BindingContext as CharacterCardViewModel).Character.CardOvner = this;
+        //BindingContext = new CharacterCardViewModel(character);
+        //(BindingContext as CharacterCardViewModel).Item.CardOvner = this;
     }
 
     private void ContentView_SizeChanged(object sender, EventArgs e)

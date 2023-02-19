@@ -2,9 +2,8 @@
 
 namespace CardGame.GameObjects
 {
-    public class Deck
+    internal class Deck
     {
         public List<CardBase> Cards;
-
     }
 }

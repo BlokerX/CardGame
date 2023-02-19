@@ -1,4 +1,4 @@
-﻿using CardGame.Characters;
+﻿using CardGame.CardModels.Characters;
 using CardGame.GameObjects;
 using CardGame.ViewModels;
 
@@ -44,7 +44,7 @@ public partial class Board : ContentPage
 
         AddClickEventToSelect_PlayerCards();
 
-        this.Loaded += (s, e) => ComputerTurn();
+        Loaded += (s, e) => ComputerTurn();
         //todo change loaded to start event
     }
 

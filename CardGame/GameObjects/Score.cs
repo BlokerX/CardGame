@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CardGame.GameObjects
 {
-    public class Score
+    internal class Score
     {
 		private int _points;
         /// <summary>

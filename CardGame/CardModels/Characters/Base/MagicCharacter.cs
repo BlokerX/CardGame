@@ -1,4 +1,4 @@
-﻿namespace CardGame.Characters
+﻿namespace CardGame.CardModels.Characters
 {
     public class MagicCharacter : CharacterBase
     {
@@ -10,7 +10,7 @@
 
         protected int _magicPoints;
         /// <summary>
-        /// Character's magic points.
+        /// Item's magic points.
         /// </summary>
         public int MagicPoints
         {

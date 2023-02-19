@@ -1,4 +1,4 @@
-﻿using CardGame.Characters;
+﻿using CardGame.CardModels;
 using CardGame.GameObjectsUI;
 using CardGame.ViewModels;
 
@@ -7,7 +7,7 @@ namespace CardGame.GameObjects
     /// <summary>
     /// Player object.
     /// </summary>
-    public class Player
+    internal class Player
     {
         //todo do zmiany 
         private string _name = "William";
@@ -154,7 +154,7 @@ namespace CardGame.GameObjects
 
             for (int i = 0; i < count; i++)
             {
-                var c = CharactersManager.GetRandomCard();
+                var c = CardManager.GetRandomCard();
                 c.Scale = scale;
                 c.Margin = new Thickness(x, y);
                 cards.Add(c);

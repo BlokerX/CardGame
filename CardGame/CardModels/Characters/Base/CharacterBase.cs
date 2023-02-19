@@ -2,19 +2,10 @@
 using CardGame.ServiceObjects;
 using System.Diagnostics;
 
-namespace CardGame.Characters
+namespace CardGame.CardModels.Characters
 {
     public class CharacterBase : PropertyChangeObject, ICardModel
     {
-        protected string _name;
-        /// <summary>
-        /// Name of character.
-        /// </summary>
-        public string Name
-        {
-            get => _name;
-        }
-
         protected readonly int _iD;
         /// <summary>
         /// ID of character.
@@ -24,9 +15,18 @@ namespace CardGame.Characters
             get => _iD;
         }
 
+        protected string _name;
+        /// <summary>
+        /// Name of character.
+        /// </summary>
+        public string Name
+        {
+            get => _name;
+        }
+
         protected readonly string _describe;
         /// <summary>
-        /// Character describe.
+        /// Item describe.
         /// </summary>
         public string Describe
         {
@@ -35,7 +35,7 @@ namespace CardGame.Characters
 
         protected readonly string _shortDescribe;
         /// <summary>
-        /// Character short describe.
+        /// Item short describe.
         /// </summary>
         public string ShortDescribe
         {
@@ -62,7 +62,7 @@ namespace CardGame.Characters
 
         protected int _attackPoints;
         /// <summary>
-        /// Character's attack points.
+        /// Item's attack points.
         /// </summary>
         public int AttackPoints
         {
@@ -78,7 +78,7 @@ namespace CardGame.Characters
 
         protected int _healthPoints;
         /// <summary>
-        /// Character's health points.
+        /// Item's health points.
         /// </summary>
         public int HealthPoints
         {
@@ -94,7 +94,7 @@ namespace CardGame.Characters
 
         protected int _shieldPoints;
         /// <summary>
-        /// Character's shield points.
+        /// Item's shield points.
         /// </summary>
         public int ShieldPoints
         {
@@ -293,7 +293,7 @@ namespace CardGame.Characters
         ~CharacterBase()
         {
 #if DEBUG
-            Debug.WriteLine("Character has been destroyed.");
+            Debug.WriteLine("Item has been destroyed.");
             // todo destroy it doesn't works
 #endif
         }

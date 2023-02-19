@@ -2,7 +2,7 @@
 
 namespace CardGame.ViewModels
 {
-    public class BoardViewModel
+    internal class BoardViewModel
     {
         private Player _player1;
 

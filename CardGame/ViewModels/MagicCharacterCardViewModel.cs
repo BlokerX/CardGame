@@ -1,8 +1,9 @@
-﻿using CardGame.Characters;
+﻿using CardGame.CardModels.Characters;
+using CardGame.ServiceObjects;
 
 namespace CardGame.ViewModels
 {
-    public class MagicCharacterCardViewModel : CharacterCardViewModel
+    internal class MagicCharacterCardViewModel : CharacterCardViewModel
     {
         public MagicCharacterCardViewModel(MagicCharacter character): base(character)
         {
@@ -13,7 +14,7 @@ namespace CardGame.ViewModels
 
         public string MagicPoints
         {
-            get => IntToThreeCharStringComparer(Character.MagicPoints);
+            get => Character.MagicPoints.IntToThreeCharStringComparer();
         }
 
     }
