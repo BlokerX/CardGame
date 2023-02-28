@@ -17,7 +17,7 @@
 
     <Border 
         BackgroundColor="Transparent"
-        Stroke="{Binding Character.AuraBrush}"
+        Stroke="{Binding CardModel.AuraBrush}"
         StrokeThickness="10"
         HorizontalOptions="Fill"
         VerticalOptions="Fill"
@@ -28,7 +28,7 @@
         HorizontalOptions="Fill"
         VerticalOptions="Fill"
         StrokeShape="RoundRectangle 10"
-        Background="{Binding Character.StrokeColor}"
+        Background="{Binding CardModel.StrokeColor}"
         Stroke="Black"
         StrokeThickness="1"
         Padding="10">
@@ -108,7 +108,7 @@
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill"
                 StrokeShape="RoundRectangle 10"
-                Stroke="{Binding Character.StrokeColor}"
+                Stroke="{Binding CardModel.StrokeColor}"
                 StrokeThickness="5">
 
                     <Grid>
@@ -160,7 +160,7 @@
                             HorizontalOptions="Center"
                             StrokeShape="RoundRectangle 5"
                             StrokeThickness="4"
-                            Stroke="{Binding Character.StrokeColor}"
+                            Stroke="{Binding CardModel.StrokeColor}"
                             BackgroundColor="Red"
                             Margin="5"
                             Padding="5" >
@@ -178,7 +178,7 @@
                             HorizontalOptions="Center"
                             StrokeShape="RoundRectangle 5"
                             StrokeThickness="4"
-                            Stroke="{Binding Character.StrokeColor}"
+                            Stroke="{Binding CardModel.StrokeColor}"
                             BackgroundColor="Green"
                             Margin="5"
                             Padding="5" >
@@ -196,7 +196,7 @@
                             HorizontalOptions="Center"
                             StrokeShape="RoundRectangle 5"
                             StrokeThickness="4"
-                            Stroke="{Binding Character.StrokeColor}"
+                            Stroke="{Binding CardModel.StrokeColor}"
                             BackgroundColor="LightBlue"
                             Margin="5"
                             Padding="5" >
@@ -214,7 +214,7 @@
                             HorizontalOptions="Center"
                             StrokeShape="RoundRectangle 5"
                             StrokeThickness="4"
-                            Stroke="{Binding Character.StrokeColor}"
+                            Stroke="{Binding CardModel.StrokeColor}"
                             BackgroundColor="MediumPurple"
                             Margin="5"
                             Padding="5"

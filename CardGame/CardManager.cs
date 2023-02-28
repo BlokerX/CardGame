@@ -6,7 +6,7 @@ namespace CardGame
 {
     internal class CardManager
     {
-        public const int CardsID = 11;
+        public const int CardsID = 12;
 
         public static ICardModel GetCardTypesById(int id)
         {
@@ -23,6 +23,7 @@ namespace CardGame
                 9 => new RoyalSoldier(),
                 10 => new Prince(),
                 11 => new Knight(),
+                12 => new ItemBase(1,"Eataz","sfdfsdfsdf dfs", "", "img_source", 1),
 
                 _ => null,
             };
@@ -30,7 +31,7 @@ namespace CardGame
 
         public static ICardModel GetRandomCharacterType()
         {
-            return GetCardTypesById(new Random().Next(1, CardsID));
+            return GetCardTypesById(new Random().Next(1, CardsID+1));
         }
 
         public static List<ICardModel> GetAllCharacters()

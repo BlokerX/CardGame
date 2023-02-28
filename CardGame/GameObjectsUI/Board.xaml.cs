@@ -85,42 +85,42 @@ public partial class Board : ContentPage
 
     private void AttackTargetCard()
     {
-        CharacterBase myCharacter = (players[0].ChosenCard.BindingContext as CharacterCardViewModel).Character;
-        CharacterBase enemyCharacter = (players[0].TargetedCard.BindingContext as CharacterCardViewModel).Character;
+        ICardModel myCharacter = (players[0].ChosenCard.BindingContext as ICardViewModel).CardModel;
+        ICardModel enemyCharacter = (players[0].TargetedCard.BindingContext as ICardViewModel).CardModel;
 
         // Normal attack
         if (players[0].AttackType == Player.AttackTypeEnum.Attack)
         {
-            myCharacter.Attack(enemyCharacter);
+            (myCharacter as CharacterBase).Attack(enemyCharacter as CharacterBase);
             players[0].SpecialPoints++;
         }
         // Special attack
         else if (players[0].AttackType == Player.AttackTypeEnum.SpecialAttack)
         {
-            List<CharacterBase> playerBoardCharacters = new();
+            List<ICardModel> playerBoardCharacters = new();
             foreach (CardBase item in PlayerBoard.Cast<CardBase>())
             {
-                playerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).Character);
+                playerBoardCharacters.Add((item.BindingContext as ICardViewModel).CardModel);
             }
-            List<CharacterBase> computerBoardCharacters = new();
+            List<ICardModel> computerBoardCharacters = new();
             foreach (CardBase item in ComputerBoard.Cast<CardBase>())
             {
-                computerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).Character);
+                computerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).CardModel);
             }
 
-            myCharacter.SpecialAttack(computerBoardCharacters.ToArray(), playerBoardCharacters.ToArray(), enemyCharacter);
+            (myCharacter as CharacterBase).SpecialAttack(computerBoardCharacters.ToArray(), playerBoardCharacters.ToArray(), enemyCharacter);
             players[0].SpecialPoints = 0;
         }
 
         #region Animation
         if (players[0].ChosenCard != null)
-            (players[0].ChosenCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Brush.Transparent;
+            (players[0].ChosenCard.BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Brush.Transparent;
         #endregion
         players[0].ChosenCard = null;
 
         #region Animation
         if (players[0].TargetedCard != null)
-            (players[0].TargetedCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Brush.Transparent;
+            (players[0].TargetedCard.BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Brush.Transparent;
         #endregion
         players[0].TargetedCard = null;
 
@@ -209,7 +209,7 @@ public partial class Board : ContentPage
             players[1].TargetedCard = PlayerBoard.Children[new Random().Next(0, PlayerBoard.Children.Count)] as CardBase;
 
             if (players[1].TargetedCard != null)
-                new Animation(callback: v => (players[1].TargetedCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Color.FromRgba(v, 0, 0, 0.75),
+                new Animation(callback: v => (players[1].TargetedCard.BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Color.FromRgba(v, 0, 0, 0.75),
                     start: 0,
                     end: 1).Commit(players[1].TargetedCard, "Animation", 16, highlightCardAnimationTime, finished: (d, b) => ComputerAttack());
         });
@@ -220,8 +220,8 @@ public partial class Board : ContentPage
         // atak kończący turę
         new Animation((v) => { }).Commit(ComputerBoard, "Animation", 16, 1000, finished: (d, b) =>
         {
-            CharacterBase computerCharacter = (players[1].ChosenCard.BindingContext as CharacterCardViewModel).Character;
-            CharacterBase enemyCharacter = (players[1].TargetedCard.BindingContext as CharacterCardViewModel).Character;
+            CharacterBase computerCharacter = (CharacterBase)(players[1].ChosenCard.BindingContext as CharacterCardViewModel).CardModel;
+            CharacterBase enemyCharacter = (CharacterBase)(players[1].TargetedCard.BindingContext as CharacterCardViewModel).CardModel;
 
             // Normal attack
             if (players[1].AttackType == Player.AttackTypeEnum.Attack)
@@ -235,12 +235,12 @@ public partial class Board : ContentPage
                 List<CharacterBase> computerBoardCharacters = new();
                 foreach (CardBase item in ComputerBoard.Cast<CardBase>())
                 {
-                    computerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).Character);
+                    computerBoardCharacters.Add((CharacterBase)(item.BindingContext as CharacterCardViewModel).CardModel);
                 }
                 List<CharacterBase> playerBoardCharacters = new();
                 foreach (CardBase item in ComputerBoard.Cast<CardBase>())
                 {
-                    playerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).Character);
+                    playerBoardCharacters.Add((CharacterBase)(item.BindingContext as CharacterCardViewModel).CardModel);
                 }
 
                 computerCharacter.SpecialAttack(playerBoardCharacters.ToArray(), computerBoardCharacters.ToArray(), enemyCharacter);
@@ -255,13 +255,13 @@ public partial class Board : ContentPage
     {
         #region Animation
         if (players[1].ChosenCard != null)
-            (players[1].ChosenCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Brush.Transparent;
+            (players[1].ChosenCard.BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Brush.Transparent;
         #endregion
         players[1].ChosenCard = null;
 
         #region Animation
         if (players[1].TargetedCard != null)
-            (players[1].TargetedCard.BindingContext as CharacterCardViewModel).Character.AuraBrush = Brush.Transparent;
+            (players[1].TargetedCard.BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Brush.Transparent;
         #endregion
         players[1].TargetedCard = null;
 

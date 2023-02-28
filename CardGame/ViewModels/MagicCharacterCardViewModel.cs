@@ -7,14 +7,14 @@ namespace CardGame.ViewModels
     {
         public MagicCharacterCardViewModel(MagicCharacter character): base(character)
         {
-            Character = character;
+            CardModel = character;
         }
 
-        public new readonly MagicCharacter Character;
+        public new readonly MagicCharacter CardModel;
 
         public string MagicPoints
         {
-            get => Character.MagicPoints.IntToThreeCharStringComparer();
+            get => CardModel.MagicPoints.IntToThreeCharStringComparer();
         }
 
     }

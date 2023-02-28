@@ -2,7 +2,7 @@
 
 namespace CardGame
 {
-    internal interface ICardModel
+    public interface ICardModel
     {
         /// <summary>
         /// ID.
@@ -15,12 +15,12 @@ namespace CardGame
         public string Name { get; }
 
         /// <summary>
-        /// Item describe.
+        /// CardModel describe.
         /// </summary>
         public string Describe { get; }
 
         /// <summary>
-        /// Item short describe.
+        /// CardModel short describe.
         /// </summary>
         public string ShortDescribe { get; }
 

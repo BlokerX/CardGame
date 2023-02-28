@@ -3,34 +3,44 @@ using CardGame.ServiceObjects;
 
 namespace CardGame.ViewModels
 {
-    public class ItemCardViewModel : ICardViewModel
+    internal class ItemCardViewModel : ICardViewModel
     {
-        public readonly ItemBase _item;
-
-        public ItemBase Item
+        public ItemCardViewModel(ItemBase item)
         {
-            get => _item;
+            _cardModel = item;
+        }
+
+        private readonly ItemBase _cardModel;
+
+        public ICardModel CardModel
+        {
+            get => _cardModel;
         }
 
         public string ID
         {
-            get => Item.ID.IntToThreeCharStringComparer();
+            get => CardModel.ID.IntToThreeCharStringComparer();
         }
 
         public string Name
         {
-            get => Item.Name;
+            get => CardModel.Name;
         }
 
         //private readonly Image _exampleImage/* = new() { Source = "https://i.pinimg.com/280x280_RS/2e/51/23/2e51230e3d557acde4744f7848308da0.jpg" }*/;
         public Image ExampleImage
         {
-            get => new() { Source = Item.ExampleImageSource };
+            get => new() { Source = CardModel.ExampleImageSource };
         }
 
         public Brush BackgroundColor
         {
-            get => Item.BackgroundColor;
+            get => CardModel.BackgroundColor;
+        }
+
+        public string NumberOfUses
+        {
+            get => (CardModel as ItemBase).NumberOfUses.IntToThreeCharStringComparer();
         }
     }
 }

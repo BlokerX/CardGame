@@ -1,4 +1,5 @@
 ﻿using CardGame.CardModels.Characters;
+using CardGame.GameObjectsUI;
 using CardGame.ServiceObjects;
 
 namespace CardGame.ViewModels
@@ -13,10 +14,10 @@ namespace CardGame.ViewModels
 
         public CharacterCardViewModel(CharacterBase character)
         {
-            _character = character;
-            Character.HealthPointsChanged += (i) => OnPropertyChanged(nameof(HealthPoints));
-            Character.AttackPointsChanged += (i) => OnPropertyChanged(nameof(AttackPoints));
-            Character.ShieldPointsChanged += (i) => OnPropertyChanged(nameof(ShieldPoints));
+            _cardModel = character;
+            (CardModel as CharacterBase).HealthPointsChanged += (i) => OnPropertyChanged(nameof(HealthPoints));
+            (CardModel as CharacterBase).AttackPointsChanged += (i) => OnPropertyChanged(nameof(AttackPoints));
+            (CardModel as CharacterBase).ShieldPointsChanged += (i) => OnPropertyChanged(nameof(ShieldPoints));
         }
 
         public CharacterCardViewModel(MagicCharacter character) : this((CharacterBase)character)
@@ -24,37 +25,37 @@ namespace CardGame.ViewModels
             _isMagicCard = true;
         }
 
-        public readonly CharacterBase _character;
+        private readonly CharacterBase _cardModel;
 
-        public CharacterBase Character
+        public ICardModel CardModel
         {
-            get => _character;
+            get => _cardModel;
         }
 
         public string ID
         {
-            get => Character.ID.IntToThreeCharStringComparer();
+            get => CardModel.ID.IntToThreeCharStringComparer();
         }
 
         public string Name
         {
-            get => Character.Name;
+            get => CardModel.Name;
         }
 
         //private readonly Image _exampleImage/* = new() { Source = "https://i.pinimg.com/280x280_RS/2e/51/23/2e51230e3d557acde4744f7848308da0.jpg" }*/;
         public Image ExampleImage
         {
-            get => new() { Source = Character.ExampleImageSource };
+            get => new() { Source = CardModel.ExampleImageSource };
         }
 
         public Brush BackgroundColor
         {
-            get => Character.BackgroundColor;
+            get => CardModel.BackgroundColor;
         }
 
         public string ShortDescribe
         {
-            get => Character.ShortDescribe;
+            get => CardModel.ShortDescribe;
         }
 
         private readonly string _speciesImage;
@@ -71,23 +72,22 @@ namespace CardGame.ViewModels
 
         public bool IsMagicResistant
         {
-            get => Character.IsMagicResistant;
+            get => (CardModel as CharacterBase).IsMagicResistant;
         }
 
         public string AttackPoints
         {
-            get => Character.AttackPoints.IntToThreeCharStringComparer();
+            get => (CardModel as CharacterBase).AttackPoints.IntToThreeCharStringComparer();
         }
 
         public string HealthPoints
         {
-            get => Character.HealthPoints.IntToThreeCharStringComparer();
+            get => (CardModel as CharacterBase).HealthPoints.IntToThreeCharStringComparer();
         }
 
         public string ShieldPoints
         {
-            get => Character.ShieldPoints.IntToThreeCharStringComparer();
+            get => (CardModel as CharacterBase).ShieldPoints.IntToThreeCharStringComparer();
         }
-
     }
 }

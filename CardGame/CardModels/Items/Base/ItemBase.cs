@@ -26,7 +26,7 @@ namespace CardGame.CardModels.Items
 
         protected readonly string _describe;
         /// <summary>
-        /// Item describe.
+        /// CardModel describe.
         /// </summary>
         public string Describe
         {
@@ -35,7 +35,7 @@ namespace CardGame.CardModels.Items
 
         protected readonly string _shortDescribe;
         /// <summary>
-        /// Item short describe.
+        /// CardModel short describe.
         /// </summary>
         public string ShortDescribe
         {
@@ -94,9 +94,37 @@ namespace CardGame.CardModels.Items
             }
         }
 
+        private int _numberOfUses;
+        /// <summary>
+        /// Number of remaining uses.
+        /// </summary>
+        public int NumberOfUses
+        {
+            get => _numberOfUses;
+            set 
+            {
+                _numberOfUses = value;
+                OnPropertyChanged(nameof(NumberOfUses));
+            }
+        }
+
+        public virtual void ItemFunction() { }
+
         public ItemCard CardOvner;
 
-        private static void DestroyCard(ItemCard card)
+        public ItemBase(int iD, string name, string describe, string shortDescribe, string exampleImageSource, int numberOfUses, Brush backgroundColor = null, Brush strokeColor = null)
+        {
+            _name = name;
+            _iD = iD;
+            _describe = describe;
+            _shortDescribe = shortDescribe;
+            _exampleImageSource = exampleImageSource;
+            _numberOfUses = numberOfUses;
+            _backgroundColor = backgroundColor == null ? Brush.Orange : backgroundColor;
+            _strokeColor = strokeColor == null ? Brush.White : strokeColor;
+        }
+
+        private static void DestroyCard(CardBase card)
         {
             card.Destroy();
         }
@@ -104,7 +132,7 @@ namespace CardGame.CardModels.Items
         ~ItemBase()
         {
 #if DEBUG
-            Debug.WriteLine("Item has been destroyed.");
+            Debug.WriteLine("CardModel has been destroyed.");
             // todo destroy it doesn't works
 #endif
         }

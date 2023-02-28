@@ -4,24 +4,27 @@
     {
         public Zeus() : base("Zeus", 5, "-", "-", SpeciesTypes.God, CharacterTypeEnum.God, 20, 10, 0, false, "img_source", Color.Parse("LightBlue")) { }
 
-        public override void SpecialAttack(CharacterBase[] enemies, CharacterBase[] allies, CharacterBase selectedCharacter)
+        public override void SpecialAttack(ICardModel[] enemies, ICardModel[] allies, ICardModel selectedCardModel)
         {
+            var characterEnemies = enemies as CharacterBase[];
+            var selectedCharacter = selectedCardModel as CharacterBase;
+
             // Atak główny:
             selectedCharacter.GetDamaged(AttackPoints * 3);
 
             // Ataki poboczne:
-            if (enemies.Length < 2)
+            if (characterEnemies.Length < 2)
                 return;
             Random random = new();
-            var selectedEnemies = new int[random.Next() % (enemies.Length - 1)];
+            var selectedEnemies = new int[random.Next() % (characterEnemies.Length - 1)];
             for (int i = 0; i < selectedEnemies.Length; i++)
             {
                 int x;
                 do
                 {
-                    x = random.Next() % enemies.Length;
+                    x = random.Next() % characterEnemies.Length;
 
-                } while (selectedEnemies.Contains(x) || enemies[x] == selectedCharacter);
+                } while (selectedEnemies.Contains(x) || characterEnemies[x] == selectedCharacter);
                 selectedEnemies[i] = x;
 
                 // Działanie na wybranych, przypadkowych przeciwnikach:

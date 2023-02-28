@@ -10,7 +10,7 @@
 
         protected int _magicPoints;
         /// <summary>
-        /// Item's magic points.
+        /// CardModel's magic points.
         /// </summary>
         public int MagicPoints
         {

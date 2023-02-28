@@ -1,7 +1,9 @@
 ﻿namespace CardGame.ViewModels
 {
-    public interface ICardViewModel
+    internal interface ICardViewModel
     {
+        public ICardModel CardModel { get; }
+
         public string ID { get; }
 
         public string Name { get; }

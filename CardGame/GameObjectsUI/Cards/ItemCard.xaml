@@ -4,7 +4,7 @@
             xmlns:z="clr-namespace:CardGame.GameObjectsUI"
             x:Class="CardGame.GameObjectsUI.ItemCard"
             xmlns:local="clr-namespace:CardGame.ViewModels"
-            x:DataType="local:MagicCharacterCardViewModel"
+            x:DataType="local:ItemCardViewModel"
             SizeChanged="ContentView_SizeChanged"
             HeightRequest="829"
             WidthRequest="505"
@@ -17,7 +17,7 @@
 
     <Border 
         BackgroundColor="Transparent"
-        Stroke="{Binding Character.AuraBrush}"
+        Stroke="{Binding CardModel.AuraBrush}"
         StrokeThickness="10"
         HorizontalOptions="Fill"
         VerticalOptions="Fill"
@@ -28,7 +28,7 @@
         HorizontalOptions="Fill"
         VerticalOptions="Fill"
         StrokeShape="RoundRectangle 10"
-        Background="{Binding Character.StrokeColor}"
+        Background="{Binding CardModel.StrokeColor}"
         Stroke="Black"
         StrokeThickness="1"
         Padding="10">
@@ -36,7 +36,7 @@
             <Grid 
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand"
-            Background="{Binding BackgroundColor}"
+            Background="{Binding CardModel.BackgroundColor}"
             Padding="15,10">
 
                 <Grid.RowDefinitions>
@@ -69,7 +69,7 @@
 
                     <Label 
                     Grid.Column="1"
-                    Text="{Binding Name}"
+                    Text="{Binding CardModel.Name}"
                     VerticalOptions="Center" 
                     HorizontalOptions="Start" 
                     TextColor="White"
@@ -108,13 +108,13 @@
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill"
                 StrokeShape="RoundRectangle 10"
-                Stroke="{Binding Character.StrokeColor}"
+                Stroke="{Binding CardModel.StrokeColor}"
                 StrokeThickness="5">
 
                     <Grid>
 
                         <Image 
-                        Source="{Binding ExampleImage.Source}"
+                        Source="{Binding CardModel.ExampleImageSource}"
                         Aspect="Fill"/>
 
                     </Grid>
@@ -134,97 +134,31 @@
                     HorizontalOptions="Fill"
                     Margin="5" >
 
-                    <HorizontalStackLayout>
-
-
-                        <Label 
-                            Text="SPECIES"
-                            VerticalOptions="Center" 
-                            HorizontalOptions="Start"
-                            Margin="5"/>
-
-                        <Label 
-                            Text="{Binding IsMagicResistant}"
-                            VerticalOptions="Center" 
-                            HorizontalOptions="Fill" 
-                            Margin="5"/>
-
-                    </HorizontalStackLayout>
-
                     <HorizontalStackLayout
                         VerticalOptions="Fill"
                         HorizontalOptions="End">
 
+                        <Label 
+                            Text="Validity: "
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center"
+                            FontSize="Large" />
+                        
                         <Border 
                             VerticalOptions="Center" 
                             HorizontalOptions="Center"
                             StrokeShape="RoundRectangle 5"
                             StrokeThickness="4"
-                            Stroke="{Binding Character.StrokeColor}"
+                            Stroke="{Binding CardModel.StrokeColor}"
                             BackgroundColor="Red"
                             Margin="5"
                             Padding="5" >
 
                             <Label 
-                            Text="{Binding HealthPoints}"
+                            Text="{Binding NumberOfUses}"
                             VerticalOptions="Center" 
                             HorizontalOptions="Center"
                             FontSize="Large" />
-
-                        </Border>
-
-                        <Border 
-                            VerticalOptions="Center" 
-                            HorizontalOptions="Center"
-                            StrokeShape="RoundRectangle 5"
-                            StrokeThickness="4"
-                            Stroke="{Binding Character.StrokeColor}"
-                            BackgroundColor="Green"
-                            Margin="5"
-                            Padding="5" >
-
-                            <Label 
-                                Text="{Binding AttackPoints}"
-                                VerticalOptions="Center" 
-                                HorizontalOptions="Center" 
-                                FontSize="Large" />
-
-                        </Border>
-
-                        <Border 
-                            VerticalOptions="Center" 
-                            HorizontalOptions="Center"
-                            StrokeShape="RoundRectangle 5"
-                            StrokeThickness="4"
-                            Stroke="{Binding Character.StrokeColor}"
-                            BackgroundColor="LightBlue"
-                            Margin="5"
-                            Padding="5" >
-
-                            <Label 
-                                Text="{Binding ShieldPoints}"
-                                VerticalOptions="Center" 
-                                HorizontalOptions="Center" 
-                                FontSize="Large" />
-
-                        </Border>
-
-                        <Border 
-                            VerticalOptions="Center" 
-                            HorizontalOptions="Center"
-                            StrokeShape="RoundRectangle 5"
-                            StrokeThickness="4"
-                            Stroke="{Binding Character.StrokeColor}"
-                            BackgroundColor="MediumPurple"
-                            Margin="5"
-                            Padding="5"
-                            IsVisible="{Binding IsMagicCard}">
-
-                            <Label 
-                                Text="{Binding MagicPoints}"
-                                VerticalOptions="Center" 
-                                HorizontalOptions="Center"
-                                FontSize="Large" />
 
                         </Border>
 

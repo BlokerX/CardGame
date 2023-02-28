@@ -26,7 +26,7 @@ namespace CardGame.CardModels.Characters
 
         protected readonly string _describe;
         /// <summary>
-        /// Item describe.
+        /// CardModel describe.
         /// </summary>
         public string Describe
         {
@@ -35,7 +35,7 @@ namespace CardGame.CardModels.Characters
 
         protected readonly string _shortDescribe;
         /// <summary>
-        /// Item short describe.
+        /// CardModel short describe.
         /// </summary>
         public string ShortDescribe
         {
@@ -62,7 +62,7 @@ namespace CardGame.CardModels.Characters
 
         protected int _attackPoints;
         /// <summary>
-        /// Item's attack points.
+        /// CardModel's attack points.
         /// </summary>
         public int AttackPoints
         {
@@ -78,7 +78,7 @@ namespace CardGame.CardModels.Characters
 
         protected int _healthPoints;
         /// <summary>
-        /// Item's health points.
+        /// CardModel's health points.
         /// </summary>
         public int HealthPoints
         {
@@ -94,7 +94,7 @@ namespace CardGame.CardModels.Characters
 
         protected int _shieldPoints;
         /// <summary>
-        /// Item's shield points.
+        /// CardModel's shield points.
         /// </summary>
         public int ShieldPoints
         {
@@ -187,7 +187,7 @@ namespace CardGame.CardModels.Characters
             selectedCharacter.GetDamaged(AttackPoints);
         }
 
-        public virtual void SpecialAttack(CharacterBase[] enemies, CharacterBase[] allies, CharacterBase selectedCharacter) { }
+        public virtual void SpecialAttack(ICardModel[] enemies, ICardModel[] allies, ICardModel selectedCardModel) { }
 
         public void GetDamaged(int damage)
         {
@@ -273,19 +273,15 @@ namespace CardGame.CardModels.Characters
             _shieldPoints = shieldPoints;
             _isMagicResistant = isMagicResistant;
             _exampleImageSource = exampleImageSource;
-            if (backgroundColor == null)
-                _backgroundColor = Brush.Orange;
-            else _backgroundColor = backgroundColor;
-            if (strokeColor == null)
-                _strokeColor = Brush.White;
-            else _strokeColor = strokeColor;
+            _backgroundColor = backgroundColor == null ? Brush.Orange : backgroundColor;
+            _strokeColor = strokeColor == null ? Brush.White : strokeColor;
 
             // Śmierć karty:
             OnHealthToZero += DestroyCard;
 
         }
 
-        private static void DestroyCard(CharacterCard card)
+        private static void DestroyCard(CardBase card)
         {
             card.Destroy();
         }
@@ -293,7 +289,7 @@ namespace CardGame.CardModels.Characters
         ~CharacterBase()
         {
 #if DEBUG
-            Debug.WriteLine("Item has been destroyed.");
+            Debug.WriteLine("CardModel has been destroyed.");
             // todo destroy it doesn't works
 #endif
         }
