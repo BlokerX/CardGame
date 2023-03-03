@@ -5,8 +5,14 @@
         public MagicCharacter(string name, int iD, string describe, string shortDescribe, SpeciesTypes species, CharacterTypeEnum characterType, int attackPoints, int healthPoints, int shieldPoints, bool isMagicResistant, string exampleImageSource, int magicPoints, Brush backgroundColor = null, Brush strokeColor = null) :
             base(name, iD, describe, shortDescribe, species, characterType, attackPoints, healthPoints, shieldPoints, isMagicResistant, exampleImageSource, backgroundColor, strokeColor)
         {
-            _magicPoints = magicPoints;
+            _maxMagicPoints = _magicPoints = magicPoints;
         }
+
+        private readonly int _maxMagicPoints;
+        /// <summary>
+        /// Max magic points.
+        /// </summary>
+        public int MaxMagicPoints => _maxMagicPoints;
 
         protected int _magicPoints;
         /// <summary>

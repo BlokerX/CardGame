@@ -60,6 +60,12 @@ namespace CardGame.CardModels.Characters
             get => _characterType;
         }
 
+        private readonly int _maxAttackPoints;
+        /// <summary>
+        /// Max attack points.
+        /// </summary>
+        public int MaxAttackPoints => _maxAttackPoints;
+
         protected int _attackPoints;
         /// <summary>
         /// CardModel's attack points.
@@ -75,6 +81,12 @@ namespace CardGame.CardModels.Characters
             }
         }
         public Action<int> AttackPointsChanged;
+
+        private readonly int _maxHealthPoints;
+        /// <summary>
+        /// Max health points.
+        /// </summary>
+        public int MaxHealthPoints => _maxHealthPoints;
 
         protected int _healthPoints;
         /// <summary>
@@ -92,6 +104,12 @@ namespace CardGame.CardModels.Characters
         }
         public Action<int> HealthPointsChanged;
 
+        private readonly int _maxShieldPoints;
+        /// <summary>
+        /// Max shield points.
+        /// </summary>
+        public int MaxShieldPoints => _maxShieldPoints;
+
         protected int _shieldPoints;
         /// <summary>
         /// CardModel's shield points.
@@ -108,24 +126,18 @@ namespace CardGame.CardModels.Characters
         }
         public Action<int> ShieldPointsChanged;
 
-        protected readonly bool _isMagicResistant;
+        protected bool _isMagicResistant;
         /// <summary>
         /// Return true if character is magic resistant.
         /// </summary>
-        public bool IsMagicResistant
-        {
-            get => _isMagicResistant;
-        }
+        public bool IsMagicResistant => _isMagicResistant;
 
         protected readonly string _exampleImageSource;
 
         /// <summary>
         /// 
         /// </summary>
-        public string ExampleImageSource
-        {
-            get => _exampleImageSource;
-        }
+        public string ExampleImageSource => _exampleImageSource;
 
         private Brush _backgroundColor;
 
@@ -227,6 +239,12 @@ namespace CardGame.CardModels.Characters
             HealthPoints += healthPoints;
         }
 
+        public void HealToMax()
+        {
+            if (HealthPoints < MaxHealthPoints)
+                HealthPoints = MaxHealthPoints;
+        }
+
         public void BoostAttack(int attackPoints)
         {
             if (attackPoints <= 0)
@@ -243,6 +261,12 @@ namespace CardGame.CardModels.Characters
             AttackPoints = AttackPoints - attackPoints > 0 ? AttackPoints - attackPoints : 0;
         }
 
+        public void RestoreAttackToMax()
+        {
+            if (AttackPoints < MaxAttackPoints)
+                AttackPoints = MaxAttackPoints;
+        }
+
         public void ReinforceShield(int shieldPoints)
         {
             if (shieldPoints <= 0)
@@ -251,9 +275,27 @@ namespace CardGame.CardModels.Characters
             ShieldPoints += shieldPoints;
         }
 
+        public void AddMagicResistant()
+        {
+            _isMagicResistant = true;
+            OnPropertyChanged(nameof(IsMagicResistant));
+        }
+
+        public void RemoveMagicResistant()
+        {
+            _isMagicResistant = false;
+            OnPropertyChanged(nameof(IsMagicResistant));
+        }
+
         public void BreakShield()
         {
             if (ShieldPoints != 0) ShieldPoints = 0;
+        }
+
+        public void ReinforceShieldToMax()
+        {
+            if (ShieldPoints < MaxShieldPoints)
+                ShieldPoints = MaxShieldPoints;
         }
 
         public CharacterCard CardOvner;
@@ -268,9 +310,9 @@ namespace CardGame.CardModels.Characters
             _shortDescribe = shortDescribe;
             _species = species;
             _characterType = characterType;
-            _attackPoints = attackPoints;
-            _healthPoints = healthPoints;
-            _shieldPoints = shieldPoints;
+            _maxAttackPoints = _attackPoints = attackPoints;
+            _maxHealthPoints = _healthPoints = healthPoints;
+            _maxShieldPoints = _shieldPoints = shieldPoints;
             _isMagicResistant = isMagicResistant;
             _exampleImageSource = exampleImageSource;
             _backgroundColor = backgroundColor == null ? Brush.Orange : backgroundColor;

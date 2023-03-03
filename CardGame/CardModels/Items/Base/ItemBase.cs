@@ -101,18 +101,17 @@ namespace CardGame.CardModels.Items
         public int NumberOfUses
         {
             get => _numberOfUses;
-            set 
+            set
             {
                 _numberOfUses = value;
                 OnPropertyChanged(nameof(NumberOfUses));
             }
         }
 
-        public virtual void ItemFunction() { }
+        public virtual void ItemFunction(ICardModel[] enemies, ICardModel[] allies, ICardModel[] selectedEnemies, ICardModel[] selectedAllies) { }
 
         public ItemCard CardOvner;
-
-        public ItemBase(int iD, string name, string describe, string shortDescribe, string exampleImageSource, int numberOfUses, Brush backgroundColor = null, Brush strokeColor = null)
+        public ItemBase(string name, int iD, string describe, string shortDescribe, string exampleImageSource, int numberOfUses, ItemTypeEnum itemType, uint maxCardToSelect, Brush backgroundColor = null, Brush strokeColor = null)
         {
             _name = name;
             _iD = iD;
@@ -120,6 +119,17 @@ namespace CardGame.CardModels.Items
             _shortDescribe = shortDescribe;
             _exampleImageSource = exampleImageSource;
             _numberOfUses = numberOfUses;
+            _itemType = itemType;
+
+            //error catcher
+            if (_itemType == ItemTypeEnum.ToOneEnemy ||
+                _itemType == ItemTypeEnum.ToOneAllie)
+                _maxCardToSelect = 1;
+            else if (_itemType == ItemTypeEnum.ToAll)
+                _maxCardToSelect = 0;
+            else
+                _maxCardToSelect = maxCardToSelect;
+
             _backgroundColor = backgroundColor == null ? Brush.Orange : backgroundColor;
             _strokeColor = strokeColor == null ? Brush.White : strokeColor;
         }
@@ -135,6 +145,37 @@ namespace CardGame.CardModels.Items
             Debug.WriteLine("CardModel has been destroyed.");
             // todo destroy it doesn't works
 #endif
+        }
+
+        public enum ItemTypeEnum
+        {
+            ToOneEnemy,
+            ToMoreThanOneEnemy,
+            ToAllEnemies,
+
+            ToOneAllie,
+            ToMoreThanOneAllie,
+            ToAllAllies,
+
+            ToAll
+        }
+
+        private readonly ItemTypeEnum _itemType;
+        /// <summary>
+        /// Type of item by used.
+        /// </summary>
+        public ItemTypeEnum ItemType
+        {
+            get => _itemType;
+        }
+
+        private readonly uint _maxCardToSelect = 1;
+        /// <summary>
+        /// Number of card to select with using the item.
+        /// </summary>
+        public uint MaxCardToSelect
+        {
+            get => _maxCardToSelect;
         }
 
     }
