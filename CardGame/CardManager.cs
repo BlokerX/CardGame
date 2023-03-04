@@ -23,7 +23,10 @@ namespace CardGame
                 9 => new RoyalSoldier(),
                 10 => new Prince(),
                 11 => new Knight(),
-                12 => new ItemBase(1,"Eataz","sfdfsdfsdf dfs", "", "img_source", 1),
+                12 => new Excaliber(),
+                13 => new WoodenShield(),
+                14 => new InfernalTalisman(),
+                15 => new TheRainOfRedemption(),
 
                 _ => null,
             };

@@ -1,5 +1,4 @@
-﻿using CardGame.CardModels;
-using CardGame.GameObjectsUI;
+﻿using CardGame.GameObjectsUI;
 using CardGame.ViewModels;
 
 namespace CardGame.GameObjects
@@ -42,10 +41,17 @@ namespace CardGame.GameObjects
         /// </summary>
         public CardBase ChosenCard;
 
+        public event Action OnChosenCard;
+
         /// <summary>
-        /// Targeted card (enemy card).
+        /// Targeted cards (enemy card).
         /// </summary>
-        public CardBase TargetedCard;
+        public List<CardBase> TargetedEnemiesCards = new();
+
+        /// <summary>
+        /// Targeted cards (allies card).
+        /// </summary>
+        public List<CardBase> TargetedAlliesCards = new();
 
         #endregion
 
@@ -119,9 +125,22 @@ namespace CardGame.GameObjects
             EnemyTure,
 
             // Player moves:
-            SelectingPlayerCard,
-            SelectingEnemyCard,
+            VerifingCardType,
+
+            // Select chosen card:
+            ChosePlayerCard,
+
+            // Select targeted card:
+            TargetingPlayerCard,
+            TargetingPlayerCards,
+            TargetingPlayerAllCards,
+            TargetingEnemyCard,
+            TargetingEnemyCards,
+            TargetingEnemyAllCards,
+
+            // 
             Attacking,
+            UsingItem,
 
             // On animating:
             Animating,
@@ -198,7 +217,7 @@ namespace CardGame.GameObjects
 
         public void ChoseCard(CardBase card)
         {
-            if (this.TurnFaze is not Player.TurnFazeEnum.SelectingPlayerCard)
+            if (this.TurnFaze is not Player.TurnFazeEnum.ChosePlayerCard)
                 return;
 
             this.ChosenCard = card;
@@ -208,12 +227,13 @@ namespace CardGame.GameObjects
             // todo chowanie lobby
             Lobby.IsVisible = false;
 
-            this.TurnFaze = Player.TurnFazeEnum.SelectingEnemyCard;
+            this.TurnFaze = Player.TurnFazeEnum.TargetingEnemyCard;
+            OnChosenCard?.Invoke();
         }
 
         public void ThrowNewCard(CardBase card)
         {
-            if (this.TurnFaze is not Player.TurnFazeEnum.SelectingPlayerCard)
+            if (this.TurnFaze is not Player.TurnFazeEnum.ChosePlayerCard)
                 return;
 
             card.OnCardTaped -= ThrowNewCard;
@@ -233,7 +253,7 @@ namespace CardGame.GameObjects
             if (card != this.ChosenCard)
                 return;
 
-            if (this.ChosenCard != card && this.TurnFaze != Player.TurnFazeEnum.SelectingEnemyCard)
+            if (this.ChosenCard != card && this.TurnFaze != Player.TurnFazeEnum.TargetingEnemyCard)
                 return;
 
             switch (this.AttackType)
@@ -280,10 +300,10 @@ namespace CardGame.GameObjects
 
         public void HighlightTargetedCard(Action<double, bool> finished = null)
         {
-            if (this.TargetedCard != null)
-                new Animation(callback: v => (this.TargetedCard.BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Color.FromRgba(v, 0, 0, 0.5),
+            if (this.TargetedEnemiesCards[0] != null)
+                new Animation(callback: v => (this.TargetedEnemiesCards[0].BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Color.FromRgba(v, 0, 0, 0.5),
                         start: 0,
-                        end: 1).Commit(this.TargetedCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
+                        end: 1).Commit(this.TargetedEnemiesCards[0], "Animation", 16, highlightCardAnimationTime, finished: finished);
         }
 
         #endregion

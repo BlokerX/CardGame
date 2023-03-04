@@ -16,14 +16,14 @@ namespace CardGame.GameObjects
             {
                 case Player.AttackTypeEnum.Attack:
                     if (this.ChosenCard != null)
-                        new Animation(callback: v => (this.ChosenCard.BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Color.FromRgba(0, 0, 0, v),
+                        new Animation(callback: v => (this.ChosenCard.BindingContext as ICardViewModel).CardModel.AuraBrush = Color.FromRgba(0, 0, 0, v),
                         start: 0,
                         end: 0.75).Commit(this.ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
                     break;
 
                 case Player.AttackTypeEnum.SpecialAttack:
                     if (this.ChosenCard != null)
-                        new Animation(callback: v => (this.ChosenCard.BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Color.FromRgba(v, v, 0, v),
+                        new Animation(callback: v => (this.ChosenCard.BindingContext as ICardViewModel).CardModel.AuraBrush = Color.FromRgba(v, v, 0, v),
                         start: 0,
                         end: 0.75).Commit(this.ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
                     break;
