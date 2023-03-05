@@ -8,7 +8,9 @@ namespace CardGame.CardModels.Items
 
         public override void ItemFunction(ICardModel[] enemies, ICardModel[] allies, ICardModel[] selectedEnemies, ICardModel[] selectedAllies)
         {
-            var charactersSelectedAllies = selectedAllies as CharacterBase[];
+            var charactersSelectedAllies = (from allie in selectedAllies
+                                            where allie is CharacterBase
+                                            select allie as CharacterBase).ToArray();
 
             if (charactersSelectedAllies.Length == 1)
                 charactersSelectedAllies[0].ReinforceShield(10);

@@ -66,18 +66,54 @@ public partial class Board : ContentPage
         foreach (CardBase card in PlayerCards.Children.Cast<CardBase>())
         {
             card.OnCardTaped += players[0].ThrowNewCard;
+            card.OnCardTaped += PostThrowNewCard;
         }
+    }
+
+    private void PostThrowNewCard(CardBase card)
+    {
+        card.OnCardTaped -= PostThrowNewCard;
+        card.OnCardTaped += TargetedAllieCardSelected;
     }
 
     #region Game logic
 
     #region Player turn
 
+    public void TargetedAllieCardSelected(CardBase card)
+    {
+        switch (players[0].TurnFaze)
+        {
+            // targeted allies:
+            case Player.TurnFazeEnum.TargetingPlayerCard:
+                if (players[0].ChosenCard is ItemCard)
+                    TargetAllieCardToUseItemCard(card);
+                break;
+
+            case Player.TurnFazeEnum.TargetingPlayerCards:
+                if (players[0].ChosenCard is ItemCard)
+                    TargetAllieCardsToUseItemCard(card);
+                break;
+
+            case Player.TurnFazeEnum.TargetingPlayerAllCards:
+                if (players[0].ChosenCard is ItemCard)
+                    TargetAllAllieCardsToUseItemCard(card);
+                break;
+
+            default:
+                return;
+
+        }
+    }
+
     private void ChosenCardSelected()
     {
+        if (players[0].TurnFaze != Player.TurnFazeEnum.ChosePlayerCard)
+            return;
+
         if (players[0].ChosenCard is CharacterCard)
         {
-            players[0].TurnFaze = Player.TurnFazeEnum.TargetingPlayerCard;
+            players[0].TurnFaze = Player.TurnFazeEnum.TargetingEnemyCard;
             // Wybieranie postaci przeciwnika do zwykłego ataku
         }
         else if (players[0].ChosenCard is ItemCard)
@@ -102,7 +138,7 @@ public partial class Board : ContentPage
                     //players[0].HighlightTargetedCard((d, b) => SelectAllEnemyCardsToUseTargetCard());
                     break;
 
-                /// ------- ///
+                // ------- //
 
                 case ItemBase.ItemTypeEnum.ToOneAllie:
                     players[0].TurnFaze = Player.TurnFazeEnum.TargetingPlayerCard;
@@ -131,35 +167,41 @@ public partial class Board : ContentPage
     {
         players[0].TargetedEnemiesCards.Add(card);
         players[0].TurnFaze = Player.TurnFazeEnum.Attacking;
-        players[0].HighlightTargetedCard((d, b) => AttackTargetCard());
+        players[0].HighlightTargetedEnemyCard((d, b) => AttackTargetCard());
     }
 
-    private void TargetEnemyCardToUseTargetCard(ItemCard card)
+    private void TargetEnemyCardToUseItemCard(CardBase card)
+    {
+        players[0].TargetedEnemiesCards.Add(card);
+        players[0].TurnFaze = Player.TurnFazeEnum.UsingItem;
+        // todo zmienić kolor animacji
+        players[0].HighlightTargetedEnemyCardForItem((d, b) => UseItemToTargetCards());
+    }
+
+    private void TargetEnemyCardsToUseItemCard(CardBase card)
     {
 
     }
 
-    private void TargetEnemyCardsToUseTargetCard(ItemCard card)
+    private void TargetAllEnemyCardsToUseItemCard(CardBase card)
     {
 
     }
 
-    private void TargetAllEnemyCardsToUseTargetCard(ItemCard card)
+    private void TargetAllieCardToUseItemCard(CardBase card)
+    {
+        players[0].TargetedAlliesCards.Add(card);
+        players[0].TurnFaze = Player.TurnFazeEnum.UsingItem;
+        // todo zmienić kolor animacji
+        players[0].HighlightTargetedAllieCardForItem((d, b) => UseItemToTargetCards());
+    }
+
+    private void TargetAllieCardsToUseItemCard(CardBase card)
     {
 
     }
 
-    private void TargetAllieCardToUseTargetCard(ItemCard card)
-    {
-
-    }
-
-    private void TargetAllieCardsToUseTargetCard(ItemCard card)
-    {
-
-    }
-
-    private void TargetAllAllieCardsToUseTargetCard(ItemCard card)
+    private void TargetAllAllieCardsToUseItemCard(CardBase card)
     {
 
     }
@@ -171,36 +213,21 @@ public partial class Board : ContentPage
     {
         switch (players[0].TurnFaze)
         {
-            case Player.TurnFazeEnum.TargetingPlayerCard:
+            case Player.TurnFazeEnum.TargetingEnemyCard:
                 if (players[0].ChosenCard is CharacterCard)
                     TargetEnemyCardForChosenCharacter(card as CharacterCard);
                 else if (players[0].ChosenCard is ItemCard)
-                    TargetAllieCardToUseTargetCard(card as ItemCard);
-                break;
-
-            case Player.TurnFazeEnum.TargetingPlayerCards:
-                if (players[0].ChosenCard is ItemCard)
-                    TargetAllieCardsToUseTargetCard(card as ItemCard);
-                break;
-
-            case Player.TurnFazeEnum.TargetingPlayerAllCards:
-                if (players[0].ChosenCard is ItemCard)
-                    TargetAllAllieCardsToUseTargetCard(card as ItemCard);
-                break;
-
-            case Player.TurnFazeEnum.TargetingEnemyCard:
-                if (players[0].ChosenCard is ItemCard)
-                    TargetAllieCardToUseTargetCard(card as ItemCard);
+                    TargetEnemyCardToUseItemCard(card as ItemCard);
                 break;
 
             case Player.TurnFazeEnum.TargetingEnemyCards:
                 if (players[0].ChosenCard is ItemCard)
-                    TargetEnemyCardsToUseTargetCard(card as ItemCard);
+                    TargetEnemyCardsToUseItemCard(card as ItemCard);
                 break;
 
             case Player.TurnFazeEnum.TargetingEnemyAllCards:
                 if (players[0].ChosenCard is ItemCard)
-                    TargetAllEnemyCardsToUseTargetCard(card as ItemCard);
+                    TargetAllEnemyCardsToUseItemCard(card as ItemCard);
                 break;
 
             default:
@@ -210,53 +237,103 @@ public partial class Board : ContentPage
 
     private void AttackTargetCard()
     {
-        CharacterCard myCharacter = (players[0].ChosenCard.BindingContext as CharacterCard).CardModel;
-        CharacterCard enemyCharacter = (players[0].TargetedEnemiesCards[0].BindingContext as CharacterCard).CardModel;
+        if (players[0].TurnFaze != Player.TurnFazeEnum.Attacking)
+            return;
+
+        CharacterBase myCharacter = (players[0].ChosenCard.BindingContext as ICardViewModel).CardModel as CharacterBase;
+        CharacterBase enemyCharacter = (players[0].TargetedEnemiesCards[0].BindingContext as ICardViewModel).CardModel as CharacterBase;
 
         // Normal attack
         if (players[0].AttackType == Player.AttackTypeEnum.Attack)
         {
-            (myCharacter as CharacterBase).Attack(enemyCharacter as CharacterBase);
+            myCharacter.Attack(enemyCharacter);
             players[0].SpecialPoints++;
         }
         // Special attack
         else if (players[0].AttackType == Player.AttackTypeEnum.SpecialAttack)
         {
-            List<ICardModel> playerBoardCharacters = new();
+            List<CharacterBase> playerBoardCharacters = new();
             foreach (CardBase item in PlayerBoard.Cast<CardBase>())
             {
-                playerBoardCharacters.Add((item.BindingContext as ICardViewModel).CardModel);
-            }
-            List<ICardModel> computerBoardCharacters = new();
-            foreach (CardBase item in ComputerBoard.Cast<CardBase>())
-            {
-                computerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).CardModel);
+                if ((item.BindingContext as ICardViewModel).CardModel is CharacterBase)
+                    playerBoardCharacters.Add((item.BindingContext as ICardViewModel).CardModel as CharacterBase);
             }
 
-            (myCharacter as CharacterBase).SpecialAttack(computerBoardCharacters.ToArray(), playerBoardCharacters.ToArray(), enemyCharacter);
+            List<CharacterBase> computerBoardCharacters = new();
+            foreach (CardBase item in ComputerBoard.Cast<CardBase>())
+            {
+                if ((item.BindingContext as CharacterCardViewModel).CardModel is CharacterBase)
+                    computerBoardCharacters.Add((item.BindingContext as CharacterCardViewModel).CardModel as CharacterBase);
+            }
+
+            myCharacter.SpecialAttack(computerBoardCharacters.ToArray(), playerBoardCharacters.ToArray(), enemyCharacter);
             players[0].SpecialPoints = 0;
         }
 
+        PostPlayerAttackOrUseItem();
+    }
+
+    private void PostPlayerAttackOrUseItem()
+    {
         #region Animation
         if (players[0].ChosenCard != null)
-            (players[0].ChosenCard.BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Brush.Transparent;
+            (players[0].ChosenCard.BindingContext as ICardViewModel).CardModel.AuraBrush = Brush.Transparent;
         #endregion
         players[0].ChosenCard = null;
 
         #region Animation
-        if (players[0].TargetedEnemiesCards[0] != null)
-            (players[0].TargetedEnemiesCards[0].BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Brush.Transparent;
+        if (players[0].TargetedEnemiesCards?.Count > 0)
+            players[0].TargetedEnemiesCards.ForEach((card) => (card.BindingContext as ICardViewModel).CardModel.AuraBrush = Brush.Transparent);
+        #endregion
+
+        #region Animation
+        if (players[0].TargetedAlliesCards?.Count > 0)
+            players[0].TargetedAlliesCards.ForEach((card) => (card.BindingContext as ICardViewModel).CardModel.AuraBrush = Brush.Transparent);
         #endregion
 
         players[0].TargetedEnemiesCards?.Clear();
+        players[0].TargetedAlliesCards?.Clear();
 
         players[0].AttackType = Player.AttackTypeEnum.Attack;
 
         players[0].TurnFaze = Player.TurnFazeEnum.EnemyTure;
 
+        PlayerCards.IsVisible = false;
+
         ComputerTurn();
 
         PlayerCards.IsVisible = true;
+    }
+
+    private void UseItemToTargetCards()
+    {
+        if (players[0].TurnFaze != Player.TurnFazeEnum.UsingItem)
+            return;
+
+        ItemBase myItem = (players[0].ChosenCard.BindingContext as ICardViewModel).CardModel as ItemBase;
+
+        List<ICardModel> enemyCardModels = new();
+        enemyCardModels.AddRange(from card in players[0].TargetedEnemiesCards
+                                 select (card.BindingContext as ICardViewModel).CardModel);
+
+        List<ICardModel> allieCardModels = new();
+        allieCardModels.AddRange(from card in players[0].TargetedAlliesCards
+                                 select (card.BindingContext as ICardViewModel).CardModel);
+
+        List<ICardModel> playerBoardCardModels = new();
+        playerBoardCardModels.AddRange(from CardBase item in PlayerBoard.Cast<CardBase>()
+                                       select (item.BindingContext as ICardViewModel).CardModel);
+
+        List<ICardModel> computerBoardCardModels = new();
+        computerBoardCardModels.AddRange(from CardBase item in ComputerBoard.Cast<CardBase>()
+                                         select (item.BindingContext as ICardViewModel).CardModel);
+
+        myItem.ItemFunction(computerBoardCardModels.ToArray(), playerBoardCardModels.ToArray(), enemyCardModels.ToArray(), allieCardModels.ToArray());
+
+        // todo czy naliczać punkty przy urzyciu itemu?
+        players[0].SpecialPoints++;
+
+        PostPlayerAttackOrUseItem();
     }
 
     #endregion

@@ -6,7 +6,7 @@ namespace CardGame
 {
     internal class CardManager
     {
-        public const int CardsID = 12;
+        public const int CardsID = 15;
 
         public static ICardModel GetCardTypesById(int id)
         {

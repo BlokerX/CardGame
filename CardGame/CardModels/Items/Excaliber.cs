@@ -1,4 +1,5 @@
 ﻿using CardGame.CardModels.Characters;
+using System.Linq;
 
 namespace CardGame.CardModels.Items
 {
@@ -8,10 +9,12 @@ namespace CardGame.CardModels.Items
 
         public override void ItemFunction(ICardModel[] enemies, ICardModel[] allies, ICardModel[] selectedEnemies, ICardModel[] selectedAllies)
         {
-            var charactersSelectedAllies = selectedAllies as CharacterBase[];
+            var charactersSelectedAllies = (from allie in selectedAllies
+                                            where allie is CharacterBase
+                                            select allie as CharacterBase).ToArray();
 
             // Wzmacnia atak wybranej karty (sojusznika o 50%).
-            if (charactersSelectedAllies.Length == 1)
+            if (charactersSelectedAllies?.Length == 1)
                 charactersSelectedAllies[0].BoostAttack(charactersSelectedAllies[0].AttackPoints / 2);
         }
     }

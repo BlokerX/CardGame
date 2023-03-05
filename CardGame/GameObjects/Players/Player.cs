@@ -124,9 +124,6 @@ namespace CardGame.GameObjects
             // Ememy turn:
             EnemyTure,
 
-            // Player moves:
-            VerifingCardType,
-
             // Select chosen card:
             ChosePlayerCard,
 
@@ -138,7 +135,7 @@ namespace CardGame.GameObjects
             TargetingEnemyCards,
             TargetingEnemyAllCards,
 
-            // 
+            // Player moves:
             Attacking,
             UsingItem,
 
@@ -227,7 +224,6 @@ namespace CardGame.GameObjects
             // todo chowanie lobby
             Lobby.IsVisible = false;
 
-            this.TurnFaze = Player.TurnFazeEnum.TargetingEnemyCard;
             OnChosenCard?.Invoke();
         }
 
@@ -298,12 +294,28 @@ namespace CardGame.GameObjects
                 }
         }
 
-        public void HighlightTargetedCard(Action<double, bool> finished = null)
+        public void HighlightTargetedEnemyCard(Action<double, bool> finished = null)
         {
-            if (this.TargetedEnemiesCards[0] != null)
-                new Animation(callback: v => (this.TargetedEnemiesCards[0].BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Color.FromRgba(v, 0, 0, 0.5),
+            if (this.TargetedEnemiesCards.LastOrDefault() != null)
+                new Animation(callback: v => (this.TargetedEnemiesCards.Last().BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Color.FromRgba(v, 0, 0, 0.5),
                         start: 0,
-                        end: 1).Commit(this.TargetedEnemiesCards[0], "Animation", 16, highlightCardAnimationTime, finished: finished);
+                        end: 1).Commit(this.TargetedEnemiesCards.Last(), "Animation", 16, highlightCardAnimationTime, finished: finished);
+        }
+
+        public void HighlightTargetedEnemyCardForItem(Action<double, bool> finished = null)
+        {
+            if (this.TargetedEnemiesCards.LastOrDefault() != null)
+                new Animation(callback: v => (this.TargetedEnemiesCards.Last().BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Color.FromRgba(v, v, v, 0.5),
+                        start: 0,
+                        end: 1).Commit(this.TargetedEnemiesCards.Last(), "Animation", 16, highlightCardAnimationTime, finished: finished);
+        }
+
+        public void HighlightTargetedAllieCardForItem(Action<double, bool> finished = null)
+        {
+            if (this.TargetedAlliesCards.LastOrDefault() != null)
+                new Animation(callback: v => (this.TargetedAlliesCards.Last().BindingContext as CharacterCardViewModel).CardModel.AuraBrush = Color.FromRgba(v, v, v, 0.5),
+                        start: 0,
+                        end: 1).Commit(this.TargetedAlliesCards.Last(), "Animation", 16, highlightCardAnimationTime, finished: finished);
         }
 
         #endregion
