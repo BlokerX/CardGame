@@ -2,6 +2,7 @@
 using CardGame.CardModels.Items;
 using CardGame.GameObjects;
 using CardGame.ViewModels;
+using System.Linq;
 
 namespace CardGame.GameObjectsUI;
 
@@ -95,11 +96,6 @@ public partial class Board : ContentPage
                     TargetAllieCardsToUseItemCard(card);
                 break;
 
-            case Player.TurnFazeEnum.TargetingPlayerAllCards:
-                if (players[0].ChosenCard is ItemCard)
-                    TargetAllAllieCardsToUseItemCard(card);
-                break;
-
             default:
                 return;
 
@@ -134,6 +130,11 @@ public partial class Board : ContentPage
 
                 case ItemBase.ItemTypeEnum.ToAllEnemies:
                     players[0].TurnFaze = Player.TurnFazeEnum.TargetingEnemyAllCards;
+
+                    List<CardBase> computerBoardCharacters = new();
+                    computerBoardCharacters.AddRange(ComputerBoard.Cast<CardBase>());
+                    TargetAllEnemyCardsToUseItemCard(computerBoardCharacters);
+
                     //używanie itemu na wszystkich postaciach przeciwnika
                     //players[0].HighlightTargetedCard((d, b) => SelectAllEnemyCardsToUseTargetCard());
                     break;
@@ -154,6 +155,11 @@ public partial class Board : ContentPage
 
                 case ItemBase.ItemTypeEnum.ToAllAllies:
                     players[0].TurnFaze = Player.TurnFazeEnum.TargetingPlayerAllCards;
+
+                    List<CardBase> playerBoardCharacters = new();
+                    playerBoardCharacters.AddRange(PlayerBoard.Cast<CardBase>());
+                    TargetAllAllieCardsToUseItemCard(playerBoardCharacters);
+
                     //używanie itemu na wszystkich postaciach sojusznika
                     //players[0].HighlightTargetedCard((d, b) => SelectAllAllieCardsToUseTargetCard());
                     break;
@@ -183,9 +189,12 @@ public partial class Board : ContentPage
 
     }
 
-    private void TargetAllEnemyCardsToUseItemCard(CardBase card)
+    private void TargetAllEnemyCardsToUseItemCard(List<CardBase> cards)
     {
-
+        players[0].TargetedEnemiesCards.AddRange(cards);
+        players[0].TurnFaze = Player.TurnFazeEnum.UsingItem;
+        // todo zmienić kolor animacji
+        players[0].HighlightTargetedEnemyCardForItem((d, b) => UseItemToTargetCards());
     }
 
     private void TargetAllieCardToUseItemCard(CardBase card)
@@ -201,9 +210,12 @@ public partial class Board : ContentPage
 
     }
 
-    private void TargetAllAllieCardsToUseItemCard(CardBase card)
+    private void TargetAllAllieCardsToUseItemCard(List<CardBase> cards)
     {
-
+        players[0].TargetedAlliesCards.AddRange(cards);
+        players[0].TurnFaze = Player.TurnFazeEnum.UsingItem;
+        // todo zmienić kolor animacji
+        players[0].HighlightTargetedAllieCardForItem((d, b) => UseItemToTargetCards());
     }
 
     #endregion
@@ -223,11 +235,6 @@ public partial class Board : ContentPage
             case Player.TurnFazeEnum.TargetingEnemyCards:
                 if (players[0].ChosenCard is ItemCard)
                     TargetEnemyCardsToUseItemCard(card as ItemCard);
-                break;
-
-            case Player.TurnFazeEnum.TargetingEnemyAllCards:
-                if (players[0].ChosenCard is ItemCard)
-                    TargetAllEnemyCardsToUseItemCard(card as ItemCard);
                 break;
 
             default:
