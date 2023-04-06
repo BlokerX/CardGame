@@ -72,14 +72,29 @@ namespace CardGame.GameObjects
             });
         }
 
+        public void ChangeLobbyVisible(bool isVisible)
+        {
+            if (this.Lobby != null)
+                Lobby.IsVisible = isVisible;
+        }
+
+        public bool? GetLobbyVisible()
+        {
+            if (this.Lobby != null)
+                return Lobby.IsVisible;
+            else return null;
+        }
+
         /// <summary>
         /// Player's board.
         /// </summary>
-        private Layout Board;
+        private Layout _board;
+
+        public Layout Board => _board;
 
         public void SetBoard(Layout board)
         {
-            Board = board;
+            _board = board;
             this.DeckOfCards.Cards.ForEach((card) =>
             {
                 card.ToDestroy += RemoveCardFromBoard;
@@ -206,8 +221,8 @@ namespace CardGame.GameObjects
 
         public void RemoveCardFromBoard(CardBase card)
         {
-            if (Board.Children.Contains(card))
-                Board.Children.Remove(card);
+            if (_board.Children.Contains(card))
+                _board.Children.Remove(card);
 
             card.ToDestroy -= RemoveCardFromBoard;
         }
@@ -238,7 +253,7 @@ namespace CardGame.GameObjects
 
             RemoveCardFromLobby(card);
 
-            Board.Children.Add(card);
+            _board.Children.Add(card);
             card.ToDestroy += RemoveCardFromBoard;
 
             this.ChoseCard(card);
@@ -281,13 +296,13 @@ namespace CardGame.GameObjects
                 switch (this.AttackType)
                 {
                     case Player.AttackTypeEnum.Attack:
-                        new Animation(callback: v => (this.ChosenCard.BindingContext as ICardViewModel).CardModel.AuraBrush = Color.FromRgba(0, 0, v, 0.5),
+                        new Animation(callback: v => { if (ChosenCard != null) (this.ChosenCard.BindingContext as ICardViewModel).CardModel.AuraBrush = Color.FromRgba(0, 0, v, 0.5); },
                             start: 0,
                             end: 1).Commit(this.ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
                         break;
 
                     case Player.AttackTypeEnum.SpecialAttack:
-                        new Animation(callback: v => (this.ChosenCard.BindingContext as ICardViewModel).CardModel.AuraBrush = Color.FromRgba(v, v, 0, 0.73),
+                        new Animation(callback: v => { if (ChosenCard != null) (this.ChosenCard.BindingContext as ICardViewModel).CardModel.AuraBrush = Color.FromRgba(v, v, 0, 0.73); },
                             start: 0,
                             end: 1).Commit(this.ChosenCard, "Animation", 16, highlightCardAnimationTime, finished: finished);
                         break;

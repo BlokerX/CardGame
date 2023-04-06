@@ -12,12 +12,12 @@ namespace CardGame.ViewModels
             set { _player1 = value; }
         }
 
-        private Player _computer;
+        private Player _player2;
 
-        public Player Computer
+        public Player Player2
         {
-            get { return _computer; }
-            set { _computer = value; }
+            get { return _player2; }
+            set { _player2 = value; }
         }
 
         //todo połączyć view model ze szkieletem strony

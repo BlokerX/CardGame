@@ -47,7 +47,7 @@
 
                 <Label
                     Grid.Column="1"
-                    Text="{Binding Computer.Name}"
+                    Text="{Binding Player2}"
                     TextColor="Black"
                     FontSize="Title"
                     HorizontalTextAlignment="Center"
@@ -80,7 +80,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Border 
-                    x:Name="PlayerBoardBorder"
+                    x:Name="Player1BoardBorder"
                     Grid.Column="0"
                     Stroke="Blue"
                     BackgroundColor="#66AAAAFF"
@@ -99,7 +99,7 @@
                         Padding="5">
 
                         <HorizontalStackLayout 
-                            x:Name="PlayerBoard"
+                            x:Name="Player1Board"
                             Spacing="5"/>
 
                     </ScrollView>
@@ -117,7 +117,7 @@
                         Padding="5">
 
                         <HorizontalStackLayout 
-                            x:Name="ComputerBoard"
+                            x:Name="Player2Board"
                             Spacing="5"/>
 
                     </ScrollView>
@@ -129,8 +129,9 @@
         </Border>
 
         <Border 
+            x:Name="LobbyBorder"
             Grid.Row="2"
-            Stroke="Goldenrod"
+            Stroke="Blue"
             StrokeThickness="1.5"
             BackgroundColor="#FFFFBB"
             Margin="20">
@@ -139,9 +140,14 @@
                 Padding="0,5">
                 <Grid>
                     <HorizontalStackLayout 
-                    x:Name="PlayerCards"
-                    Spacing="5"
-                    Padding="5"/>
+                        x:Name="Player1Cards"
+                        Spacing="5"
+                        Padding="5"/>
+                    <HorizontalStackLayout 
+                        x:Name="Player2Cards"
+                        Spacing="5"
+                        Padding="5"
+                        IsVisible="false"/>
                 </Grid>
             </ScrollView>
         </Border>
