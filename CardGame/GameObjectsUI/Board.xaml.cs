@@ -117,11 +117,13 @@ public partial class Board : ContentPage
     {
         foreach (CardBase card in Player1Cards.Children.Cast<CardBase>())
         {
+            card.OnCardTaped += OnEnemyCardClickedPlayerTargeted;
             card.OnCardTaped += players[0].ThrowNewCard;
             card.OnCardTaped += PostThrowNewCard;
         }
         foreach (CardBase card in Player2Cards.Children.Cast<CardBase>())
         {
+            card.OnCardTaped += OnEnemyCardClickedPlayerTargeted;
             card.OnCardTaped += players[1].ThrowNewCard;
             card.OnCardTaped += PostThrowNewCard;
         }
@@ -280,7 +282,7 @@ public partial class Board : ContentPage
     #endregion
 
     // Wybieranie karty:
-    private void OnComputerCardClickedPlayerTargeted(CardBase card)
+    private void OnEnemyCardClickedPlayerTargeted(CardBase card)
     {
         switch (currentPlayer.TurnFaze)
         {
@@ -449,7 +451,7 @@ public partial class Board : ContentPage
         {
             ComputerBoard.Children.Add(players[1].ChosenCard);
             players[1].ChosenCard.ToDestroy += players[1].RemoveCardFromBoard;
-            players[1].ChosenCard.OnCardTaped += OnComputerCardClickedPlayerTargeted;
+            players[1].ChosenCard.OnCardTaped += OnEnemyCardClickedPlayerTargeted;
         }
 
         players[1].HighlightChosenCard((d, b) => ComputerTargetEnemyCard());
