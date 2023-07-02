@@ -4,7 +4,7 @@ namespace CardGame.CardModels.Items
 {
     public class TheRainOfRedemption : ItemBase
     {
-        public TheRainOfRedemption() : base("The rain of redemption", 15, "-", "-", "img_source", 1, ItemTypeEnum.ToAllAllies, 1, Color.Parse("Green")) { }
+        public TheRainOfRedemption() : base("The rain of redemption", 15, "-", "-", "the_rain_of_redemption.png", 1, ItemTypeEnum.ToAllAllies, 1, Color.Parse("Green")) { }
 
         public override void ItemFunction(ICardModel[] enemies, ICardModel[] allies, ICardModel[] selectedEnemies, ICardModel[] selectedAllies)
         {

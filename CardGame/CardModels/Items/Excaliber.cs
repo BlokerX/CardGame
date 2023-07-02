@@ -5,7 +5,7 @@ namespace CardGame.CardModels.Items
 {
     public class Excaliber : ItemBase
     {
-        public Excaliber() : base("Excaliber", 12, "-", "-", "img_source", 1, ItemTypeEnum.ToOneAllie, 1, Color.Parse("Red")) { }
+        public Excaliber() : base("Excaliber", 12, "-", "-", "excaliber.png", 1, ItemTypeEnum.ToOneAllie, 1, Color.Parse("Red")) { }
 
         public override void ItemFunction(ICardModel[] enemies, ICardModel[] allies, ICardModel[] selectedEnemies, ICardModel[] selectedAllies)
         {

@@ -2,7 +2,7 @@
 {
     internal class SwordFighter : CharacterBase
     {
-        public SwordFighter() : base("Sword fighter", 4, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Melee, 15, 10, 7, false, "img_source", Color.Parse("Red")) { }
+        public SwordFighter() : base("Sword fighter", 4, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Melee, 15, 10, 7, false, "sword_fighter.png", Color.Parse("Red")) { }
 
         public override void SpecialAttack(ICardModel[] enemies, ICardModel[] allies, ICardModel selectedCardModel)
         {

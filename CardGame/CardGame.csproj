@@ -66,4 +66,8 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Resources\Images\CardPictures\" />
+	</ItemGroup>
+
 </Project>

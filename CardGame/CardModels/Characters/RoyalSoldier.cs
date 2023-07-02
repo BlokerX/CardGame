@@ -2,7 +2,7 @@
 {
     internal class RoyalSoldier : CharacterBase
     {
-        public RoyalSoldier() : base("Royal soldier", 9, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Melee, 16, 15, 18, false, "img_source", Color.Parse("Brown")) { }
+        public RoyalSoldier() : base("Royal soldier", 9, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Melee, 16, 15, 18, false, "royal_solider.png", Color.Parse("Brown")) { }
 
         public override void SpecialAttack(ICardModel[] enemies, ICardModel[] allies, ICardModel selectedCardModel)
         {

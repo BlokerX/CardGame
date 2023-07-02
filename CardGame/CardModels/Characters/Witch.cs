@@ -2,7 +2,7 @@
 {
     internal class Witch : MagicCharacter
     {
-        public Witch() : base("Witch", 8, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Magic, 12, 5, 5, true, "img_source", 10, Color.Parse("MediumPurple")) { }
+        public Witch() : base("Witch", 8, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Magic, 12, 5, 5, true, "witch.png", 10, Color.Parse("MediumPurple")) { }
 
         public override void SpecialAttack(ICardModel[] enemies, ICardModel[] allies, ICardModel selectedCardModel)
         {

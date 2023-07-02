@@ -144,6 +144,9 @@ public partial class Board : ContentPage
 
     public void TargetedAllieCardSelected(CardBase card)
     {
+        if (!currentPlayer.DeckOfCards.Cards.Contains(card))
+            return;
+
         switch (currentPlayer.TurnFaze)
         {
             // targeted allies:
@@ -284,6 +287,9 @@ public partial class Board : ContentPage
     // Wybieranie karty:
     private void OnEnemyCardClickedPlayerTargeted(CardBase card)
     {
+        if (currentPlayer.DeckOfCards.Cards.Contains(card))
+            return;
+
         switch (currentPlayer.TurnFaze)
         {
             case Player.TurnFazeEnum.TargetingEnemyCard:

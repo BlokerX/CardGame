@@ -2,7 +2,7 @@
 {
     internal class Prince : CharacterBase
     {
-        public Prince() : base("Prince", 10, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Melee, 25, 15, 10, false, "img_source", Color.Parse("Gold")) { }
+        public Prince() : base("Prince", 10, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Melee, 25, 15, 10, false, "prince.png", Color.Parse("Gold")) { }
 
         public override void SpecialAttack(ICardModel[] enemies, ICardModel[] allies, ICardModel selectedCardModel)
         {

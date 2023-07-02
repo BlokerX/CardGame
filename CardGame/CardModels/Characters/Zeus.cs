@@ -2,7 +2,7 @@
 {
     internal class Zeus : CharacterBase
     {
-        public Zeus() : base("Zeus", 5, "-", "-", SpeciesTypes.God, CharacterTypeEnum.God, 20, 10, 0, false, "img_source", Color.Parse("LightBlue")) { }
+        public Zeus() : base("Zeus", 5, "-", "-", SpeciesTypes.God, CharacterTypeEnum.God, 20, 10, 0, false, "zeus.png", Color.Parse("LightBlue")) { }
 
         public override void SpecialAttack(ICardModel[] enemies, ICardModel[] allies, ICardModel selectedCardModel)
         {

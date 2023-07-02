@@ -2,7 +2,7 @@
 {
     internal class Fighter : CharacterBase
     {
-        public Fighter() : base("Fighter", 1, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Normal, 10, 15, 5, false, "img_source") { }
+        public Fighter() : base("Fighter", 1, "-", "-", SpeciesTypes.Human, CharacterTypeEnum.Normal, 10, 15, 5, false, "fighter.png") { }
 
         public override void SpecialAttack(ICardModel[] enemies, ICardModel[] allies, ICardModel selectedCardModel)
         {
